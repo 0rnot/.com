@@ -13,7 +13,8 @@ const isMiniMode = ref(false)
 const songlist = config.banner.musicID
 
 const checkScreenSize = () => {
-  isMiniMode.value = window.innerWidth <= 768 // 768px as breakpoint
+  isMiniMode.value = window.innerWidth <= 768 && window.innerWidth >= 425 // 768px as breakpoint
+
   if (isMiniMode.value) {
     ap.value.setMode('mini')
   } else {
@@ -141,6 +142,12 @@ const addRandomSong = async () => {
     aspect-ratio: 1;
     border-radius: 100%;
     border: 2px white solid;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  #aplayer {
+    display: none;
   }
 }
 </style>
