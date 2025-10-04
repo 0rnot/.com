@@ -21,7 +21,7 @@ manifest:
     - src: /favicon144.png
       sizes: 144x144
 # 个人信息
-level: 85 # 等级
+level: 90 # 等级
 exp: 8382 # 经验值
 nextExp: 8381 # 到达下一等级经验值（比exp小则显示满级）
 # Iconfont图标导入
