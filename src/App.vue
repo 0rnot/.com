@@ -12,7 +12,7 @@ import { ref } from 'vue'
 
 const loading = ref(true)
 const percent = ref(1)
-const l2dOnly = ref(false)
+const l2dOnly = ref(true)
 
 import NProgress from 'nprogress'
 
@@ -41,7 +41,9 @@ const switchL2D = () => {
   </transition>
   <div id="background"></div>
   <main v-if="!loading">
-    <Background :l2dOnly="l2dOnly"></Background>
+    <Suspense>
+      <Background :l2dOnly="l2dOnly" @update:changeL2D="l2dOnly = $event"></Background>
+    </Suspense>
     <transition name="up">
       <Level v-if="!l2dOnly"></Level>
     </transition>
