@@ -110,11 +110,7 @@ const addRandomSong = async () => {
 </script>
 
 <template>
-  <div id="aplayer-container">
-    <a-tooltip :content="songName" :popup-visible="isMiniMode" position="bottom">
-      <div id="aplayer"></div>
-    </a-tooltip>
-  </div>
+  <div id="aplayer"></div>
 </template>
 
 <style scoped>
@@ -125,7 +121,7 @@ const addRandomSong = async () => {
   width: 300px;
   aspect-ratio: 446 / 158;
   opacity: 0.9;
-  transition: transform 0.1s;
+  transition: transform 0.3s;
 }
 
 #aplayer:active {

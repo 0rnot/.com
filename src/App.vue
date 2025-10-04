@@ -123,7 +123,7 @@ main {
 
 .left-leave-to,
 .left-enter-from {
-  transform: translateX(-300px);
+  transform: translateX(-400px);
 }
 
 .left-leave-from,
