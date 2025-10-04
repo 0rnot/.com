@@ -13,9 +13,9 @@
 body {
   background-color: #fff;
   overflow: hidden;
-  font-family: BlueakaBeta2GBK, Inter, '-apple-system', BlinkMacSystemFont, 'PingFang SC',
-    'Hiragino Sans GB', 'noto sans', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial,
-    sans-serif !important;
+  font-family:
+    BlueakaBeta2GBK, Inter, '-apple-system', BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB',
+    'noto sans', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
 }
 
 a {
@@ -83,13 +83,23 @@ a {
 }
 
 .arco-modal-body {
-  padding: 75px 100px !important;
+  padding: 75px 100px 50px !important;
   font-size: 16px !important;
   max-width: 240px;
+  background: #f0f0f0;
+}
 
+.arco-modal > :last-child.arco-modal-body {
+  padding: 75px 100px !important;
   background-size: contain;
   background: #f0f0f0 var(--deco1) no-repeat right !important;
-  border-radius:  0 0 var(--border-radius-large) var(--border-radius-large) !important;
+  border-radius: 0 0 var(--border-radius-large) var(--border-radius-large) !important;
+}
+
+.arco-modal-footer {
+  background-size: contain;
+  background: #f0f0f0 var(--deco1) no-repeat right !important;
+  border-radius: 0 0 var(--border-radius-large) var(--border-radius-large) !important;
 }
 
 .arco-modal-header {
@@ -175,19 +185,23 @@ a {
   }
 }
 
-.zoom-modal-enter-from,.zoom-modal-appear-from {
-  transform: scale(1) translateY(100%)!important;
-  opacity: 0
-
+.zoom-modal-enter-from,
+.zoom-modal-appear-from {
+  transform: scale(1) translateY(100%) !important;
+  opacity: 0;
 }
 
-.zoom-modal-enter-to,.zoom-modal-appear-to {
+.zoom-modal-enter-to,
+.zoom-modal-appear-to {
   transform: scale(1) translateY(0);
-  opacity: 1
+  opacity: 1;
 }
 
-.zoom-modal-enter-active,.zoom-modal-appear-active {
-  transition: opacity .4s cubic-bezier(.3,1.3,.3,1),transform .4s cubic-bezier(.3,1,.3,1) !important;
+.zoom-modal-enter-active,
+.zoom-modal-appear-active {
+  transition:
+    opacity 0.4s cubic-bezier(0.3, 1.3, 0.3, 1),
+    transform 0.4s cubic-bezier(0.3, 1, 0.3, 1) !important;
 }
 
 #background canvas {
