@@ -3,7 +3,7 @@ import { Modal } from '@arco-design/web-vue'
 import { h, ref } from 'vue'
 import config from '/_config.yaml'
 const emit = defineEmits(['switch'])
-const props = defineProps(['l2dOnly'])
+const props = defineProps(['l2dOnly', 'canskip'])
 
 const max_ap = 60 + config.level * 2
 const ap = ref(
@@ -48,8 +48,10 @@ const about = () => {
 }
 
 const change = () => {
-  img.value = img.value === '/img/min.png' ? '/img/max.png' : '/img/min.png'
-  emit('switch')
+  if (!props.canskip) {
+    img.value = img.value === '/img/min.png' ? '/img/max.png' : '/img/min.png'
+    emit('switch')
+  }
 }
 
 document.body.addEventListener('click', () => {
@@ -112,13 +114,14 @@ setInterval(() => {
       <icon-info-circle class="css-cursor-hover-enabled" />
     </a>
     <a
+      id="change"
       class="l2d toolbox"
-      :class="{ canHover: !hover }"
+      :class="{ canHover: !hover && !props.canskip }"
       @click="change"
       :style="{
         transform: (!props.l2dOnly ? 'translateY(0)' : 'translateY(-76px)') + ' skew(-10deg)',
         transition: 'transform 0.3s ' + (!props.l2dOnly ? 'ease-out' : 'ease-in') + ',opacity 0.6s',
-        opacity: !props.l2dOnly || (showMin && hover) ? 1 : 0
+        opacity: (!props.l2dOnly || (showMin && hover)) && !props.canskip ? 1 : 0
       }"
     >
       <img alt="" :src="img" />

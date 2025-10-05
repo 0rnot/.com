@@ -18,6 +18,7 @@
     "aplayer": "^1.10.1",
     "autoprefixer": "^10.4.20",
     "axios": "^1.8.2",
+    "howler": "^2.2.4",
     "js-yaml": "^4.1.0",
     "nprogress": "^0.2.0",
     "pixi.js": "^7.4.3",

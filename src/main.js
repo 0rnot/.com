@@ -7,6 +7,7 @@ import ArcoVue from '@arco-design/web-vue'
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
 import App from './App.vue'
 import { registerSW } from 'virtual:pwa-register'
+import config from '/_config.yaml'
 
 import { css } from './assets/font/BlueakaBeta2GBK-DemiBold.ttf'
 import { css as css2 } from './assets/font/BlueakaBeta2GBK-Bold.ttf'
@@ -55,22 +56,12 @@ setInterval(() => {
 
 import * as PIXI from 'pixi.js'
 
-// 这里是学生的l2d载入位置，想要修改自己喜欢的学生可以改这里
-const hina_swimsuit = '/l2d/hina_swimsuit/CH0063_home'
-const aris = '/l2d/aris/Aris_home'
-/*
- * students 是学生l2d的位置
- * l2dBGM 是学生背景音乐的位置
- * */
-export const students = [hina_swimsuit, aris]
-/*——————————————————————————————————————————————————*/
-
 // 加载大厅L2D文件
 ;(async function () {
   let a = 0
-  for (let i of students) {
-    PIXI.Assets.add({ alias: 'skeleton' + a, src: `${i}.skel` })
-    PIXI.Assets.add({ alias: 'atlas' + a, src: `${i}.atlas` })
+  for (let i of config.memorialLobbies) {
+    PIXI.Assets.add({ alias: 'skeleton' + a, src: i.path + i.skel })
+    PIXI.Assets.add({ alias: 'atlas' + a, src: i.path + i.atlas })
     await PIXI.Assets.load(['skeleton' + a, 'atlas' + a])
     a++
   }

@@ -13,6 +13,7 @@ import { ref } from 'vue'
 const loading = ref(true)
 const percent = ref(1)
 const l2dOnly = ref(true)
+const canSkipit = ref(true)
 
 import NProgress from 'nprogress'
 
@@ -33,6 +34,10 @@ const load = setInterval(() => {
 const switchL2D = () => {
   l2dOnly.value = !l2dOnly.value
 }
+
+const canSkip = (value) => {
+  canSkipit.value = value
+}
 </script>
 
 <template>
@@ -42,12 +47,16 @@ const switchL2D = () => {
   <div id="background"></div>
   <main v-if="!loading">
     <Suspense>
-      <Background :l2dOnly="l2dOnly" @update:changeL2D="l2dOnly = $event"></Background>
+      <Background
+        :l2dOnly="l2dOnly"
+        @update:changeL2D="l2dOnly = $event"
+        @canskip="canSkip"
+      ></Background>
     </Suspense>
     <transition name="up">
       <Level v-if="!l2dOnly"></Level>
     </transition>
-    <Toolbox :l2dOnly="l2dOnly" @switch="switchL2D"></Toolbox>
+    <Toolbox :l2dOnly="l2dOnly" :canskip="canSkipit" @switch="switchL2D"></Toolbox>
     <transition name="left">
       <Contact v-if="!l2dOnly"></Contact>
     </transition>

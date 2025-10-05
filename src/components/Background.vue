@@ -1,15 +1,37 @@
 <script setup>
 import { Spine } from '@esotericsoftware/spine-pixi-v7'
 import * as PIXI from 'pixi.js'
-import { students } from '@/main'
 import { Modal } from '@arco-design/web-vue'
+import config from '/_config.yaml'
+const emit = defineEmits(['canskip', 'update:changeL2D'])
+import { Howl, Howler } from 'howler'
+import { ref } from 'vue'
 
 const props = defineProps(['l2dOnly'])
 
 let animation,
-  id = 0
+  id = 1
 let canSkip = true
+let soundList = []
+let talking = false,
+  talkIndex = 1
 let modalRef
+
+const dialogue = ref('')
+const showDialogue = ref(false)
+
+window.onresize = () => {
+  dialogueDisplay.value.x =
+    eval(config.memorialLobbies[id].dialogueDisplay.x) * document.documentElement.clientWidth
+  dialogueDisplay.value.y =
+    eval(config.memorialLobbies[id].dialogueDisplay.y) * document.documentElement.clientHeight
+}
+
+const dialogueDisplay = ref({
+  x: 0,
+  y: 0,
+  position: 'left'
+})
 
 const l2d = new PIXI.Application({
   width: 2560,
@@ -19,25 +41,66 @@ const l2d = new PIXI.Application({
 
 document.querySelector('#background').appendChild(l2d.view)
 
-const emit = defineEmits(['update:changeL2D'])
-
 const changeL2D = (value) => {
   emit('update:changeL2D', value)
 }
 
+const onEvent = (entry, event) => {
+  if (event.stringValue === '') return
+  console.log(config.memorialLobbies[id].voice[event.stringValue], event.stringValue)
+
+  if (!config.memorialLobbies[id].voice[event.stringValue]) return
+
+  dialogue.value = config.memorialLobbies[id].voice[event.stringValue]
+  showDialogue.value = true
+
+  let voice = new Howl({
+    src: [config.memorialLobbies[id].path + event.stringValue + '.ogg'],
+    volume: 0.3
+  })
+  if (voice.state() === 'loaded') voice.play()
+  else if (voice.state() === 'loading') {
+    voice.on('load', () => {
+      voice.play()
+    })
+  }
+  soundList.push(voice)
+}
+
 const setL2D = async (num) => {
   canSkip = true
+  emit('canskip', true)
+  talking = false
+  talkIndex = 1
+  if (soundList.length !== 0) {
+    for (let i in soundList) soundList[i].stop()
+    soundList = []
+  }
+  if (animation) {
+    animation.state.listeners = []
+    animation.state.addListener({
+      event: onEvent
+    })
+  }
   l2d.stage.removeChild(animation)
+
   switch (num) {
     case '-':
-      id = id === 0 ? students.length - 1 : id - 1
+      id = id === 0 ? config.memorialLobbies.length - 1 : id - 1
       break
     case '+':
-      id = id === students.length - 1 ? 0 : id + 1
+      id = id === config.memorialLobbies.length - 1 ? 0 : id + 1
       break
     default:
       id = num
   }
+
+  dialogueDisplay.value.x =
+    eval(config.memorialLobbies[id].dialogueDisplay.x) * document.documentElement.clientWidth
+  dialogueDisplay.value.y =
+    eval(config.memorialLobbies[id].dialogueDisplay.y) * document.documentElement.clientHeight
+  dialogueDisplay.value.position = config.memorialLobbies[id].dialogueDisplay.position
+
   animation = Spine.from('skeleton' + id, 'atlas' + id)
   if (animation) {
     animation.state.setAnimation(1, 'Dummy', true)
@@ -53,10 +116,11 @@ const setL2D = async (num) => {
   animation.y = 1440
   animation.x = 2560 / 2
   let startIdle = 'Start_Idle_01'
+  showDialogue.value = false
   if (!animation.state.data.skeletonData.findAnimation('Start_Idle_01')) startIdle = 'Start_idle_01'
-  // animation.state.addListener({
-  //   event: onEvent
-  // })
+  animation.state.addListener({
+    event: onEvent
+  })
   if (animation.state.data.skeletonData.findAnimation(startIdle)) {
     changeL2D(true)
     animation.state.setAnimation(0, startIdle, false)
@@ -71,10 +135,11 @@ const setL2D = async (num) => {
         if (entry.trackIndex === 0 && entry.animation.name !== 'Idle_01') {
           changeL2D(false)
           animation.state.listeners = []
-          // animation.state.addListener({
-          //   event: onEvent
-          // })
+          animation.state.addListener({
+            event: onEvent
+          })
           canSkip = false
+          emit('canskip', false)
           if (modalRef) {
             modalRef.close()
           }
@@ -90,10 +155,11 @@ const setL2D = async (num) => {
     ) {
       animation.state.setAnimation(0, 'Idle_01', true)
       animation.state.listeners = []
-      // animation.state.addListener({
-      //   event: onEvent
-      // })
+      animation.state.addListener({
+        event: onEvent
+      })
       canSkip = false
+      emit('canskip', false)
       if (modalRef) {
         modalRef.close()
       }
@@ -111,19 +177,60 @@ const skipStartIdle = () => {
       content: '是否跳过？',
       onOk: () => {
         changeL2D(false)
+        if (soundList.length !== 0) {
+          for (let i in soundList) soundList[i].stop()
+          soundList = []
+        }
         animation.state.setAnimation(1, 'Dummy', true)
         animation.state.setAnimation(2, 'Dummy', true)
         animation.state.setAnimation(3, 'Dummy', true)
         animation.state.setAnimation(4, 'Dummy', true)
         animation.state.setAnimation(0, 'Idle_01', true)
         animation.state.listeners = []
-        // animation.state.addListener({
-        //   event: onEvent
-        // });
+        animation.state.addListener({
+          event: onEvent
+        })
         canSkip = false
+        emit('canskip', false)
       }
     })
   }
+}
+
+const onInteractionWithStudent = () => {
+  if (
+    talking ||
+    animation.state.getCurrent(0).animation.name.toLowerCase().startsWith('start_idle')
+  )
+    return
+  console.log('Talk_0' + talkIndex)
+  if (animation.state.data.skeletonData.findAnimation('Talk_0' + talkIndex + '_A_CN')) {
+    // 判断所用回忆大厅是否有专门给国服配音卡口型
+    animation.state.addAnimation(1, 'Talk_0' + talkIndex + '_A_CN')._mixDuration = 0.3
+    animation.state.addAnimation(2, 'Talk_0' + talkIndex + '_M_CN')._mixDuration = 0.3
+  } else {
+    animation.state.addAnimation(1, 'Talk_0' + talkIndex + '_A')._mixDuration = 0.3
+    animation.state.addAnimation(2, 'Talk_0' + talkIndex + '_M')._mixDuration = 0.3
+  }
+  animation.state.addAnimation(1, 'Dummy', true)._mixDuration = 0.3
+  animation.state.addAnimation(2, 'Dummy', true)._mixDuration = 0.3
+  let listener = {
+    complete: (entry) => {
+      if (entry.trackIndex === 1 && entry.animation.name !== 'Dummy') {
+        animation.state.listeners = []
+        animation.state.addListener({
+          event: onEvent
+        })
+        talking = false
+        showDialogue.value = false
+        console.log('end!')
+      }
+    }
+  }
+  animation.state.addListener(listener)
+  talkIndex++
+  if (!animation.state.data.skeletonData.findAnimation('Talk_0' + talkIndex + '_A')) talkIndex = 1
+  talking = true
 }
 
 setL2D(id)
@@ -139,9 +246,33 @@ setL2D(id)
     style="position: fixed; width: 100%; height: 100%"
     @click="skipStartIdle()"
   ></div>
+  <a-trigger
+    v-else
+    :popup-visible="showDialogue"
+    :popup-translate="[dialogueDisplay.x, dialogueDisplay.y]"
+    :position="dialogueDisplay.position"
+    :show-arrow="true"
+  >
+    <div class="interaction css-cursor-hover-enabled" @click="onInteractionWithStudent()"></div>
+    <template #content>
+      <div class="dialogue">
+        {{ dialogue }}
+      </div>
+    </template>
+  </a-trigger>
 </template>
 
 <style scoped>
+.dialogue {
+  padding: 30px 20px;
+  max-width: 280px;
+  width: 40vw;
+  font-size: 24px;
+  background-color: #f0f0f0dd;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
+}
+
 #change {
   position: absolute;
   top: 0;
@@ -151,6 +282,20 @@ setL2D(id)
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.interaction {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 66%;
+  height: 66%;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 img {
