@@ -24,7 +24,7 @@
 - [x] 点击特效和动效
 - [x] 多个学生回忆大厅l2d切换
 - [x] 学生回忆大厅全局观赏
-- [ ] 学生互动
+- [x] 学生对话互动
 
 ## 使用到的项目
 
@@ -134,6 +134,27 @@ task:
 banner:
   musicID: # 音乐ID（暂时只支持网易云音乐）
     - 2059151619
+# 回忆大厅配置
+memorialLobbies:
+  - name: Aris # 这里填学生名字
+    path: '/l2d/aris/' # 这里填回忆大厅L2D文件位置（注意最后以“/”结尾）
+    skel: 'Aris_home.skel' # 这里填回忆大厅L2D的SKEL文件
+    atlas: 'Aris_home.atlas' # 这里填回忆大厅L2D的ATLAS文件
+    voice: # 这里填学生对话（注意：前面的必须是L2D文件中有的内容，实在不清楚的可以在调试的时候获取"Background.vue"文件"onEvent"函数的"event.stringValue"的值以确保无误）
+      Aris_MemorialLobby_1: 爱丽丝觉得在基沃托斯魔法并不是空想。
+      Aris_MemorialLobby_2_1: 魔法是真正存在的。
+      Aris_MemorialLobby_2_2: 因为，老师现在让爱丽丝感到非常幸福。
+      Aris_MemorialLobby_3_1: 游戏之所以很有趣，
+      Aris_MemorialLobby_3_2: 是因为它蕴藏了这个世界所有的美丽之处。
+      Aris_MemorialLobby_3_3: 这是，老师您让我明白的道理。
+      Aris_MemorialLobby_4_1: 游戏、猫咪、和好朋友……还有……
+      Aris_MemorialLobby_4_2: 现在这个瞬间，在这世界上有太多太多美好的东西。
+      Aris_MemorialLobby_5_1: 爱丽丝还想知道更多更多。
+      Aris_MemorialLobby_5_2: 想和老师一起……两个人一起，继续探索这个世界！
+    dialogueDisplay: # 这里填学生对话框位置（百分比定位）
+      x: -1/4 - 1/16
+      y: -1/16
+      position: right # 这里是对话框朝向
 ```
 > 修改其中相关内容，之后重新按上述方式部署即可完成修改
 
@@ -141,3 +162,12 @@ banner:
 
 1. 自己去游戏解包中获取（[教程1](https://www.bilibili.com/read/cv15934670/)、[教程2](https://www.bilibili.com/read/cv18073492/)）
 2. 去[基沃托斯古书馆](https://kivo.fun/)中的`角色图鉴`—`切换到鉴赏模式`—`回忆大厅`当中自行抓包获取
+
+## 基于本项目的最佳实践
+
+> 感谢使用此项目的大佬们能够进一步完善这个项目😭😭😭
+> 
+> 欢迎其他大佬通过Issue来向我投稿最佳实践❤❤❤
+
+1. [Home - 杏仁レモンティー](https://apricotlemontea.com/)
+2. [ElectroHeavenVN's Homepage](https://electroheavenvn.github.io/homepage/)
