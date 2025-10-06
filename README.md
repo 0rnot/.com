@@ -24,7 +24,8 @@
 - [x] 点击特效和动效
 - [x] 多个学生回忆大厅l2d切换
 - [x] 学生回忆大厅全局观赏
-- [x] 学生对话互动
+- [x] 学生摸头和对话互动
+- [ ] 个人信息等二级界面
 
 ## 使用到的项目
 
@@ -36,6 +37,7 @@
 - [Iconfont](https://www.iconfont.cn/)
 - [cn-font-split](https://github.com/KonghaYao/cn-font-split)
 - [APlayer](https://aplayer.js.org/#/)
+- [howler.js](https://github.com/goldfire/howler.js)
 
 ## 部署方式
 
@@ -151,6 +153,7 @@ memorialLobbies:
       Aris_MemorialLobby_4_2: 现在这个瞬间，在这世界上有太多太多美好的东西。
       Aris_MemorialLobby_5_1: 爱丽丝还想知道更多更多。
       Aris_MemorialLobby_5_2: 想和老师一起……两个人一起，继续探索这个世界！
+    offset: 0.45 # 这里填学生在回忆大厅的位置，方便在小屏时居中定位学生（百分比定位）
     dialogueDisplay: # 这里填学生对话框位置（百分比定位）
       x: -1/4 - 1/16
       y: -1/16
