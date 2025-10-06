@@ -19,6 +19,7 @@ let modalRef
 
 const dialogue = ref('')
 const showDialogue = ref(false)
+const ifPetting = ref(false)
 
 window.onresize = () => {
   dialogueDisplay.value.x =
@@ -233,6 +234,75 @@ const onInteractionWithStudent = () => {
   talking = true
 }
 
+const onPetStudent = () => {
+  if (
+    talking ||
+    animation.state.getCurrent(0).animation.name.toLowerCase().startsWith('start_idle')
+  )
+    return
+  // console.log('Talk_0' + talkIndex)
+  animation.state.addAnimation(1, 'Pat_01_A', true)._mixDuration = 0.3
+  animation.state.addAnimation(2, 'Pat_01_M', true)._mixDuration = 0.3
+  ifPetting.value = true
+}
+
+let pressTimer = null
+
+// 处理长按事件的回调函数
+const handleLongPress = () => {
+  if (talking) return
+  console.log('长按事件触发')
+  onPetStudent()
+
+  let a = setInterval(() => {
+    if (pressTimer === null) {
+      ifPetting.value = false
+      animation.state.addAnimation(1, 'PatEnd_01_A')._mixDuration = 0.3
+      animation.state.addAnimation(2, 'PatEnd_01_M')._mixDuration = 0.3
+      animation.state.addAnimation(1, 'Dummy', true)._mixDuration = 0.3
+      animation.state.addAnimation(2, 'Dummy', true)._mixDuration = 0.3
+      console.log('end!')
+      clearInterval(a)
+    }
+  }, 10)
+}
+
+const vLongPress = {
+  mounted(el, binding) {
+    // 创建定时器
+    const start = (e) => {
+      // 防止重复设置定时器
+      if (pressTimer === null) {
+        pressTimer = setTimeout(() => {
+          // 执行绑定值中的函数
+          binding.value(e)
+        }, 500)
+      }
+    }
+
+    // 取消定时器
+    const cancel = () => {
+      if (pressTimer !== null) {
+        clearTimeout(pressTimer)
+        if (!ifPetting.value) {
+          onInteractionWithStudent()
+        }
+        pressTimer = null
+      }
+    }
+
+    // 添加事件监听器
+    el.addEventListener('mousedown', start)
+    el.addEventListener('touchstart', start)
+
+    // 取消定时器的事件
+    el.addEventListener('click', cancel)
+    el.addEventListener('mouseout', cancel)
+    el.addEventListener('touchend', cancel)
+    el.addEventListener('touchcancel', cancel)
+  }
+}
+
 setL2D(id)
 </script>
 
@@ -253,7 +323,7 @@ setL2D(id)
     :position="dialogueDisplay.position"
     :show-arrow="true"
   >
-    <div class="interaction css-cursor-hover-enabled" @click="onInteractionWithStudent()"></div>
+    <div class="interaction css-cursor-hover-enabled" v-long-press="handleLongPress"></div>
     <template #content>
       <div class="dialogue">
         {{ dialogue }}
@@ -266,7 +336,7 @@ setL2D(id)
 .dialogue {
   padding: 30px 20px;
   max-width: 280px;
-  width: 40vw;
+  width: calc(40vw - 20px);
   font-size: 24px;
   background-color: #f0f0f0dd;
   border-radius: 10px;
@@ -292,7 +362,7 @@ setL2D(id)
   bottom: 0;
   margin: auto;
   width: 66%;
-  height: 66%;
+  height: 100%;
   cursor: pointer;
   user-select: none;
   -webkit-user-drag: none;
