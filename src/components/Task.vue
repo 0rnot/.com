@@ -152,6 +152,24 @@ const skip = () => {
   }
 }
 
+@media screen and (max-height: 630px) {
+  .task {
+    width: 120px;
+    height: 120px;
+  }
+  .task:before {
+    width: calc(100% + 4px);
+    background: #003153;
+    transform: skewX(-10deg);
+    height: 40px;
+  }
+
+  .task:after {
+    height: 40px;
+    font-size: 20px;
+  }
+}
+
 .down2-leave-to,
 .down2-enter-from {
   transform: translateY(300px);

@@ -40,7 +40,7 @@ const canSkip = (value) => {
   canSkipit.value = value
 }
 const checkScreenSize = () => {
-  changeDirection.value = window.innerWidth <= 768 && window.innerWidth >= 375 ? 'right' : 'left'
+  changeDirection.value = window.innerWidth <= 768 ? 'right' : 'left'
 }
 checkScreenSize()
 window.addEventListener('resize', checkScreenSize)

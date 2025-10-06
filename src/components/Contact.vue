@@ -11,6 +11,7 @@ const IconFont = Icon.addFromIconFontCn({
   <div class="contact-box">
     <a
       v-for="contact in config.contact"
+      :key="contact.name"
       :href="contact.href"
       class="contact css-cursor-hover-enabled"
     >
@@ -79,6 +80,13 @@ const IconFont = Icon.addFromIconFontCn({
   .contact-box {
     grid-template-columns: repeat(2, 100px);
     grid-gap: 20px;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .contact-box {
+    grid-template-columns: repeat(2, 75px);
+    grid-gap: 15px;
   }
 }
 </style>
