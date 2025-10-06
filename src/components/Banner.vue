@@ -13,7 +13,7 @@ const isMiniMode = ref(false)
 const songlist = config.banner.musicID
 
 const checkScreenSize = () => {
-  isMiniMode.value = window.innerWidth <= 768 && window.innerWidth >= 425 // 768px as breakpoint
+  isMiniMode.value = window.innerWidth <= 768 && window.innerWidth >= 375
 
   if (isMiniMode.value) {
     ap.value.setMode('mini')

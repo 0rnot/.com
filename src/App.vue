@@ -14,6 +14,7 @@ const loading = ref(true)
 const percent = ref(1)
 const l2dOnly = ref(true)
 const canSkipit = ref(true)
+const changeDirection = ref('left')
 
 import NProgress from 'nprogress'
 
@@ -38,6 +39,11 @@ const switchL2D = () => {
 const canSkip = (value) => {
   canSkipit.value = value
 }
+const checkScreenSize = () => {
+  changeDirection.value = window.innerWidth <= 768 && window.innerWidth >= 375 ? 'right' : 'left'
+}
+checkScreenSize()
+window.addEventListener('resize', checkScreenSize)
 </script>
 
 <template>
@@ -61,7 +67,7 @@ const canSkip = (value) => {
       <Contact v-if="!l2dOnly"></Contact>
     </transition>
     <Task :l2dOnly="l2dOnly"></Task>
-    <transition name="left">
+    <transition :name="changeDirection">
       <Banner v-show="!l2dOnly"></Banner>
     </transition>
     <transition name="down">
@@ -142,15 +148,27 @@ main {
   transform: translateX(0);
 }
 
+.right-leave-to,
+.right-enter-from {
+  transform: translateX(300px);
+}
+
+.right-leave-from,
+.right-enter-to {
+  transform: translateX(0);
+}
+
 .up-leave-active,
 .down-leave-active,
-.left-leave-active {
+.left-leave-active,
+.right-leave-active {
   transition: transform 0.3s ease-in;
 }
 
 .up-enter-active,
 .down-enter-active,
-.left-enter-active {
+.left-enter-active,
+.right-enter-active {
   transition: transform 0.3s ease-out;
 }
 
