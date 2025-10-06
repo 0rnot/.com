@@ -96,6 +96,7 @@ memorialLobbies:
       Aris_MemorialLobby_4_2: 现在这个瞬间，在这世界上有太多太多美好的东西。
       Aris_MemorialLobby_5_1: 爱丽丝还想知道更多更多。
       Aris_MemorialLobby_5_2: 想和老师一起……两个人一起，继续探索这个世界！
+    offset: 0.45 # 这里填学生在回忆大厅的位置，方便在小屏时居中定位学生（百分比定位）
     dialogueDisplay: # 这里填学生对话框位置（百分比定位）
       x: -1/4 - 1/16
       y: -1/16
@@ -115,6 +116,7 @@ memorialLobbies:
       CH0063_MemorialLobby_4_2: 大海，原来这么美啊。
       CH0063_MemorialLobby_5_1: 真是不可思议……我以前，从来没这么想过。
       CH0063_MemorialLobby_5_2: 老师，谢谢你……陪在我的身边…… ……教会了我这么多事。
+    offset: 0.68
     dialogueDisplay:
       x: 1/4 + 1/8
       y: -1/8

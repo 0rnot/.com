@@ -16,11 +16,11 @@ let soundList = []
 let talking = false,
   talkIndex = 1
 let modalRef
+let originalOffsetPercent = (parseFloat(config.memorialLobbies[0].offset) || 0.7) * 100
 
 const dialogue = ref('')
 const showDialogue = ref(false)
 const ifPetting = ref(false)
-
 window.onresize = () => {
   dialogueDisplay.value.x =
     eval(config.memorialLobbies[id].dialogueDisplay.x) * document.documentElement.clientWidth
@@ -116,6 +116,10 @@ const setL2D = async (num) => {
   animation.autoUpdate = true
   animation.y = 1440
   animation.x = 2560 / 2
+
+  originalOffsetPercent = (parseFloat(config.memorialLobbies[id].offset) || 0.7) * 100
+  l2d.view.style.transform = `translateX(calc((50% - ${originalOffsetPercent} * 1%) * (1 - min(1, 100vw / 1200px))))`
+
   let startIdle = 'Start_Idle_01'
   showDialogue.value = false
   if (!animation.state.data.skeletonData.findAnimation('Start_Idle_01')) startIdle = 'Start_idle_01'
