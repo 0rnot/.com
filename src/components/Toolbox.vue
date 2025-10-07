@@ -1,7 +1,11 @@
 <script setup>
 import { Modal } from '@arco-design/web-vue'
 import { h, ref } from 'vue'
-import config from '/_config.yaml'
+
+import { useConfig } from '@/composables/useConfig'
+const { configs } = useConfig()
+const config = configs.value
+
 const emit = defineEmits(['switch'])
 const props = defineProps(['l2dOnly', 'canskip'])
 
@@ -25,16 +29,16 @@ const hover = ref(window.matchMedia('(hover: none)').matches)
 
 const about = () => {
   Modal.open({
-    title: '关于',
+    title: config.translate.about,
     content: () => [
       h(
         'p',
         {},
-        config.author === '小鱼yuzifu'
-          ? `© ${new Date().getFullYear()} 小鱼yuzifu`
+        config.author === '小鱼yuzifu' || config.author === 'ゆづふ' || config.author === 'Yuzifu'
+          ? `© ${new Date().getFullYear()} ${config.author}`
           : [`© ${new Date().getFullYear()} ${config.author}`, h('p', {}, 'Made by 小鱼yuzifu')]
       ),
-      h('span', {}, '项目地址：'),
+      h('span', {}, config.translate.projectWebsite),
       h('a', { href: 'https://github.com/sf-yuzifu/homepage', target: '_blank' }, 'Github'),
       config.ICP
         ? [

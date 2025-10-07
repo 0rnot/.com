@@ -2,9 +2,11 @@
 import { Spine } from '@esotericsoftware/spine-pixi-v7'
 import * as PIXI from 'pixi.js'
 import { Modal } from '@arco-design/web-vue'
-import config from '/_config.yaml'
+import { useConfig } from '@/composables/useConfig'
+const { configs, locale } = useConfig()
+const config = configs.value
 const emit = defineEmits(['canskip', 'update:changeL2D'])
-import { Howl, Howler } from 'howler'
+import { Howl } from 'howler'
 import { ref } from 'vue'
 
 const props = defineProps(['l2dOnly'])
@@ -54,11 +56,19 @@ const onEvent = (entry, event) => {
 
   dialogue.value = config.memorialLobbies[id].voice[event.stringValue]
   showDialogue.value = true
+  let voice
+  if (locale.value === 'zh') {
+    voice = new Howl({
+      src: [config.memorialLobbies[id].path + 'zh-CN/' + event.stringValue + '.ogg'],
+      volume: 0.3
+    })
+  } else {
+    voice = new Howl({
+      src: [config.memorialLobbies[id].path + 'ja-JP/' + event.stringValue + '.ogg'],
+      volume: 0.3
+    })
+  }
 
-  let voice = new Howl({
-    src: [config.memorialLobbies[id].path + event.stringValue + '.ogg'],
-    volume: 0.3
-  })
   if (voice.state() === 'loaded') voice.play()
   else if (voice.state() === 'loading') {
     voice.on('load', () => {
@@ -178,8 +188,10 @@ const skipStartIdle = () => {
     animation.state.data.skeletonData.findAnimation('Idle_01')
   ) {
     modalRef = Modal.open({
-      title: '通知',
-      content: '是否跳过？',
+      title: config.translate.info,
+      content: config.translate.ifSkip,
+      okText: config.translate.ok,
+      cancelText: config.translate.cancel,
       onOk: () => {
         changeL2D(false)
         if (soundList.length !== 0) {
@@ -209,7 +221,10 @@ const onInteractionWithStudent = () => {
   )
     return
   console.log('Talk_0' + talkIndex)
-  if (animation.state.data.skeletonData.findAnimation('Talk_0' + talkIndex + '_A_CN')) {
+  if (
+    animation.state.data.skeletonData.findAnimation('Talk_0' + talkIndex + '_A_CN') &&
+    locale.value === 'zh'
+  ) {
     // 判断所用回忆大厅是否有专门给国服配音卡口型
     animation.state.addAnimation(1, 'Talk_0' + talkIndex + '_A_CN')._mixDuration = 0.3
     animation.state.addAnimation(2, 'Talk_0' + talkIndex + '_M_CN')._mixDuration = 0.3

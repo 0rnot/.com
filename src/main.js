@@ -7,12 +7,14 @@ import ArcoVue from '@arco-design/web-vue'
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
 import App from './App.vue'
 import { registerSW } from 'virtual:pwa-register'
-import config from '/_config.yaml'
+import { useConfig } from '@/composables/useConfig'
+const { configs } = useConfig()
+const config = configs.value
 
 import { css } from './assets/font/BlueakaBeta2GBK-DemiBold.ttf'
 import { css as css2 } from './assets/font/BlueakaBeta2GBK-Bold.ttf'
-// console.log(css.family, css.weight);
-// console.log(css2.family, css2.weight);
+console.log(css.family, css.weight);
+console.log(css2.family, css2.weight);
 
 const app = createApp(App)
 app.use(ArcoVue)
@@ -24,8 +26,10 @@ if ('serviceWorker' in navigator) {
   const updateSW = registerSW({
     onNeedRefresh() {
       Modal.open({
-        title: '通知',
-        content: '老师，站点已更新，刷新即可访问最新内容！',
+        title: config.translate.info,
+        content: config.translate.update,
+        okText: config.translate.ok,
+        cancelText: config.translate.cancel,
         onOk: () => {
           updateSW(true)
         }
@@ -55,6 +59,8 @@ setInterval(() => {
 }, 1000)
 
 import * as PIXI from 'pixi.js'
+
+document.querySelector('title').innerHTML = config.title
 
 // 加载大厅L2D文件
 ;(async function () {

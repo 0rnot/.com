@@ -46,7 +46,7 @@ dock:
 # 左边联系方式（推荐4个）
 contact:
   - name: QQ # 联系方式
-    href: 'https://wpa.qq.com/msgrd?v=3&uin=1906929246&site=qq&menu=yes&jumpflag=1' # 联系地址
+    href: 'https://wpa.qq.com/msgrd?v=3&uin=2512902451&site=qq&menu=yes&jumpflag=1' # 联系地址
     iconfont: icon-qq # iconfont图标id（只有icon-qq/github/bilibili/gitee）
   - name: Gitee
     href: 'https://gitee.com/sf-yuzifu'
@@ -121,3 +121,11 @@ memorialLobbies:
       x: 1/4 + 1/8
       y: -1/8
       position: left
+translate:
+  about: 关于
+  projectWebsite: 项目地址：
+  info: 通知
+  ifSkip: 是否跳过？
+  update: 老师！站点已更新，刷新即可访问最新内容！
+  ok: 确认
+  cancel: 取消

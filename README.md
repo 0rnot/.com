@@ -127,7 +127,7 @@ dock:
 # 左边联系方式（推荐4个）
 contact:
   - name: QQ # 联系方式
-    href: 'https://wpa.qq.com/msgrd?v=3&uin=1906929246&site=qq&menu=yes&jumpflag=1' # 联系地址
+    href: 'https://wpa.qq.com/msgrd?v=3&uin=2512902451&site=qq&menu=yes&jumpflag=1' # 联系地址
     iconfont: icon-qq # iconfont图标id（只有icon-qq/github/bilibili/gitee）
 # 任务按钮启动
 task:

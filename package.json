@@ -30,7 +30,6 @@
     "vite-plugin-font": "^5.1.2",
     "vite-plugin-pwa": "^0.16.5",
     "vue": "^3.3.4",
-    "vue-i18n": "^11.1.2",
     "vue-router": "^4.2.4"
   },
   "devDependencies": {

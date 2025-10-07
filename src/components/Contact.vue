@@ -1,6 +1,8 @@
 <script setup>
 import { Icon } from '@arco-design/web-vue'
-import config from '/_config.yaml'
+import { useConfig } from '@/composables/useConfig'
+const { configs } = useConfig()
+const config = configs.value
 
 const IconFont = Icon.addFromIconFontCn({
   src: config.iconfont
