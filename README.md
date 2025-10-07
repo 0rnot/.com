@@ -25,6 +25,7 @@
 - [x] 多个学生回忆大厅l2d切换
 - [x] 学生回忆大厅全局观赏
 - [x] 学生摸头和对话互动
+- [x] i18n适配
 - [ ] 个人信息等二级界面
 
 ## 使用到的项目
@@ -158,8 +159,21 @@ memorialLobbies:
       x: -1/4 - 1/16
       y: -1/16
       position: right # 这里是对话框朝向
+translate: # 这里是一些杂项，需要翻译
+  about: 关于
+  projectWebsite: 项目地址：
+  info: 通知
+  ifSkip: 是否跳过？
+  update: 老师！站点已更新，刷新即可访问最新内容！
+  ok: 确认
+  cancel: 取消
 ```
 > 修改其中相关内容，之后重新按上述方式部署即可完成修改
+
+## 有关i18n
+新版本也开始支持i18n了，其中`简体中文`为本项目默认语言，位于`_config.yaml`中，并内置了`English`和`日本語`，分别位于`src/locales/en-US.yaml`和`src/locales/ja-JP.yaml`
+
+**修改需保证每个词条都有对应的翻译，不得空缺！**
 
 ## 有关学生回忆大厅L2D文件获取
 
