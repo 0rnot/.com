@@ -1,18 +1,32 @@
 <script setup>
 import { Icon } from '@arco-design/web-vue'
+import { computed } from 'vue'
 import { useConfig } from '@/composables/useConfig'
 const { configs } = useConfig()
-const config = configs.value
 
-const IconFont = Icon.addFromIconFontCn({
-  src: config.iconfont
+const currentConfig = computed(() => configs.value)
+
+const iconfontUrl = computed(() => {
+  if (!currentConfig.value || !currentConfig.value.iconfont) return ''
+  return currentConfig.value.iconfont
+})
+
+const contacts = computed(() => {
+  if (!currentConfig.value || !currentConfig.value.contact) return []
+  return currentConfig.value.contact
+})
+
+const IconFont = computed(() => {
+  const url = iconfontUrl.value
+  if (!url) return null
+  return Icon.addFromIconFontCn({ src: url })
 })
 </script>
 
 <template>
   <div class="contact-box">
     <a
-      v-for="contact in config.contact"
+      v-for="contact in contacts"
       :key="contact.name"
       :href="contact.href"
       class="contact css-cursor-hover-enabled"

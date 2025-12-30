@@ -14,14 +14,6 @@ const imgList = [
 document.oncontextmenu = function () {
   return false
 }
-const options = {
-  // 动画时长
-  duration: 2000,
-  // 动画前后保持的状态
-  fill: 'forwards',
-  // 动画缓动类型
-  easing: 'ease-in-out'
-}
 let a = 0
 imgUrl.value = imgList[a % 4]
 a++

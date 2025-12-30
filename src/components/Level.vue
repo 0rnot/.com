@@ -1,11 +1,29 @@
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { useConfig } from '@/composables/useConfig'
 const { configs } = useConfig()
-const config = configs.value
 
-const exp = ref(config.exp)
-const nextExp = ref(config.nextExp)
+const currentConfig = computed(() => configs.value)
+
+const exp = computed(() => {
+  if (!currentConfig.value || currentConfig.value.exp === undefined) return 0
+  return currentConfig.value.exp
+})
+
+const nextExp = computed(() => {
+  if (!currentConfig.value || currentConfig.value.nextExp === undefined) return 100
+  return currentConfig.value.nextExp
+})
+
+const level = computed(() => {
+  if (!currentConfig.value || currentConfig.value.level === undefined) return 1
+  return currentConfig.value.level
+})
+
+const author = computed(() => {
+  if (!currentConfig.value || !currentConfig.value.author) return 'Unknown'
+  return currentConfig.value.author
+})
 </script>
 
 <template>
@@ -13,10 +31,10 @@ const nextExp = ref(config.nextExp)
     <div class="container">
       <div class="level css-cursor-hover-enabled">
         <span>Lv.</span>
-        <p>{{ config.level }}</p>
+        <p>{{ level }}</p>
       </div>
       <div class="right">
-        <span class="name">{{ config.author }}</span>
+        <span class="name">{{ author }}</span>
         <div>
           <a-progress
             :percent="exp / nextExp"

@@ -1,103 +1,138 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import originalConfig from '/_config.yaml'
 import enUS from '../locales/en-US.yaml'
 import jaJP from '../locales/ja-JP.yaml'
+import { detectBrowserLanguage, createConfigLoader } from './configUtils'
 
 // 支持的语言配置
 const localeConfigs = {
-  'zh': originalConfig,
+  zh: originalConfig,
   'en-US': enUS,
   'ja-JP': jaJP
 }
 
+// 创建配置加载器
+const configLoader = createConfigLoader(localeConfigs)
+
 export function useConfig() {
   const currentLocale = ref('zh')
+  const currentConfig = ref(null)
+  const isLoading = ref(false)
 
-  // 自动检测浏览器语言
-  const autoDetectLanguage = () => {
-    const browserLang = navigator.language || navigator.userLanguage
+  // 初始化语言
+  const initLocale = () => {
+    try {
+      const detectedLang = detectBrowserLanguage(configLoader.getSupportedLocales())
+      currentLocale.value = detectedLang
 
-    // console.log('检测浏览器语言:', browserLang)
-
-    const supportedLanguages = Object.keys(localeConfigs)
-    const languageMap = {
-      zh: 'zh',
-      'zh-CN': 'zh',
-      'zh-TW': 'zh',
-      'zh-HK': 'zh',
-      en: 'en-US',
-      'en-US': 'en-US',
-      'en-GB': 'en-US',
-      ja: 'ja-JP',
-      'ja-JP': 'ja-JP'
+      console.log('语言检测完成:', {
+        最终语言: detectedLang,
+        浏览器语言: navigator.language || navigator.userLanguage,
+        支持语言: configLoader.getSupportedLocales()
+      })
+    } catch (error) {
+      console.error('语言检测失败:', error)
+      currentLocale.value = 'en-US' // 备用语言
     }
-
-    // 精确匹配
-    if (languageMap[browserLang] && supportedLanguages.includes(languageMap[browserLang])) {
-      return languageMap[browserLang]
-    }
-
-    // 前缀匹配
-    const prefix = browserLang.split('-')[0]
-    if (languageMap[prefix] && supportedLanguages.includes(languageMap[prefix])) {
-      return languageMap[prefix]
-    }
-
-    // 默认中文
-    return 'en-US'
   }
 
-  // 确保数字字段安全的配置获取器
-  const getSafeConfig = (locale) => {
-    const config = localeConfigs[locale] || originalConfig
+  // 加载配置
+  const loadConfig = async () => {
+    if (isLoading.value) return
 
-    // 确保数字字段有安全的默认值
-    return {
-      ...config,
-      // 个人信息数字字段
-      level: Number(config.level) || 1,
-      exp: Number(config.exp) || 0,
-      nextExp: Number(config.nextExp) || 0,
-
-      // 确保数组存在且安全
-      dock: config.dock || [],
-      contact: config.contact || [],
-      memorialLobbies: config.memorialLobbies || [],
-
-      // 确保 banner.musicID 数组存在且安全
-      banner: {
-        musicID: (config.banner?.musicID || []).map((id) => Number(id) || 0),
-        ...config.banner
+    isLoading.value = true
+    try {
+      const config = await configLoader.getConfig(currentLocale.value)
+      currentConfig.value = config
+    } catch (error) {
+      console.error('加载配置失败:', error)
+      // 使用默认配置
+      currentConfig.value = {
+        level: 1,
+        exp: 0,
+        nextExp: 0,
+        dock: [],
+        contact: [],
+        memorialLobbies: [],
+        banner: { musicID: [] },
+        title: '个人主页',
+        translate: {
+          info: '更新提示',
+          update: '检测到新版本，是否立即更新？',
+          ok: '立即更新',
+          cancel: '稍后更新'
+        }
       }
+    } finally {
+      isLoading.value = false
     }
   }
 
-  // 初始化 - 自动检测语言（立即执行）
-  const init = () => {
-    const detectedLang = autoDetectLanguage()
-    currentLocale.value = detectedLang
+  // 立即初始化
+  initLocale()
+  loadConfig()
 
-    // console.log('语言自动检测完成:', {
-    //   最终语言: detectedLang,
-    //   浏览器语言: navigator.language,
-    //   支持的语言: Object.keys(localeConfigs)
-    // })
+  // 响应式配置对象
+  const configs = computed(() => currentConfig.value)
+
+  // 等待配置加载完成
+  const waitForConfig = () => {
+    return new Promise((resolve, reject) => {
+      if (!isLoading.value && currentConfig.value) {
+        resolve(currentConfig.value)
+        return
+      }
+
+      const unwatch = watch([isLoading, currentConfig], ([loading, config]) => {
+        if (!loading && config) {
+          unwatch()
+          resolve(config)
+        }
+      })
+
+      // 超时处理
+      setTimeout(() => {
+        unwatch()
+        if (currentConfig.value) {
+          resolve(currentConfig.value)
+        } else {
+          reject(new Error('配置加载超时'))
+        }
+      }, 10000) // 10秒超时
+    })
   }
 
-  // 立即执行初始化
-  init()
+  // 手动切换语言
+  const setLocale = (locale) => {
+    if (configLoader.getSupportedLocales().includes(locale)) {
+      currentLocale.value = locale
+      loadConfig()
+      console.log('语言已切换为:', locale)
+    } else {
+      console.warn(`不支持的语言: ${locale}`)
+    }
+  }
 
-  // 获取当前配置（安全的版本）- 使用 computed 确保响应式
-  const configs = computed(() => {
-    return getSafeConfig(currentLocale.value)
-  })
+  // 获取当前语言
+  const getCurrentLocale = () => {
+    return currentLocale.value
+  }
 
   return {
-    // 在模板中使用的响应式配置
+    // 响应式配置对象
     configs,
     // 当前语言
+    currentLocale,
+    // 当前语言（兼容旧版本）
     locale: currentLocale,
+    // 加载状态
+    isLoading,
     // 支持的语言列表
-    availableLocales: Object.keys(localeConfigs)
+    availableLocales: configLoader.getSupportedLocales(),
+    // 方法
+    setLocale,
+    getCurrentLocale,
+    reloadConfig: loadConfig,
+    waitForConfig
   }
 }

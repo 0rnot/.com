@@ -1,14 +1,27 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Icon } from '@arco-design/web-vue'
-
 import { useConfig } from '@/composables/useConfig'
 const { configs } = useConfig()
-const config = configs.value
 
-const IconFont = Icon.addFromIconFontCn({
-  src: config.iconfont
+const currentConfig = computed(() => configs.value)
+
+const iconfontUrl = computed(() => {
+  if (!currentConfig.value || !currentConfig.value.iconfont) return ''
+  return currentConfig.value.iconfont
 })
+
+const dockSites = computed(() => {
+  if (!currentConfig.value || !currentConfig.value.dock) return []
+  return currentConfig.value.dock
+})
+
+const IconFont = computed(() => {
+  const url = iconfontUrl.value
+  if (!url) return null
+  return Icon.addFromIconFontCn({ src: url })
+})
+
 const time = ref(new Date().getHours() + ':' + new Date().getMinutes())
 
 const addZero = (time) => {
@@ -24,7 +37,7 @@ setInterval(() => {
   <div class="footer">
     <div class="project-box">
       <a
-        v-for="site in config.dock"
+        v-for="site in dockSites"
         :key="site.name"
         :href="site.href"
         class="project css-cursor-hover-enabled"

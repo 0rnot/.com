@@ -1,8 +1,16 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useConfig } from '@/composables/useConfig'
 const { configs } = useConfig()
-const config = configs.value
+
+const currentConfig = computed(() => configs.value)
+
+const taskInfo = computed(() => {
+  if (!currentConfig.value || !currentConfig.value.task) {
+    return { name: '', href: '#' }
+  }
+  return currentConfig.value.task
+})
 
 const curtain = ref(false)
 const bg = ref(false)
@@ -14,7 +22,10 @@ const skip = () => {
   setTimeout(() => {
     curtain.value = true
     setTimeout(() => {
-      window.open(config.task.href)
+      const href = taskInfo.value.href
+      if (href && href !== '#') {
+        window.open(href)
+      }
     }, 300)
     setTimeout(
       () => {
@@ -31,7 +42,7 @@ const skip = () => {
   <transition name="down2">
     <div
       v-if="!props.l2dOnly"
-      :name="config.task.name"
+      :name="taskInfo.name"
       class="task css-cursor-hover-enabled"
       @click="skip"
     ></div>

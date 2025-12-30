@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue'
 import Cursor from '@/components/Cursor.vue'
 import Footer from '@/components/Footer.vue'
 import Level from '@/components/Level.vue'
@@ -8,30 +9,18 @@ import Task from '@/components/Task.vue'
 import Loading from '@/components/Loading.vue'
 import Background from '@/components/Background.vue'
 import Banner from '@/components/Banner.vue'
-import { ref } from 'vue'
+import { useLoading } from '@/composables/useLoading'
+import { useResponsive } from '@/composables/useResponsive'
 
-const loading = ref(true)
-const percent = ref(1)
+// 状态管理
 const l2dOnly = ref(true)
 const canSkipit = ref(true)
-const changeDirection = ref('left')
 
-import NProgress from 'nprogress'
+// 使用composables
+const { loading, percent } = useLoading()
+const { changeDirection } = useResponsive()
 
-NProgress.start()
-
-const load = setInterval(() => {
-  percent.value = NProgress.status
-  if (document.readyState === 'complete' && window.l2d_complete === true) {
-    NProgress.done()
-    percent.value = 1
-    setTimeout(() => {
-      loading.value = false
-    }, 2000)
-    clearInterval(load)
-  }
-}, 1)
-
+// 方法
 const switchL2D = () => {
   l2dOnly.value = !l2dOnly.value
 }
@@ -39,152 +28,64 @@ const switchL2D = () => {
 const canSkip = (value) => {
   canSkipit.value = value
 }
-const checkScreenSize = () => {
-  changeDirection.value = window.innerWidth <= 768 ? 'right' : 'left'
-}
-checkScreenSize()
-window.addEventListener('resize', checkScreenSize)
 </script>
 
 <template>
+  <!-- 加载状态 -->
   <transition name="loading">
-    <Loading v-if="loading" :percent="percent"></Loading>
+    <Loading v-if="loading" :percent="percent" />
   </transition>
-  <div id="background"></div>
-  <main v-if="!loading">
+
+  <!-- 背景 -->
+  <div id="background" class="app-background"></div>
+
+  <!-- 主要内容 -->
+  <main v-if="!loading" class="app-main">
     <Suspense>
-      <Background
-        :l2dOnly="l2dOnly"
-        @update:changeL2D="l2dOnly = $event"
-        @canskip="canSkip"
-      ></Background>
+      <Background :l2dOnly="l2dOnly" @update:changeL2D="l2dOnly = $event" @canskip="canSkip" />
     </Suspense>
+
+    <!-- 等级部分 -->
     <transition name="up">
-      <Level v-if="!l2dOnly"></Level>
+      <Level v-if="!l2dOnly" />
     </transition>
-    <Toolbox :l2dOnly="l2dOnly" :canskip="canSkipit" @switch="switchL2D"></Toolbox>
+
+    <!-- 工具箱 -->
+    <Toolbox :l2dOnly="l2dOnly" :canskip="canSkipit" @switch="switchL2D" />
+
+    <!-- 联系方式 -->
     <transition name="left">
-      <Contact v-if="!l2dOnly"></Contact>
+      <Contact v-if="!l2dOnly" />
     </transition>
-    <Task :l2dOnly="l2dOnly"></Task>
+
+    <!-- 任务 -->
+    <Task :l2dOnly="l2dOnly" />
+
+    <!-- 横幅 -->
     <transition :name="changeDirection">
-      <Banner v-show="!l2dOnly"></Banner>
+      <Banner v-show="!l2dOnly" />
     </transition>
+
+    <!-- 页脚 -->
     <transition name="down">
-      <Footer v-if="!l2dOnly"></Footer>
+      <Footer v-if="!l2dOnly" />
     </transition>
+
+    <!-- 幕布效果 -->
     <div id="curtain"></div>
   </main>
-  <Cursor></Cursor>
+
+  <!-- 自定义光标 -->
+  <Cursor />
 </template>
 
 <style scoped>
+/* 导入样式文件 */
+@import '@/assets/app.css';
+
+/* 主要内容区域 */
 main {
   display: flex;
   flex-direction: column;
-}
-
-.loading-leave-to {
-  opacity: 0;
-}
-
-.loading-leave-from {
-  opacity: 1;
-}
-
-.loading-leave-active {
-  transition: opacity 0.5s ease-in-out;
-}
-
-.up-leave-to,
-.up-enter-from {
-  transform: translateY(-300px);
-}
-
-.up-leave-from,
-.up-enter-to {
-  transform: translateY(0);
-}
-
-.down-leave-to,
-.down-enter-from {
-  transform: translateY(300px) skew(-20deg);
-}
-
-.down-leave-from,
-.down-enter-to {
-  transform: translateY(0) skew(-20deg);
-}
-
-@media screen and (max-width: 495px) {
-  .down-leave-to,
-  .down-enter-from {
-    transform: translateY(300px);
-  }
-
-  .down-leave-from,
-  .down-enter-to {
-    transform: translateY(0);
-  }
-
-  .up-leave-to,
-  .up-enter-from {
-    transform: translateY(-300px) skew(-10deg);
-  }
-
-  .up-leave-from,
-  .up-enter-to {
-    transform: translateY(0) skew(-10deg);
-  }
-}
-
-.left-leave-to,
-.left-enter-from {
-  transform: translateX(-400px);
-}
-
-.left-leave-from,
-.left-enter-to {
-  transform: translateX(0);
-}
-
-.right-leave-to,
-.right-enter-from {
-  transform: translateX(300px);
-}
-
-.right-leave-from,
-.right-enter-to {
-  transform: translateX(0);
-}
-
-.up-leave-active,
-.down-leave-active,
-.left-leave-active,
-.right-leave-active {
-  transition: transform 0.3s ease-in;
-}
-
-.up-enter-active,
-.down-enter-active,
-.left-enter-active,
-.right-enter-active {
-  transition: transform 0.3s ease-out;
-}
-
-#background {
-  background-image: url('/shitim/Event_Main_Stage_Bg.png');
-  background-position: center;
-  background-size: cover;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
 }
 </style>

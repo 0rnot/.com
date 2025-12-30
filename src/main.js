@@ -1,75 +1,53 @@
 import './assets/index.css'
 import '@arco-design/web-vue/dist/arco.css'
 
-import { createApp } from 'vue'
-import { Modal } from '@arco-design/web-vue'
-import ArcoVue from '@arco-design/web-vue'
-import ArcoVueIcon from '@arco-design/web-vue/es/icon'
-import App from './App.vue'
-import { registerSW } from 'virtual:pwa-register'
+import { initApp } from '@/init/app'
+import { initPWA } from '@/init/pwa'
+import { loadFonts } from '@/init/fonts'
+import { initLinkHandler } from '@/init/links'
+import { initLive2D } from '@/init/live2d'
 import { useConfig } from '@/composables/useConfig'
-const { configs } = useConfig()
-const config = configs.value
 
-import { css } from './assets/font/BlueakaBeta2GBK-DemiBold.ttf'
-import { css as css2 } from './assets/font/BlueakaBeta2GBK-Bold.ttf'
-console.log(css.family, css.weight);
-console.log(css2.family, css2.weight);
+// 初始化应用
+initApp()
 
-const app = createApp(App)
-app.use(ArcoVue)
-app.use(ArcoVueIcon)
+// 初始化PWA
+initPWA()
 
-app.mount('#app')
+// 初始化链接处理器
+initLinkHandler()
 
-if ('serviceWorker' in navigator) {
-  const updateSW = registerSW({
-    onNeedRefresh() {
-      Modal.open({
-        title: config.translate.info,
-        content: config.translate.update,
-        okText: config.translate.ok,
-        cancelText: config.translate.cancel,
-        onOk: () => {
-          updateSW(true)
-        }
-      })
+// 启动初始化流程
+async function startApp() {
+  try {
+    // 初始化配置并设置页面标题
+    const { configs, waitForConfig } = useConfig()
+
+    // 等待配置加载完成
+    await waitForConfig()
+
+    // 设置页面标题
+    const config = configs.value
+    if (config && config.title) {
+      document.title = config.title
+    } else {
+      document.title = '个人主页'
     }
-  })
+
+    // 加载字体
+    await loadFonts()
+
+    // 等待配置完成后初始化Live2D
+    await initLive2D()
+
+    // 应用准备就绪
+    console.log('应用初始化完成')
+  } catch (error) {
+    console.error('应用初始化失败:', error)
+    // 设置默认标题
+    document.title = '个人主页'
+  }
 }
 
-window.l2d_complete = false
-
-setInterval(() => {
-  document.querySelectorAll('a[href]:not(.tag)').forEach((link) => {
-    link.classList.add('tag')
-    link.addEventListener('click', async (e) => {
-      const url = link.getAttribute('href')
-      e.preventDefault()
-      document.querySelector('#curtain').style.display = 'block'
-      setTimeout(() => {
-        let a = document.createElement('a')
-        a.href = url
-        a.target = '_blank'
-        a.click()
-      }, 900)
-      setTimeout(() => (document.querySelector('#curtain').style.display = ''), 3000)
-    })
-  })
-}, 1000)
-
-import * as PIXI from 'pixi.js'
-
-document.querySelector('title').innerHTML = config.title
-
-// 加载大厅L2D文件
-;(async function () {
-  let a = 0
-  for (let i of config.memorialLobbies) {
-    PIXI.Assets.add({ alias: 'skeleton' + a, src: i.path + i.skel })
-    PIXI.Assets.add({ alias: 'atlas' + a, src: i.path + i.atlas })
-    await PIXI.Assets.load(['skeleton' + a, 'atlas' + a])
-    a++
-  }
-  window.l2d_complete = true
-})()
+// 启动应用
+startApp()

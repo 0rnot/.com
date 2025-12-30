@@ -4,30 +4,40 @@ import * as PIXI from 'pixi.js'
 import { Modal } from '@arco-design/web-vue'
 import { useConfig } from '@/composables/useConfig'
 const { configs, locale } = useConfig()
-const config = configs.value
 const emit = defineEmits(['canskip', 'update:changeL2D'])
 import { Howl } from 'howler'
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 const props = defineProps(['l2dOnly'])
 
 let animation,
-  id = 1
+  id = 0
 let canSkip = true
 let soundList = []
 let talking = false,
   talkIndex = 1
 let modalRef
-let originalOffsetPercent = (parseFloat(config.memorialLobbies[0].offset) || 0.7) * 100
+let originalOffsetPercent = 70 // 默认值，等待配置加载后更新
 
 const dialogue = ref('')
 const showDialogue = ref(false)
 const ifPetting = ref(false)
+const currentConfig = computed(() => configs.value)
+
+const updateDialoguePosition = () => {
+  if (
+    currentConfig.value &&
+    currentConfig.value.memorialLobbies &&
+    currentConfig.value.memorialLobbies[id]
+  ) {
+    const lobby = currentConfig.value.memorialLobbies[id]
+    dialogueDisplay.value.x = eval(lobby.dialogueDisplay.x) * document.documentElement.clientWidth
+    dialogueDisplay.value.y = eval(lobby.dialogueDisplay.y) * document.documentElement.clientHeight
+  }
+}
+
 window.onresize = () => {
-  dialogueDisplay.value.x =
-    eval(config.memorialLobbies[id].dialogueDisplay.x) * document.documentElement.clientWidth
-  dialogueDisplay.value.y =
-    eval(config.memorialLobbies[id].dialogueDisplay.y) * document.documentElement.clientHeight
+  updateDialoguePosition()
 }
 
 const dialogueDisplay = ref({
@@ -50,21 +60,31 @@ const changeL2D = (value) => {
 
 const onEvent = (entry, event) => {
   if (event.stringValue === '') return
-  console.log(config.memorialLobbies[id].voice[event.stringValue], event.stringValue)
 
-  if (!config.memorialLobbies[id].voice[event.stringValue]) return
+  if (
+    !currentConfig.value ||
+    !currentConfig.value.memorialLobbies ||
+    !currentConfig.value.memorialLobbies[id]
+  ) {
+    return
+  }
 
-  dialogue.value = config.memorialLobbies[id].voice[event.stringValue]
+  const lobby = currentConfig.value.memorialLobbies[id]
+  console.log(lobby.voice[event.stringValue], event.stringValue)
+
+  if (!lobby.voice[event.stringValue]) return
+
+  dialogue.value = lobby.voice[event.stringValue]
   showDialogue.value = true
   let voice
   if (locale.value === 'zh') {
     voice = new Howl({
-      src: [config.memorialLobbies[id].path + 'zh-CN/' + event.stringValue + '.ogg'],
+      src: [lobby.path + 'zh-CN/' + event.stringValue + '.ogg'],
       volume: 0.3
     })
   } else {
     voice = new Howl({
-      src: [config.memorialLobbies[id].path + 'ja-JP/' + event.stringValue + '.ogg'],
+      src: [lobby.path + 'ja-JP/' + event.stringValue + '.ogg'],
       volume: 0.3
     })
   }
@@ -79,6 +99,11 @@ const onEvent = (entry, event) => {
 }
 
 const setL2D = async (num) => {
+  if (!currentConfig.value || !currentConfig.value.memorialLobbies) {
+    console.warn('配置未准备好，跳过Live2D切换')
+    return
+  }
+
   canSkip = true
   emit('canskip', true)
   talking = false
@@ -95,31 +120,77 @@ const setL2D = async (num) => {
   }
   l2d.stage.removeChild(animation)
 
+  const lobbies = currentConfig.value.memorialLobbies
+
   switch (num) {
     case '-':
-      id = id === 0 ? config.memorialLobbies.length - 1 : id - 1
+      id = id === 0 ? lobbies.length - 1 : id - 1
       break
     case '+':
-      id = id === config.memorialLobbies.length - 1 ? 0 : id + 1
+      id = id === lobbies.length - 1 ? 0 : id + 1
       break
     default:
       id = num
   }
 
-  dialogueDisplay.value.x =
-    eval(config.memorialLobbies[id].dialogueDisplay.x) * document.documentElement.clientWidth
-  dialogueDisplay.value.y =
-    eval(config.memorialLobbies[id].dialogueDisplay.y) * document.documentElement.clientHeight
-  dialogueDisplay.value.position = config.memorialLobbies[id].dialogueDisplay.position
-
-  animation = Spine.from('skeleton' + id, 'atlas' + id)
-  if (animation) {
-    animation.state.setAnimation(1, 'Dummy', true)
-    animation.state.setAnimation(2, 'Dummy', true)
-    animation.state.setAnimation(3, 'Dummy', true)
-    animation.state.setAnimation(4, 'Dummy', true)
+  if (id < 0 || id >= lobbies.length) {
+    console.error('角色索引超出范围:', id, '角色总数:', lobbies.length)
+    return
   }
-  l2d.stage.addChild(animation)
+
+  const lobby = lobbies[id]
+
+  // 检查必需的属性
+  if (!lobby.path || !lobby.skel || !lobby.atlas) {
+    console.error('角色资源配置不完整:', {
+      角色名: lobby.name,
+      path: lobby.path,
+      skel: lobby.skel,
+      atlas: lobby.atlas,
+      完整配置: lobby
+    })
+    return
+  }
+
+  dialogueDisplay.value.x = eval(lobby.dialogueDisplay.x) * document.documentElement.clientWidth
+  dialogueDisplay.value.y = eval(lobby.dialogueDisplay.y) * document.documentElement.clientHeight
+  dialogueDisplay.value.position = lobby.dialogueDisplay.position
+
+  try {
+    // 使用配置文件中定义的实际资源路径
+    const skeletonPath = lobby.path + lobby.skel
+    const atlasPath = lobby.path + lobby.atlas
+
+    console.log('加载Live2D资源:', {
+      角色: lobby.name,
+      骨架路径: skeletonPath,
+      图集路径: atlasPath
+    })
+
+    // 先预加载资源 (使用与 live2d.js 相同的别名格式)
+    const skeletonAlias = `skeleton_${id}`
+    const atlasAlias = `atlas_${id}`
+
+    PIXI.Assets.add({ alias: skeletonAlias, src: skeletonPath })
+    PIXI.Assets.add({ alias: atlasAlias, src: atlasPath })
+    await PIXI.Assets.load([skeletonAlias, atlasAlias])
+
+    // 然后创建动画
+    animation = Spine.from(skeletonAlias, atlasAlias)
+    if (animation) {
+      animation.state.setAnimation(1, 'Dummy', true)
+      animation.state.setAnimation(2, 'Dummy', true)
+      animation.state.setAnimation(3, 'Dummy', true)
+      animation.state.setAnimation(4, 'Dummy', true)
+      l2d.stage.addChild(animation)
+    } else {
+      console.error('Live2D 动画创建失败，角色:', lobby.name)
+      return
+    }
+  } catch (error) {
+    console.error('Live2D 资源加载失败:', error, '角色:', lobby.name, '资源路径:', lobby.path)
+    return
+  }
   animation.scale.set(0.85)
   animation.state.setAnimation(0, 'Idle_01', true)
   animation.state.timeScale = 1
@@ -127,7 +198,7 @@ const setL2D = async (num) => {
   animation.y = 1440
   animation.x = 2560 / 2
 
-  originalOffsetPercent = (parseFloat(config.memorialLobbies[id].offset) || 0.7) * 100
+  originalOffsetPercent = (parseFloat(lobby.offset) || 0.7) * 100
   l2d.view.style.transform = `translateX(calc((50% - ${originalOffsetPercent} * 1%) * (1 - min(1, 100vw / 1200px))))`
 
   let startIdle = 'Start_Idle_01'
@@ -187,11 +258,17 @@ const skipStartIdle = () => {
     animation.state.getCurrent(0).animation.name !== 'Idle_01' &&
     animation.state.data.skeletonData.findAnimation('Idle_01')
   ) {
+    if (!currentConfig.value || !currentConfig.value.translate) {
+      console.warn('配置未准备好，无法显示跳过对话框')
+      changeL2D(false)
+      return
+    }
+
     modalRef = Modal.open({
-      title: config.translate.info,
-      content: config.translate.ifSkip,
-      okText: config.translate.ok,
-      cancelText: config.translate.cancel,
+      title: currentConfig.value.translate.info,
+      content: currentConfig.value.translate.ifSkip,
+      okText: currentConfig.value.translate.ok,
+      cancelText: currentConfig.value.translate.cancel,
       onOk: () => {
         changeL2D(false)
         if (soundList.length !== 0) {
@@ -322,7 +399,23 @@ const vLongPress = {
   }
 }
 
-setL2D(id)
+// 等待配置加载完成后初始化Live2D
+const initLive2DWhenReady = () => {
+  if (currentConfig.value && currentConfig.value.memorialLobbies) {
+    setL2D(id)
+  }
+}
+
+// 监听配置变化
+watch(
+  currentConfig,
+  (newConfig) => {
+    if (newConfig && newConfig.memorialLobbies && newConfig.memorialLobbies.length > 0) {
+      initLive2DWhenReady()
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>

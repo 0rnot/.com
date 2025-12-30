@@ -1,19 +1,22 @@
 <script setup>
 import { Modal } from '@arco-design/web-vue'
-import { h, ref } from 'vue'
+import { h, ref, computed } from 'vue'
 
 import { useConfig } from '@/composables/useConfig'
 const { configs } = useConfig()
-const config = configs.value
 
 const emit = defineEmits(['switch'])
 const props = defineProps(['l2dOnly', 'canskip'])
 
-const max_ap = 60 + config.level * 2
+const currentConfig = computed(() => configs.value)
+const max_ap = computed(() => {
+  if (!currentConfig.value || !currentConfig.value.level) return 60
+  return 60 + currentConfig.value.level * 2
+})
 const ap = ref(
-  max_ap -
+  max_ap.value -
     Math.trunc(
-      max_ap *
+      max_ap.value *
         ((new Date().getTime() -
           new Date(
             `${new Date().getFullYear()}-${
@@ -28,22 +31,36 @@ const showMin = ref(false)
 const hover = ref(window.matchMedia('(hover: none)').matches)
 
 const about = () => {
+  if (!currentConfig.value || !currentConfig.value.translate) {
+    console.warn('配置未准备好，无法显示关于对话框')
+    return
+  }
+
   Modal.open({
-    title: config.translate.about,
+    title: currentConfig.value.translate.about,
     content: () => [
       h(
         'p',
         {},
-        config.author === '小鱼yuzifu' || config.author === 'ゆづふ' || config.author === 'Yuzifu'
-          ? `© ${new Date().getFullYear()} ${config.author}`
-          : [`© ${new Date().getFullYear()} ${config.author}`, h('p', {}, 'Made by 小鱼yuzifu')]
+        currentConfig.value.author === '小鱼yuzifu' ||
+          currentConfig.value.author === 'ゆづふ' ||
+          currentConfig.value.author === 'Yuzifu'
+          ? `© ${new Date().getFullYear()} ${currentConfig.value.author}`
+          : [
+              `© ${new Date().getFullYear()} ${currentConfig.value.author}`,
+              h('p', {}, 'Made by 小鱼yuzifu')
+            ]
       ),
-      h('span', {}, config.translate.projectWebsite),
+      h('span', {}, currentConfig.value.translate.projectWebsite),
       h('a', { href: 'https://github.com/sf-yuzifu/homepage', target: '_blank' }, 'Github'),
-      config.ICP
+      currentConfig.value.ICP
         ? [
             h('br', {}, ''),
-            h('a', { href: 'https://beian.miit.gov.cn/', target: '_blank' }, config.ICP)
+            h(
+              'a',
+              { href: 'https://beian.miit.gov.cn/', target: '_blank' },
+              currentConfig.value.ICP
+            )
           ]
         : null
     ],
