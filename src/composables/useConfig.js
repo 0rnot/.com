@@ -5,13 +5,13 @@ import jaJP from '../locales/ja-JP.yaml'
 
 // 支持的语言配置
 const localeConfigs = {
-  'zh-CN': originalConfig,
+  'zh': originalConfig,
   'en-US': enUS,
   'ja-JP': jaJP
 }
 
 export function useConfig() {
-  const currentLocale = ref('zh-CN')
+  const currentLocale = ref('zh')
 
   // 自动检测浏览器语言
   const autoDetectLanguage = () => {
@@ -21,10 +21,10 @@ export function useConfig() {
 
     const supportedLanguages = Object.keys(localeConfigs)
     const languageMap = {
-      zh: 'zh-CN',
-      'zh-CN': 'zh-CN',
-      'zh-TW': 'zh-CN',
-      'zh-HK': 'zh-CN',
+      zh: 'zh',
+      'zh-CN': 'zh',
+      'zh-TW': 'zh',
+      'zh-HK': 'zh',
       en: 'en-US',
       'en-US': 'en-US',
       'en-GB': 'en-US',
@@ -44,7 +44,7 @@ export function useConfig() {
     }
 
     // 默认中文
-    return 'zh-CN'
+    return 'en-US'
   }
 
   // 确保数字字段安全的配置获取器
