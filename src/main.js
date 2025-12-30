@@ -3,9 +3,7 @@ import '@arco-design/web-vue/dist/arco.css'
 
 import { initApp } from '@/init/app'
 import { initPWA } from '@/init/pwa'
-import { loadFonts } from '@/init/fonts'
 import { initLinkHandler } from '@/init/links'
-import { initLive2D } from '@/init/live2d'
 import { useConfig } from '@/composables/useConfig'
 
 // 初始化应用
@@ -34,14 +32,10 @@ async function startApp() {
       document.title = '个人主页'
     }
 
-    // 加载字体
-    await loadFonts()
+    console.log('main.js 初始化完成，等待useLoading管理')
 
-    // 等待配置完成后初始化Live2D
-    await initLive2D()
-
-    // 应用准备就绪
-    console.log('应用初始化完成')
+    // 注意：不再在这里加载字体和Live2D，让useLoading来处理
+    // 这样可以确保加载顺序正确
   } catch (error) {
     console.error('应用初始化失败:', error)
     // 设置默认标题

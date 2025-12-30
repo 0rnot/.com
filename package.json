@@ -20,7 +20,6 @@
     "axios": "^1.8.2",
     "howler": "^2.2.4",
     "js-yaml": "^4.1.0",
-    "nprogress": "^0.2.0",
     "pixi.js": "^7.4.3",
     "postcss": "^8.4.41",
     "postcss-import": "^16.1.0",

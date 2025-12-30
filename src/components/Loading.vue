@@ -1,7 +1,19 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useResourceLoader } from '@/composables/useResourceLoader'
 
-const prop = defineProps(['percent'])
+const props = defineProps(['percent'])
+
+// 获取资源加载器状态以显示详细信息
+const resourceLoader = useResourceLoader()
+
+// 计算Live2D资源状态
+const live2dResources = computed(() => {
+  const resources = resourceLoader.getStatus().resources
+  return Object.entries(resources)
+    .filter(([id]) => id.startsWith('live2d_'))
+    .map(([id, resource]) => ({ id, ...resource }))
+})
 
 const imgUrl = ref('https://webcnstatic.yostar.net/ba_cn_web/prod/web/assets/avatar2.b84283e9.png')
 const imgList = [
@@ -38,7 +50,23 @@ setInterval(() => {
     </div>
     <div class="progress_wrapper">
       <h1 class="title">connecting...</h1>
-      <div class="percent">{{ Math.floor(prop.percent * 100) + '%' }}</div>
+      <div class="percent">{{ Math.floor(props.percent * 100) + '%' }}</div>
+      
+      <!-- 显示加载详情 -->
+      <div v-if="resourceLoader.totalCount.value > 0" class="loading_details">
+        <div class="detail_item">
+          <span class="label">字体:</span>
+          <span class="status" :class="{ 'loaded': resourceLoader.getStatus().resources.fonts_ready?.status === 'loaded' }">
+            {{ resourceLoader.getStatus().resources.fonts_ready?.status === 'loaded' ? '✓' : '...' }}
+          </span>
+        </div>
+        <div class="detail_item" v-for="resource in live2dResources" :key="resource.id">
+          <span class="label">Live2D:</span>
+          <span class="status" :class="{ 'loaded': resource.status === 'loaded', 'error': resource.status === 'error' }">
+            {{ resource.status === 'loaded' ? '✓' : resource.status === 'error' ? '✗' : '...' }}
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -95,6 +123,7 @@ img {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  margin-top: 2rem;
 }
 
 .progress_wrapper .title {
@@ -108,6 +137,40 @@ img {
   font-size: 1.4rem;
   font-family: TVPS-Vain-Capital-2, system-ui;
   color: #1289f9;
+}
+
+/* 加载详情样式 */
+.loading_details {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.detail_item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.detail_item .label {
+  color: #999;
+}
+
+.detail_item .status {
+  font-weight: bold;
+  color: #1289f9;
+}
+
+.detail_item .status.loaded {
+  color: #52c41a;
+}
+
+.detail_item .status.error {
+  color: #ff4d4f;
 }
 
 .hide {
