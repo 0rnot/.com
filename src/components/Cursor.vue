@@ -230,15 +230,19 @@ class ClickEffect {
 function initCanvas() {
   if (!canvas.value) return
   
-  const rect = canvas.value.getBoundingClientRect()
-  canvas.value.width = rect.width * window.devicePixelRatio
-  canvas.value.height = rect.height * window.devicePixelRatio
+  // 直接使用窗口尺寸，确保响应式
+  const width = window.innerWidth
+  const height = window.innerHeight
+  const devicePixelRatio = window.devicePixelRatio || 1
+  
+  // 设置Canvas的实际像素尺寸
+  canvas.value.width = width * devicePixelRatio
+  canvas.value.height = height * devicePixelRatio
   
   ctx = canvas.value.getContext('2d')
-  ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
-  
-  canvas.value.style.width = rect.width + 'px'
-  canvas.value.style.height = rect.height + 'px'
+  // 重置变换矩阵，然后应用设备像素比缩放
+  ctx.setTransform(1, 0, 0, 1, 0, 0)
+  ctx.scale(devicePixelRatio, devicePixelRatio)
 }
 
 function animate() {
@@ -276,10 +280,23 @@ function handleDocumentMouseDown(event) {
 
 function handleResize() {
   initCanvas()
+  
+  // 在窗口大小变化时清理正在进行的动画
+  if (animationId) {
+    cancelAnimationFrame(animationId)
+    animationId = null
+  }
+  
+  // 清理所有效果，重新开始动画循环
+  effects.length = 0
 }
 
 onMounted(() => {
-  initCanvas()
+  // 延迟初始化，确保DOM元素已经渲染
+  setTimeout(() => {
+    initCanvas()
+  }, 0)
+  
   window.addEventListener('resize', handleResize)
   document.addEventListener('mousedown', handleDocumentMouseDown)
 })
