@@ -1,9 +1,16 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const posX = ref(0)
 const posY = ref(0)
 
+// Canvas相关变量
+const canvas = ref(null)
+let ctx = null
+let animationId = null
+const effects = []
+
+// 光标移动相关
 document.addEventListener('mousemove', showMousePosition, false)
 
 function showMousePosition(event) {
@@ -18,38 +25,6 @@ document.body.onmouseleave = function () {
 
 document.body.onmouseenter = function () {
   document.querySelector('#cursor .inner').style.opacity = 1
-}
-
-document.body.onclick = function () {
-  let a = document.createElement('div')
-  a.classList.add('click')
-  a.style.left = posX.value - 50 / 2 + 'px'
-  a.style.top = posY.value - 50 / 2 + 'px'
-
-  let b = document.createElement('div')
-  let c = Math.random() * 360
-  b.style.transform = 'rotate(' + c + 'deg)'
-  b.classList.add('inner')
-  a.appendChild(b)
-
-  let d = document.createElement('div')
-  let e = Math.random() * 360
-  d.style.transform = 'rotate(' + e + 'deg)'
-  d.classList.add('inner')
-  a.appendChild(d)
-
-  document.body.appendChild(a)
-  setTimeout(() => {
-    b.style.transform = 'rotate(' + (c + 180) + 'deg)'
-    d.style.transform = 'rotate(' + (e + 180) + 'deg)'
-  }, 1)
-  setTimeout(() => {
-    a.remove()
-  }, 500)
-}
-
-document.oncontextmenu = function () {
-  return false
 }
 
 let el = window.document.body
@@ -70,6 +45,252 @@ window.document.body.onmouseover = function (event) {
     document.querySelector('#cursor').classList.remove('hover')
   }
 }
+
+// 点击效果类
+class ClickEffect {
+  constructor(x, y) {
+    this.x = x
+    this.y = y
+    this.startTime = Date.now()
+    this.duration = 800
+    this.rotation1 = Math.random() * Math.PI * 2
+    this.rotation2 = Math.random() * Math.PI * 2
+    this.radius = 25
+    
+    this.triangles = []
+    this.createTriangles()
+  }
+
+  createTriangles() {
+    const triangleCount = 3 + Math.floor(Math.random() * 4)
+    
+    for (let i = 0; i < triangleCount; i++) {
+      const angle = Math.random() * Math.PI * 2
+      const delay = Math.random() * 200
+      
+      this.triangles.push({
+        angle: angle,
+        delay: delay,
+        size: 8 + Math.random() * 12,
+        speed: 30 + Math.random() * 40,
+        color: Math.random() > 0.5 ? '#77deff' : '#ffffff',
+        rotationSpeed: (Math.random() - 0.5) * 0.1
+      })
+    }
+  }
+
+  draw(ctx, currentTime) {
+    const elapsed = currentTime - this.startTime
+    const progress = Math.min(elapsed / this.duration, 1)
+    
+    ctx.save()
+    ctx.translate(this.x, this.y)
+    
+    const scale = 1 + progress * 0.3
+    const alpha = Math.pow(1 - progress, 1.5)
+    const currentRadius = this.radius + 8 + progress * 6
+    
+    ctx.globalAlpha = alpha
+    ctx.scale(scale, scale)
+    
+    this.drawOuterCircle(ctx, alpha, currentRadius)
+    this.drawArcTails(ctx, progress, currentRadius)
+    this.drawTriangles(ctx, elapsed)
+    
+    ctx.restore()
+    
+    return progress < 1
+  }
+
+  drawOuterCircle(ctx, alpha, currentRadius) {
+    const centerRadius = currentRadius + 8
+    
+    ctx.beginPath()
+    ctx.arc(0, 0, centerRadius, 0, Math.PI * 2)
+    
+    const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, centerRadius)
+    gradient.addColorStop(0, `rgba(195, 235, 255, ${alpha * 0.8})`)
+    gradient.addColorStop(0.7, `rgba(195, 235, 255, ${alpha * 0.4})`)
+    gradient.addColorStop(1, `rgba(195, 235, 255, 0)`)
+    
+    ctx.fillStyle = gradient
+    ctx.shadowColor = '#c3ebff'
+    ctx.shadowBlur = 10
+    ctx.fill()
+    ctx.shadowBlur = 0
+  }
+
+  drawArcTails(ctx, progress, currentRadius) {
+    if (progress < 0.3) return
+    
+    const tailProgress = (progress - 0.3) / 0.7
+    
+    ctx.save()
+    ctx.globalAlpha = Math.max(0, 1 - progress * 1.2)
+    
+    const tail1Angle = this.rotation1 - tailProgress * 2
+    const tail2Angle = this.rotation2 + Math.PI - tailProgress * 2
+    
+    for (let i = 0; i < 8; i++) {
+      const offset = i * 8
+      const alpha = (1 - progress) * (1 - i * 0.12)
+      
+      ctx.save()
+      ctx.globalAlpha = alpha
+      ctx.strokeStyle = '#77deff'
+      ctx.lineWidth = Math.max(1, 3 - i * 0.3)
+      ctx.lineCap = 'round'
+      
+      ctx.shadowColor = '#77deff'
+      ctx.shadowBlur = 8 - i
+      
+      const startAngle = tail1Angle - (offset * Math.PI / 180)
+      const endAngle = tail1Angle + Math.PI * 0.6 - (offset * Math.PI / 180)
+      ctx.beginPath()
+      ctx.arc(0, 0, currentRadius, startAngle, endAngle)
+      ctx.stroke()
+      
+      ctx.restore()
+    }
+    
+    for (let i = 0; i < 8; i++) {
+      const offset = i * 8
+      const alpha = (1 - progress) * (1 - i * 0.12)
+      
+      ctx.save()
+      ctx.globalAlpha = alpha
+      ctx.strokeStyle = '#ffffff'
+      ctx.lineWidth = Math.max(1, 3 - i * 0.3)
+      ctx.lineCap = 'round'
+      
+      ctx.shadowColor = '#ffffff'
+      ctx.shadowBlur = 8 - i
+      
+      const startAngle = tail2Angle - (offset * Math.PI / 180)
+      const endAngle = tail2Angle + Math.PI * 0.4 - (offset * Math.PI / 180)
+      ctx.beginPath()
+      ctx.arc(0, 0, currentRadius, startAngle, endAngle)
+      ctx.stroke()
+      
+      ctx.restore()
+    }
+    
+    ctx.restore()
+  }
+
+  drawTriangles(ctx, elapsed) {
+    this.triangles.forEach((triangle) => {
+      const triangleProgress = Math.max(0, (elapsed - triangle.delay) / (this.duration - triangle.delay))
+      
+      if (triangleProgress <= 0 || triangleProgress >= 1) return
+      
+      const distance = triangle.speed * triangleProgress
+      const size = triangle.size * (1 - triangleProgress * 0.8)
+      const brightness = Math.sin(triangleProgress * Math.PI * 6) * 0.4 + 0.8
+      
+      ctx.save()
+      ctx.translate(
+        Math.cos(triangle.angle) * (this.radius + distance),
+        Math.sin(triangle.angle) * (this.radius + distance)
+      )
+      
+      ctx.rotate(triangle.angle + elapsed * triangle.rotationSpeed / 1000)
+      
+      ctx.globalAlpha = 1 - triangleProgress
+      
+      ctx.fillStyle = triangle.color
+      ctx.shadowColor = triangle.color
+      ctx.shadowBlur = 10
+      
+      ctx.beginPath()
+      ctx.moveTo(0, -size)
+      ctx.lineTo(size * 0.866, size * 0.5)
+      ctx.lineTo(-size * 0.866, size * 0.5)
+      ctx.closePath()
+      ctx.fill()
+      
+      ctx.globalCompositeOperation = 'lighter'
+      ctx.fillStyle = triangle.color
+      ctx.globalAlpha = brightness * 0.3
+      ctx.shadowBlur = 20
+      ctx.shadowColor = triangle.color
+      ctx.beginPath()
+      ctx.moveTo(0, -size * 0.8)
+      ctx.lineTo(size * 0.693, size * 0.4)
+      ctx.lineTo(-size * 0.693, size * 0.4)
+      ctx.closePath()
+      ctx.fill()
+      
+      ctx.restore()
+    })
+  }
+}
+
+// Canvas相关函数
+function initCanvas() {
+  if (!canvas.value) return
+  
+  const rect = canvas.value.getBoundingClientRect()
+  canvas.value.width = rect.width * window.devicePixelRatio
+  canvas.value.height = rect.height * window.devicePixelRatio
+  
+  ctx = canvas.value.getContext('2d')
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
+  
+  canvas.value.style.width = rect.width + 'px'
+  canvas.value.style.height = rect.height + 'px'
+}
+
+function animate() {
+  if (!ctx) return
+  
+  const currentTime = Date.now()
+  
+  ctx.clearRect(0, 0, canvas.value.width, canvas.value.height)
+  
+  for (let i = effects.length - 1; i >= 0; i--) {
+    const effect = effects[i]
+    if (!effect.draw(ctx, currentTime)) {
+      effects.splice(i, 1)
+    }
+  }
+  
+  if (effects.length > 0 || animationId) {
+    animationId = requestAnimationFrame(animate)
+  } else {
+    animationId = null
+  }
+}
+
+function handleDocumentMouseDown(event) {
+  const rect = canvas.value.getBoundingClientRect()
+  const x = event.clientX - rect.left
+  const y = event.clientY - rect.top
+  
+  effects.push(new ClickEffect(x, y))
+  
+  if (!animationId) {
+    animationId = requestAnimationFrame(animate)
+  }
+}
+
+function handleResize() {
+  initCanvas()
+}
+
+onMounted(() => {
+  initCanvas()
+  window.addEventListener('resize', handleResize)
+  document.addEventListener('mousedown', handleDocumentMouseDown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+  document.removeEventListener('mousedown', handleDocumentMouseDown)
+  if (animationId) {
+    cancelAnimationFrame(animationId)
+  }
+})
 </script>
 
 <template>
@@ -82,6 +303,10 @@ window.document.body.onmouseover = function (event) {
   >
     <div class="inner"></div>
   </div>
+  <canvas
+    ref="canvas"
+    class="click-canvas"
+  ></canvas>
 </template>
 
 <style>
@@ -89,82 +314,27 @@ window.document.body.onmouseover = function (event) {
   cursor: none !important;
 }
 
-.click {
-  width: 50px;
-  height: 50px;
-  border-radius: 100%;
-  background: #c3ebff;
-  position: fixed;
-  left: 0;
-  top: 0;
-  display: grid;
-  transform: scale(0%);
-  border: 3px solid transparent;
-  filter: drop-shadow(0px 0px 6px #c3ebff);
-  animation: move 0.45s ease-out;
-  pointer-events: none;
-  align-items: center;
-  justify-items: center;
-}
-
-.click .inner {
-  width: calc(100% + 1px);
-  height: calc(100% + 1px);
-  border-top: 3px solid transparent;
-  border-right: 3px solid transparent;
-  border-left: 3px solid transparent;
-  border-bottom: 3px solid transparent;
-  border-radius: 100%;
-  position: absolute;
-  transition: transform 0.5s linear;
-  animation: move2 0.5s ease-out;
-}
-
-@keyframes move2 {
-  0% {
-    border-top: 3px solid #77deff;
-  }
-  25% {
-    border-top: 3px solid #fff;
-  }
-  50% {
-    border-top: 3px solid #fff;
-  }
-  80% {
-    border-top: 3px solid transparent;
-  }
-  100% {
-    border-top: 3px solid transparent;
-  }
-}
-
-@keyframes move {
-  0% {
-    transform: scale(0%);
-    background: #c3ebff;
-  }
-  25% {
-    transform: scale(100%);
-    background: #c3ebff66;
-  }
-  50% {
-    transform: scale(100%);
-    background: transparent;
-  }
-  80% {
-    transform: scale(100%);
-    background: transparent;
-  }
-  100% {
-    transform: scale(100%);
-    background: transparent;
-  }
-}
 </style>
 
 <style scoped>
 @media (hover: none) {
   #cursor {
+    display: none;
+  }
+}
+
+.click-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+@media (hover: none) {
+  .click-canvas {
     display: none;
   }
 }
