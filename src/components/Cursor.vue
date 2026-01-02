@@ -266,10 +266,13 @@ function animate() {
   }
 }
 
-function handleDocumentMouseDown(event) {
+function handleClickEvent(event) {
+  const clientX = event.clientX
+  const clientY = event.clientY
+  
   const rect = canvas.value.getBoundingClientRect()
-  const x = event.clientX - rect.left
-  const y = event.clientY - rect.top
+  const x = clientX - rect.left
+  const y = clientY - rect.top
   
   effects.push(new ClickEffect(x, y))
   
@@ -298,12 +301,12 @@ onMounted(() => {
   }, 0)
   
   window.addEventListener('resize', handleResize)
-  document.addEventListener('mousedown', handleDocumentMouseDown)
+  document.addEventListener('click', handleClickEvent, { passive: true })
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
-  document.removeEventListener('mousedown', handleDocumentMouseDown)
+  document.removeEventListener('click', handleClickEvent)
   if (animationId) {
     cancelAnimationFrame(animationId)
   }
@@ -348,12 +351,6 @@ onUnmounted(() => {
   height: 100vh;
   pointer-events: none;
   z-index: 9998;
-}
-
-@media (hover: none) {
-  .click-canvas {
-    display: none;
-  }
 }
 #cursor {
   pointer-events: none;
