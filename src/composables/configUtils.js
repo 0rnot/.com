@@ -2,8 +2,8 @@
 const LANGUAGE_MAP = {
   zh: 'zh-CN',
   'zh-CN': 'zh-CN',
-  'zh-TW': 'zh-CN',
-  'zh-HK': 'zh-CN',
+  'zh-TW': 'zh-TW',
+  'zh-HK': 'zh-TW',
   en: 'en-US',
   'en-US': 'en-US',
   'en-GB': 'en-US',

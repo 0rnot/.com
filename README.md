@@ -242,12 +242,13 @@ memorialLobbies:
 > 修改其中相关内容，之后重新按上述方式部署即可完成修改
 
 ## 有关i18n
-本项目支持多语言国际化，其中`简体中文`为本项目默认语言，位于`_config.yaml`中，并内置了`English`和`日本語`，分别位于`src/locales/en-US.yaml`和`src/locales/ja-JP.yaml`。
+本项目支持多语言国际化，其中`简体中文`为本项目默认语言，位于`_config.yaml`中，并内置了`English`、`日本語`和`繁體中文`，分别位于`src/locales/en-US.yaml`、`src/locales/ja-JP.yaml`和`src/locales/zh-TW.yaml`。
 
 ### 翻译文件目录结构
 ```
 src/locales/
-├── zh-CN.yaml  # 中文翻译文件
+├── zh-CN.yaml  # 简体中文翻译文件
+├── zh-TW.yaml  # 繁体中文翻译文件
 ├── en-US.yaml  # 英文翻译文件
 └── ja-JP.yaml  # 日文翻译文件
 ```

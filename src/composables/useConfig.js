@@ -3,6 +3,7 @@ import baseConfig from '/_config.yaml'
 import enUS from '../locales/en-US.yaml'
 import jaJP from '../locales/ja-JP.yaml'
 import zhCN from '../locales/zh-CN.yaml'
+import zhTW from '../locales/zh-TW.yaml'
 import { detectBrowserLanguage, createConfigLoader } from './configUtils'
 
 // 深度合并配置对象
@@ -91,6 +92,7 @@ function createLocaleConfig(base, translations) {
 // 支持的语言配置
 const localeConfigs = {
   'zh-CN': createLocaleConfig(baseConfig, zhCN),
+  'zh-TW': createLocaleConfig(baseConfig, zhTW),
   'en-US': createLocaleConfig(baseConfig, enUS),
   'ja-JP': createLocaleConfig(baseConfig, jaJP)
 }
