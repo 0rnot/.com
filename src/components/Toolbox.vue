@@ -30,27 +30,40 @@ const img = ref('/img/max.png')
 const showMin = ref(false)
 const hover = ref(window.matchMedia('(hover: none)').matches)
 
+const identifyOriginalAuthor = () => {
+  if (!currentConfig.value?.author) return false
+
+  const author = currentConfig.value.author
+  const originalAuthorKeywords = ['小鱼', 'ゆづふ', 'yuzifu', 'Yuzifu', 'sf-yuzifu']
+  const hasOriginalKeyword = originalAuthorKeywords.some((keyword) =>
+    author.toLowerCase().includes(keyword.toLowerCase())
+  )
+
+  if (hasOriginalKeyword) return true
+
+  return false
+}
+
+const isOriginalAuthor = computed(() => identifyOriginalAuthor())
+
 const about = () => {
   if (!currentConfig.value || !currentConfig.value.translate) {
     console.warn('配置未准备好，无法显示关于对话框')
     return
   }
 
+  // 构建版权信息内容
+  const copyrightContent = [`© ${new Date().getFullYear()} ${currentConfig.value.author}`]
+
+  // 如果不是原创者，添加"made by"信息
+  if (!isOriginalAuthor.value) {
+    copyrightContent.push(h('p', {}, 'Made by 小鱼yuzifu'))
+  }
+
   Modal.open({
     title: currentConfig.value.translate.about,
     content: () => [
-      h(
-        'p',
-        {},
-        currentConfig.value.author === '小鱼yuzifu' ||
-          currentConfig.value.author === 'ゆづふ' ||
-          currentConfig.value.author === 'Yuzifu'
-          ? `© ${new Date().getFullYear()} ${currentConfig.value.author}`
-          : [
-              `© ${new Date().getFullYear()} ${currentConfig.value.author}`,
-              h('p', {}, 'Made by 小鱼yuzifu')
-            ]
-      ),
+      h('p', {}, copyrightContent),
       h('span', {}, currentConfig.value.translate.projectWebsite),
       h('a', { href: 'https://github.com/sf-yuzifu/homepage', target: '_blank' }, 'Github'),
       currentConfig.value.ICP
