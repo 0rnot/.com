@@ -77,8 +77,8 @@ const onEvent = (entry, event) => {
   const voiceSource = lobby?.voice
 
   if (!voiceSource || !voiceSource[event.stringValue]) {
-    dialogue.value = `角色 ${lobby.name} 正在说话...`
-    showDialogue.value = true
+    // 如果没有语音配置，静默处理或者显示无语音提示
+    console.warn(`未找到语音配置: ${event.stringValue} for character ${lobby.name}`)
     return
   }
 
@@ -98,10 +98,16 @@ const onEvent = (entry, event) => {
   
   let voice = new Howl({
     src: [voicePath],
-    volume: 0.3
+    volume: 0.3,
+    onloaderror: (id, err) => {
+      console.warn(`语音文件加载失败: ${voicePath}`, err)
+    },
+    onplayerror: (id, err) => {
+      console.warn(`语音文件播放失败: ${voicePath}`, err)
+    }
   })
-  voice.play()
   
+  voice.play()
   soundList.push(voice)
 }
 
