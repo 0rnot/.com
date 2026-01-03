@@ -51,29 +51,29 @@ memorialLobbies:
 # Aris角色的語音對話翻譯
 memorialLobbies[0]:
   voice:
-    Aris_MemorialLobby_1: 愛麗絲覺得在基沃托斯魔法並不是空想。
-    Aris_MemorialLobby_2_1: 魔法是真正存在的。
-    Aris_MemorialLobby_2_2: 因為，老師現在讓愛麗絲感到非常幸福。
-    Aris_MemorialLobby_3_1: 遊戲之所以很有趣，
-    Aris_MemorialLobby_3_2: 是因為它蘊藏了這個世界所有的美麗之處。
-    Aris_MemorialLobby_3_3: 這是，老師您讓我明白的道理。
-    Aris_MemorialLobby_4_1: 遊戲、貓咪、和好朋友……還有……
-    Aris_MemorialLobby_4_2: 現在這個瞬間，在這世界上有太多太多美好的東西。
-    Aris_MemorialLobby_5_1: 愛麗絲還想知道更多更多。
-    Aris_MemorialLobby_5_2: 想和老師一起……兩個人一起，繼續探索這個世界！
+    Aris_MemorialLobby_1: 愛麗絲不覺得奇普托斯……不存在魔法。
+    Aris_MemorialLobby_2_1: 魔法是存在的。
+    Aris_MemorialLobby_2_2: 因為老師現在，就讓愛麗絲感覺到幸福。
+    Aris_MemorialLobby_3_1: 遊戲之所以有趣
+    Aris_MemorialLobby_3_2: 是因為裡面充滿了世界中的美好事物。
+    Aris_MemorialLobby_3_3: 這是從老師身上學到的。
+    Aris_MemorialLobby_4_1: 不管是遊戲、貓、還是朋友………
+    Aris_MemorialLobby_4_2: 就連現在這個瞬間也是。這個世界上有著許多美好的事物。
+    Aris_MemorialLobby_5_1: 愛麗絲還想要知道更多。
+    Aris_MemorialLobby_5_2: 和老師一起…學習更多這個世界的事情！
 
 memorialLobbies[1]:
   voice:
-    CH0063_MemorialLobby_1_1: 為什麼大家都那麼喜歡大海呢？我一直在思考這個問題。
-    CH0063_MemorialLobby_1_2: 雖然大家看起來都很開心……可我卻無論如何都喜歡不起來……
-    CH0063_MemorialLobby_2_1: 水面下的東西都看不太清楚，腳踩不到底也讓我覺得放不下心……
-    CH0063_MemorialLobby_2_2: 老師不這麼覺得嗎？
-    CH0063_MemorialLobby_3_1: 特別是晚上，大海簡直就像巨大的黑洞一樣，
-    CH0063_MemorialLobby_3_2: 光是這樣看著，就有种要被吸進去的感覺……
-    CH0063_MemorialLobby_4_1: 可是……現在我好像稍微明白一點……大家的心情了。
-    CH0063_MemorialLobby_4_2: 大海，原來這麼美啊。
-    CH0063_MemorialLobby_5_1: 真是不可思議……我以前，從來沒這麼想過。
-    CH0063_MemorialLobby_5_2: 老師，謝謝你……陪在我的身邊…… ……教會了我這麼多事。
+    CH0063_MemorialLobby_1_1: 為什麼大家，都那麼喜歡大海呢……我一直都這麼思考著。
+    CH0063_MemorialLobby_1_2: 雖然大家看起來都很開心，但是我實在是沒辦法喜歡大海……
+    CH0063_MemorialLobby_2_1: 在水裡會看不清楚，腳又無法著地，會令人不安……
+    CH0063_MemorialLobby_2_2: 老師有沒有也這麼想過？
+    CH0063_MemorialLobby_3_1: 特別是夜晚的大海，就像黑暗一樣，很陰森……
+    CH0063_MemorialLobby_3_2: 光是注視著就好像會被吸進去，雖然沒辦法喜歡……
+    CH0063_MemorialLobby_4_1: 不過……現在，好像能稍微，理解大家的心情了。
+    CH0063_MemorialLobby_4_2: 原來大海，這麼美麗呀。
+    CH0063_MemorialLobby_5_1: 真神奇……至今為止，明明沒有這麼想過。
+    CH0063_MemorialLobby_5_2: 謝謝你，老師。陪伴在我身邊……
 
 # 通用介面翻譯字串
 translate:
