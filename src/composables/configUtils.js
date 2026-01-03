@@ -1,9 +1,9 @@
 // 语言映射配置
 const LANGUAGE_MAP = {
-  zh: 'zh',
-  'zh-CN': 'zh',
-  'zh-TW': 'zh',
-  'zh-HK': 'zh',
+  zh: 'zh-CN',
+  'zh-CN': 'zh-CN',
+  'zh-TW': 'zh-CN',
+  'zh-HK': 'zh-CN',
   en: 'en-US',
   'en-US': 'en-US',
   'en-GB': 'en-US',

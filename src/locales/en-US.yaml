@@ -1,100 +1,55 @@
-# Website Basic Configuration
+# English Translation File
+
+# Website title - Displayed in browser tab
 title: Fish Archive
+
+# Website description - Used for SEO and social media sharing
 description: A personal homepage in Blue Archive style.
-favicon: /favicon144.png
-author: Yuzifu
-keywords: 'Blue Archive, 小鱼yuzifu, Personal Homepage'
-ICP: ''
 
-# PWA Configuration
+# Website keywords - Used for SEO, comma-separated
+keywords: 'Blue Archive, yuzifu, Personal Homepage'
+
+# PWA application name configuration
 manifest:
+  # PWA application full name
   name: Fish Archive
+  
+  # PWA application short name - Used for desktop display
   short_name: Fish Archive
+  
+  # PWA application description
   description: A personal homepage in Blue Archive style.
-  theme_color: '#128AFA'
-  start_url: /
-  id: Homepage
-  icons:
-    - src: /favicon512.png
-      sizes: 512x512
-      purpose: any maskable
-    - src: /favicon144.png
-      sizes: 144x144
 
-# Personal Information
-level: 90
-exp: 8382
-nextExp: 8381
+# Website author display name
+author: Yuzifu
 
-# Iconfont
-iconfont: 'https://at.alicdn.com/t/c/font_4336463_0i6ly0yvyzb.js'
-
-# Bottom Project Information
+# Bottom project display area - Project name translations
 dock:
   - name: Eat Fish Together
-    href: 'https://gitee.com/sf-yuzifu/eat-fish-together'
-    imgSrc: /img/fish.png
   - name: BCM Converter
-    href: 'https://gitee.com/sf-yuzifu/bcm_convertor'
-    imgSrc: /img/convertor.png
   - name: Waddle
-    href: 'https://waddle.cocotais.cn/'
-    imgSrc: /img/waddle2.png
   - name: PICKDUCK
-    href: 'https://shequ.pgaot.com/'
-    imgSrc: /img/pickduck.png
   - name: Boxy
-    href: 'https://boxy.cocotais.cn/'
-    imgSrc: /img/boxy.png
 
-# Left Side Contact Methods
+# Left contact methods area - Contact method name translations
 contact:
   - name: QQ
-    href: 'https://wpa.qq.com/msgrd?v=3&uin=2512902451&site=qq&menu=yes&jumpflag=1'
-    iconfont: icon-qq
   - name: Gitee
-    href: 'https://gitee.com/sf-yuzifu'
-    iconfont: icon-gitee
   - name: Github
-    href: 'https://github.com/sf-yuzifu'
-    iconfont: icon-github
   - name: BiliBili
-    href: 'https://space.bilibili.com/447666445'
-    iconfont: icon-bilibili
 
-# Task Button Launch
+# Task button configuration - Task button display text translation
 task:
   name: Blog
-  href: 'https://blog.yzf.moe/'
 
-# Banner Music
-banner:
-  musicID:
-    - 2059151619
-    - 2098476758
-    - 2630220461
-    - 2630217054
-    - 2630217057
-    - 2099308172
-    - 2098477269
-    - 2098478097
-    - 2098478355
-    - 2098473565
-    - 2098473572
-    - 2008994667
-    - 1840401436
-    - 2029212574
-    - 2612747239
-    - 2140425047
-    - 1832392174
-
-# Memorial Lobbies
+# Memorial lobby character display name translations
 memorialLobbies:
   - name: Aris
-    path: '/l2d/aris/'
-    skel: 'Aris_home.skel'
-    atlas: 'Aris_home.atlas'
-    voice:
+  - name: Hina_swimsuit
+
+# Aris character voice dialogue translations
+memorialLobbies[0]:
+  voice:
       Aris_MemorialLobby_1: I believe magic exists in Kivotos as well.
       Aris_MemorialLobby_2_1: It must.
       Aris_MemorialLobby_2_2: How else could you make me so happy, Sensei?
@@ -105,17 +60,10 @@ memorialLobbies:
       Aris_MemorialLobby_4_2: The world is full of beautiful things.
       Aris_MemorialLobby_5_1: And I want to know more of them. Together with you, Sensei.
       Aris_MemorialLobby_5_2: I want to learn more about this world!
-    offset: 0.45
-    dialogueDisplay:
-      x: -1/4 - 1/16
-      y: -1/16
-      position: right
 
-  - name: Hina_swimsuit
-    path: '/l2d/hina_swimsuit/'
-    skel: 'CH0063_home.skel'
-    atlas: 'CH0063_home.atlas'
-    voice:
+# Hina swimsuit character voice dialogue translations
+memorialLobbies[1]:
+  voice:
       CH0063_MemorialLobby_1_1: Honestly, I've never understood people's fascination with the ocean.
       CH0063_MemorialLobby_1_2: While everyone's having a good time, I've never felt the same way.
       CH0063_MemorialLobby_2_1: It's blurry underwater, and I get nervous when my feet can't touch the ground.
@@ -126,13 +74,8 @@ memorialLobbies:
       CH0063_MemorialLobby_4_2: The ocean can be so beautiful.
       CH0063_MemorialLobby_5_1: It's a new feeling but it's interesting too.
       CH0063_MemorialLobby_5_2: Thank you, Sensei...for being here with me. And for everything you've taught me.
-    offset: 0.68
-    dialogueDisplay:
-      x: 1/4 + 1/8
-      y: -1/8
-      position: left
 
-# Translation Strings
+# Common interface translation strings
 translate:
   about: About
   projectWebsite: 'Source Code: '

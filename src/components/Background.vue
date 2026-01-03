@@ -14,6 +14,7 @@ let animation,
   id = 0
 let canSkip = true
 let soundList = []
+let animationReady = false // 动画初始化状态
 let talking = false,
   talkIndex = 1
 let modalRef
@@ -59,42 +60,46 @@ const changeL2D = (value) => {
 }
 
 const onEvent = (entry, event) => {
-  if (event.stringValue === '') return
+  if (event.stringValue === '') {
+    return
+  }
 
   if (
     !currentConfig.value ||
     !currentConfig.value.memorialLobbies ||
     !currentConfig.value.memorialLobbies[id]
   ) {
+    console.warn('配置未准备好')
     return
   }
 
   const lobby = currentConfig.value.memorialLobbies[id]
-  console.log(lobby.voice[event.stringValue], event.stringValue)
+  const voiceSource = lobby?.voice
 
-  if (!lobby.voice[event.stringValue]) return
+  if (!voiceSource || !voiceSource[event.stringValue]) {
+    dialogue.value = `角色 ${lobby.name} 正在说话...`
+    showDialogue.value = true
+    return
+  }
 
-  dialogue.value = lobby.voice[event.stringValue]
+  const dialogueText = voiceSource[event.stringValue]
+  dialogue.value = dialogueText
   showDialogue.value = true
-  let voice
-  if (locale.value === 'zh') {
-    voice = new Howl({
-      src: [lobby.path + 'zh-CN/' + event.stringValue + '.ogg'],
-      volume: 0.3
-    })
+  
+  // 播放语音
+  let voicePath
+  if (locale.value.startsWith('zh')) {
+    voicePath = lobby.path + 'zh-CN/' + event.stringValue + '.ogg'
   } else {
-    voice = new Howl({
-      src: [lobby.path + 'ja-JP/' + event.stringValue + '.ogg'],
-      volume: 0.3
-    })
+    voicePath = lobby.path + 'ja-JP/' + event.stringValue + '.ogg'
   }
-
-  if (voice.state() === 'loaded') voice.play()
-  else if (voice.state() === 'loading') {
-    voice.on('load', () => {
-      voice.play()
-    })
-  }
+  
+  let voice = new Howl({
+    src: [voicePath],
+    volume: 0.3
+  })
+  voice.play()
+  
   soundList.push(voice)
 }
 
@@ -207,13 +212,13 @@ const setL2D = async (num) => {
   animation.state.addListener({
     event: onEvent
   })
-  if (animation.state.data.skeletonData.findAnimation(startIdle)) {
+  if (animation && animation.state && animation.state.data.skeletonData.findAnimation(startIdle)) {
     changeL2D(true)
     animation.state.setAnimation(0, startIdle, false)
-    if (
-      animation.state.getCurrent(0).animation.name !== 'Idle_01' &&
-      animation.state.data.skeletonData.findAnimation('Idle_01')
-    ) {
+    const currentTrack = animation.state.getCurrent(0)
+    if (currentTrack && currentTrack.animation && 
+        currentTrack.animation.name !== 'Idle_01' &&
+        animation.state.data.skeletonData.findAnimation('Idle_01')) {
       animation.state.addAnimation(0, 'Idle_01', true)
     }
     let listener = {
@@ -235,50 +240,11 @@ const setL2D = async (num) => {
     animation.state.addListener(listener)
   } else {
     changeL2D(false)
-    if (
-      animation.state.getCurrent(0).animation.name !== 'Idle_01' &&
-      animation.state.data.skeletonData.findAnimation('Idle_01')
-    ) {
-      animation.state.setAnimation(0, 'Idle_01', true)
-      animation.state.listeners = []
-      animation.state.addListener({
-        event: onEvent
-      })
-      canSkip = false
-      emit('canskip', false)
-      if (modalRef) {
-        modalRef.close()
-      }
-    }
-  }
-}
-
-const skipStartIdle = () => {
-  if (
-    animation.state.getCurrent(0).animation.name !== 'Idle_01' &&
-    animation.state.data.skeletonData.findAnimation('Idle_01')
-  ) {
-    if (!currentConfig.value || !currentConfig.value.translate) {
-      console.warn('配置未准备好，无法显示跳过对话框')
-      changeL2D(false)
-      return
-    }
-
-    modalRef = Modal.open({
-      title: currentConfig.value.translate.info,
-      content: currentConfig.value.translate.ifSkip,
-      okText: currentConfig.value.translate.ok,
-      cancelText: currentConfig.value.translate.cancel,
-      onOk: () => {
-        changeL2D(false)
-        if (soundList.length !== 0) {
-          for (let i in soundList) soundList[i].stop()
-          soundList = []
-        }
-        animation.state.setAnimation(1, 'Dummy', true)
-        animation.state.setAnimation(2, 'Dummy', true)
-        animation.state.setAnimation(3, 'Dummy', true)
-        animation.state.setAnimation(4, 'Dummy', true)
+    if (animation && animation.state) {
+      const currentTrack = animation.state.getCurrent(0)
+      if (currentTrack && currentTrack.animation && 
+          currentTrack.animation.name !== 'Idle_01' &&
+          animation.state.data.skeletonData.findAnimation('Idle_01')) {
         animation.state.setAnimation(0, 'Idle_01', true)
         animation.state.listeners = []
         animation.state.addListener({
@@ -286,23 +252,100 @@ const skipStartIdle = () => {
         })
         canSkip = false
         emit('canskip', false)
+        if (modalRef) {
+          modalRef.close()
+        }
       }
-    })
+    }
+  }
+
+  // 标记动画初始化完成
+  animationReady = true
+}
+
+const skipStartIdle = () => {
+  // 检查动画是否已正确初始化
+  if (!animation || !animation.state || !animationReady) {
+    console.warn('Live2D 动画未初始化，无法跳过')
+    changeL2D(false)
+    return
+  }
+
+  try {
+    // 检查当前动画状态和可用的动画
+    const currentTrack = animation.state.getCurrent(0)
+    if (!currentTrack || !currentTrack.animation) {
+      console.warn('无法获取当前动画状态')
+      changeL2D(false)
+      return
+    }
+
+    if (
+      currentTrack.animation.name !== 'Idle_01' &&
+      animation.state.data.skeletonData.findAnimation('Idle_01')
+    ) {
+      if (!currentConfig.value || !currentConfig.value.translate) {
+        console.warn('配置未准备好，无法显示跳过对话框')
+        changeL2D(false)
+        return
+      }
+
+      modalRef = Modal.open({
+        title: currentConfig.value.translate.info,
+        content: currentConfig.value.translate.ifSkip,
+        okText: currentConfig.value.translate.ok,
+        cancelText: currentConfig.value.translate.cancel,
+        onOk: () => {
+          changeL2D(false)
+          if (soundList.length !== 0) {
+            for (let i in soundList) soundList[i].stop()
+            soundList = []
+          }
+          
+          // 再次检查动画状态
+          if (animation && animation.state) {
+            animation.state.setAnimation(1, 'Dummy', true)
+            animation.state.setAnimation(2, 'Dummy', true)
+            animation.state.setAnimation(3, 'Dummy', true)
+            animation.state.setAnimation(4, 'Dummy', true)
+            animation.state.setAnimation(0, 'Idle_01', true)
+            animation.state.listeners = []
+            animation.state.addListener({
+              event: onEvent
+            })
+          }
+          
+          canSkip = false
+          emit('canskip', false)
+        }
+      })
+    }
+  } catch (error) {
+    console.error('跳过动画时出错:', error)
+    changeL2D(false)
   }
 }
 
 const onInteractionWithStudent = () => {
+  if (!animation || !animation.state || !animationReady) {
+    console.warn('Live2D 动画未初始化，无法进行交互')
+    return
+  }
+
+  const currentTrack = animation.state.getCurrent(0)
+
   if (
     talking ||
-    animation.state.getCurrent(0).animation.name.toLowerCase().startsWith('start_idle')
-  )
+    !currentTrack || !currentTrack.animation ||
+    currentTrack.animation.name.toLowerCase().startsWith('start_idle')
+  ) {
     return
-  console.log('Talk_0' + talkIndex)
+  }
+
   if (
     animation.state.data.skeletonData.findAnimation('Talk_0' + talkIndex + '_A_CN') &&
-    locale.value === 'zh'
+    locale.value.startsWith('zh')
   ) {
-    // 判断所用回忆大厅是否有专门给国服配音卡口型
     animation.state.addAnimation(1, 'Talk_0' + talkIndex + '_A_CN')._mixDuration = 0.3
     animation.state.addAnimation(2, 'Talk_0' + talkIndex + '_M_CN')._mixDuration = 0.3
   } else {
@@ -311,6 +354,7 @@ const onInteractionWithStudent = () => {
   }
   animation.state.addAnimation(1, 'Dummy', true)._mixDuration = 0.3
   animation.state.addAnimation(2, 'Dummy', true)._mixDuration = 0.3
+  
   let listener = {
     complete: (entry) => {
       if (entry.trackIndex === 1 && entry.animation.name !== 'Dummy') {
@@ -320,23 +364,30 @@ const onInteractionWithStudent = () => {
         })
         talking = false
         showDialogue.value = false
-        console.log('end!')
       }
     }
   }
+  
   animation.state.addListener(listener)
   talkIndex++
-  if (!animation.state.data.skeletonData.findAnimation('Talk_0' + talkIndex + '_A')) talkIndex = 1
+  if (!animation.state.data.skeletonData.findAnimation('Talk_0' + talkIndex + '_A')) {
+    talkIndex = 1
+  }
   talking = true
 }
 
 const onPetStudent = () => {
+  if (!animation || !animation.state || !animationReady) {
+    return
+  }
+
+  const currentTrack = animation.state.getCurrent(0)
   if (
     talking ||
-    animation.state.getCurrent(0).animation.name.toLowerCase().startsWith('start_idle')
+    !currentTrack || !currentTrack.animation ||
+    currentTrack.animation.name.toLowerCase().startsWith('start_idle')
   )
     return
-  // console.log('Talk_0' + talkIndex)
   animation.state.addAnimation(1, 'Pat_01_A', true)._mixDuration = 0.3
   animation.state.addAnimation(2, 'Pat_01_M', true)._mixDuration = 0.3
   ifPetting.value = true
@@ -347,7 +398,6 @@ let pressTimer = null
 // 处理长按事件的回调函数
 const handleLongPress = () => {
   if (talking) return
-  console.log('长按事件触发')
   onPetStudent()
 
   let a = setInterval(() => {
@@ -410,8 +460,19 @@ const initLive2DWhenReady = () => {
 watch(
   currentConfig,
   (newConfig) => {
+    console.log('Background.vue - 配置更新:', {
+      配置存在: !!newConfig,
+      memorialLobbies存在: !!newConfig?.memorialLobbies,
+      memorialLobbies数量: newConfig?.memorialLobbies?.length,
+      memorialLobbies内容: newConfig?.memorialLobbies,
+      可以初始化: newConfig && newConfig.memorialLobbies && newConfig.memorialLobbies.length > 0
+    })
+    
     if (newConfig && newConfig.memorialLobbies && newConfig.memorialLobbies.length > 0) {
+      console.log('Background.vue - 开始初始化Live2D')
       initLive2DWhenReady()
+    } else {
+      console.warn('Background.vue - 配置未准备好或memorialLobbies为空')
     }
   },
   { immediate: true }

@@ -1,68 +1,123 @@
-# 网站基本配置
-title: 小鱼档案 # 网站标题
-description: 有关小鱼的《蔚蓝档案》风格的个人主页 # 网站简介
-favicon: /favicon144.png # 网站图标链接
-author: 小鱼yuzifu # Sensei，你的名字
-keywords: '蔚蓝档案,小鱼yuzifu,个人主页' # 网站关键词描述
-ICP: '' # ICP备案号
-# PWA配置（https:#developer.mozilla.org/zh-CN/docs/Web/Manifest）
+# 基础配置文件（所有语言通用）
+# Website Basic Configuration
+
+# 网站标题 - 浏览器标签页显示的标题
+title: Fish Archive
+
+# 网站描述 - 用于搜索引擎优化和社交媒体分享
+description: A personal homepage in Blue Archive style.
+
+# 网站图标路径 - 浏览器标签页显示的小图标
+favicon: /favicon144.png
+
+# 网站作者姓名
+author: Yuzifu
+
+# 网站关键词 - 用于搜索引擎优化，逗号分隔
+keywords: 'Blue Archive, 小鱼yuzifu, Personal Homepage'
+
+# ICP备案号 - 中国网站备案信息，留空表示未备案
+ICP: ''
+
+# PWA配置 - 渐进式Web应用配置
 manifest:
-  name: 小鱼档案 # 应用全称
-  short_name: 小鱼档案 # 应用简称
-  description: 有关小鱼的《蔚蓝档案》风格的个人主页 # 简介
-  theme_color: '#128AFA' # 主题色
+  # PWA应用完整名称
+  name: Fish Archive
+  
+  # PWA应用简短名称 - 用于桌面显示
+  short_name: Fish Archive
+  
+  # PWA应用描述
+  description: A personal homepage in Blue Archive style.
+  
+  # PWA主题颜色 - 影响浏览器UI颜色
+  theme_color: '#128AFA'
+  
+  # PWA启动URL - 应用启动时打开的页面
   start_url: /
+  
+  # PWA应用唯一标识符
   id: Homepage
-  # 图标
+  
+  # PWA图标配置
   icons:
-    - src: /favicon512.png # 网站图标链接
-      sizes: 512x512 # 尺寸
+    # 大尺寸图标 - 用于桌面安装
+    - src: /favicon512.png
+      sizes: 512x512
       purpose: any maskable
+    
+    # 小尺寸图标 - 用于移动设备
     - src: /favicon144.png
       sizes: 144x144
-# 个人信息
-level: 90 # 等级
-exp: 8382 # 经验值
-nextExp: 8381 # 到达下一等级经验值（比exp小则显示满级）
-# Iconfont图标导入
+
+# 个人游戏等级信息
+level: 90  # 当前等级
+exp: 8382   # 当前经验值
+nextExp: 8381  # 升级所需经验值
+
+# Iconfont字体库地址 - 阿里云图标字体库
 iconfont: 'https://at.alicdn.com/t/c/font_4336463_0i6ly0yvyzb.js'
-# 底部项目信息（推荐5个，最多7个）
+
+# 底部项目展示区域 - 显示相关项目链接
 dock:
-  - name: 一起吃小鱼 # 项目名称
-    href: 'https://gitee.com/sf-yuzifu/eat-fish-together' # 项目地址
-    imgSrc: /img/fish.png # 项目图标
-  - name: 编程猫格式工厂
+  # 项目1
+  - name: Fish Archive Project
+    href: 'https://gitee.com/sf-yuzifu/eat-fish-together'
+    imgSrc: /img/fish.png
+  
+  # 项目2
+  - name: BCM Converter Project
     href: 'https://gitee.com/sf-yuzifu/bcm_convertor'
     imgSrc: /img/convertor.png
-  - name: Waddle编辑器
+  
+  # 项目3
+  - name: Waddle Project
     href: 'https://waddle.cocotais.cn/'
     imgSrc: /img/waddle2.png
-  - name: PICKDUCK
+  
+  # 项目4
+  - name: PICKDUCK Project
     href: 'https://shequ.pgaot.com/'
     imgSrc: /img/pickduck.png
-  - name: Boxy编辑器
+  
+  # 项目5
+  - name: Boxy Project
     href: 'https://boxy.cocotais.cn/'
     imgSrc: /img/boxy.png
-# 左边联系方式（推荐4个）
+
+# 左侧联系方式区域
 contact:
-  - name: QQ # 联系方式
-    href: 'https://wpa.qq.com/msgrd?v=3&uin=2512902451&site=qq&menu=yes&jumpflag=1' # 联系地址
-    iconfont: icon-qq # iconfont图标id（只有icon-qq/github/bilibili/gitee）
-  - name: Gitee
+  # 联系方式1
+  - name: QQ Contact
+    href: 'https://wpa.qq.com/msgrd?v=3&uin=2512902451&site=qq&menu=yes&jumpflag=1'
+    iconfont: icon-qq
+  
+  # 联系方式2
+  - name: Gitee Profile
     href: 'https://gitee.com/sf-yuzifu'
     iconfont: icon-gitee
-  - name: Github
+  
+  # 联系方式3
+  - name: Github Profile
     href: 'https://github.com/sf-yuzifu'
     iconfont: icon-github
-  - name: BiliBili
+  
+  # 联系方式4
+  - name: BiliBili Channel
     href: 'https://space.bilibili.com/447666445'
     iconfont: icon-bilibili
-# 任务按钮启动
+
+# 任务按钮配置 - 页面左下角的任务按钮
 task:
-  name: 个人博客 # 任务名称
-  href: 'https://blog.yzf.moe/' # 跳转地址
+  # 任务按钮显示文本
+  name: Blog Link
+  # 任务按钮链接地址
+  href: 'https://blog.yzf.moe/'
+
+# Banner音乐播放器配置
 banner:
-  musicID: # 音乐ID（暂时只支持网易云音乐）
+  # 网易云音乐歌曲ID列表 - 用于随机播放
+  musicID:
     - 2059151619
     - 2098476758
     - 2630220461
@@ -80,52 +135,43 @@ banner:
     - 2612747239
     - 2140425047
     - 1832392174
+
+# Live2D角色配置
 memorialLobbies:
-  - name: Aris # 这里填学生名字
-    path: '/l2d/aris/' # 这里填回忆大厅L2D文件位置（注意最后以“/”结尾）
-    skel: 'Aris_home.skel' # 这里填回忆大厅L2D的SKEL文件
-    atlas: 'Aris_home.atlas' # 这里填回忆大厅L2D的ATLAS文件
-    voice: # 这里填学生对话（注意：前面的必须是L2D文件中有的内容，实在不清楚的可以在调试的时候获取"Background.vue"文件"onEvent"函数的"event.stringValue"的值以确保无误）
-      Aris_MemorialLobby_1: 爱丽丝觉得在基沃托斯魔法并不是空想。
-      Aris_MemorialLobby_2_1: 魔法是真正存在的。
-      Aris_MemorialLobby_2_2: 因为，老师现在让爱丽丝感到非常幸福。
-      Aris_MemorialLobby_3_1: 游戏之所以很有趣，
-      Aris_MemorialLobby_3_2: 是因为它蕴藏了这个世界所有的美丽之处。
-      Aris_MemorialLobby_3_3: 这是，老师您让我明白的道理。
-      Aris_MemorialLobby_4_1: 游戏、猫咪、和好朋友……还有……
-      Aris_MemorialLobby_4_2: 现在这个瞬间，在这世界上有太多太多美好的东西。
-      Aris_MemorialLobby_5_1: 爱丽丝还想知道更多更多。
-      Aris_MemorialLobby_5_2: 想和老师一起……两个人一起，继续探索这个世界！
-    offset: 0.45 # 这里填学生在回忆大厅的位置，方便在小屏时居中定位学生（百分比定位）
-    dialogueDisplay: # 这里填学生对话框位置（百分比定位）
-      x: -1/4 - 1/16
-      y: -1/16
-      position: right # 这里是对话框朝向
-  - name: Hina_swimsuit
-    path: '/l2d/hina_swimsuit/'
-    skel: 'CH0063_home.skel'
-    atlas: 'CH0063_home.atlas'
-    voice:
-      CH0063_MemorialLobby_1_1: 为什么大家都那么喜欢大海呢？我一直在思考这个问题。
-      CH0063_MemorialLobby_1_2: 虽然大家看起来都很开心……可我却无论如何都喜欢不起来……
-      CH0063_MemorialLobby_2_1: 水面下的东西都看不太清楚，脚踩不到底也让我觉得放不下心……
-      CH0063_MemorialLobby_2_2: 老师不这么觉得吗？
-      CH0063_MemorialLobby_3_1: 特别是晚上，大海简直就像巨大的黑洞一样，
-      CH0063_MemorialLobby_3_2: 光是这样看着，就有种要被吸进去的感觉……
-      CH0063_MemorialLobby_4_1: 可是……现在我好像稍微明白一点……大家的心情了。
-      CH0063_MemorialLobby_4_2: 大海，原来这么美啊。
-      CH0063_MemorialLobby_5_1: 真是不可思议……我以前，从来没这么想过。
-      CH0063_MemorialLobby_5_2: 老师，谢谢你……陪在我的身边…… ……教会了我这么多事。
-    offset: 0.68
+  # 角色1 - Aris
+  - name: Aris
+    # Live2D模型文件路径
+    path: '/l2d/aris/'
+    # 骨骼动画文件
+    skel: 'Aris_home.skel'
+    # 纹理图集文件
+    atlas: 'Aris_home.atlas'
+    # 角色在屏幕中的水平位置偏移（0-1之间）
+    offset: 0.45
+    # 对话框显示位置配置
     dialogueDisplay:
+      # X坐标位置（可以是分数）
+      x: -1/4 - 1/16
+      # Y坐标位置（可以是分数）
+      y: -1/16
+      # 对话框位置（left/right）
+      position: right
+
+  # 角色2 - Hina
+  - name: Hina_swimsuit
+    # Live2D模型文件路径
+    path: '/l2d/hina_swimsuit/'
+    # 骨骼动画文件
+    skel: 'CH0063_home.skel'
+    # 纹理图集文件
+    atlas: 'CH0063_home.atlas'
+    # 角色在屏幕中的水平位置偏移（0-1之间）
+    offset: 0.68
+    # 对话框显示位置配置
+    dialogueDisplay:
+      # X坐标位置（可以是分数）
       x: 1/4 + 1/8
+      # Y坐标位置（可以是分数）
       y: -1/8
+      # 对话框位置（left/right）
       position: left
-translate:
-  about: 关于
-  projectWebsite: 项目地址：
-  info: 通知
-  ifSkip: 是否跳过？
-  update: 老师！站点已更新，刷新即可访问最新内容！
-  ok: 确认
-  cancel: 取消

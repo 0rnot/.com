@@ -171,8 +171,9 @@ export function useLoading() {
     console.log('应用加载完成，准备切换到主界面')
   }
 
-  // 强制完成（备用）
+  // 强制完成加载（用于错误情况）
   const forceComplete = () => {
+    console.warn('强制完成加载，防止无限等待')
     finishLoading()
   }
 
@@ -180,6 +181,19 @@ export function useLoading() {
     // 延迟一点开始加载，让Loading组件先显示，然后从0%开始
     setTimeout(() => {
       startLoading()
+      
+      // 设置超时机制，防止无限等待
+      const timeoutId = setTimeout(() => {
+        console.warn('资源加载超时，强制完成加载')
+        forceComplete()
+      }, 15000) // 15秒超时
+      
+      // 如果正常完成加载，取消超时
+      watch(() => loading.value, (newLoading) => {
+        if (!newLoading) {
+          clearTimeout(timeoutId)
+        }
+      })
     }, 300) // 增加延迟时间
   })
 

@@ -95,85 +95,211 @@ yarn preview
 
 ```yaml
 # 网站基本配置
-title: 小鱼档案 # 网站标题
-description: 有关小鱼的《蔚蓝档案》风格的个人主页 # 网站简介
-favicon: /favicon144.png # 网站图标链接
-author: 小鱼yuzifu # Sensei，你的名字
-keywords: '蔚蓝档案,小鱼yuzifu,个人主页' # 网站关键词描述
-ICP: '' # ICP备案号
-# PWA配置（https:#developer.mozilla.org/zh-CN/docs/Web/Manifest）
+title: Fish Archive # 网站标题 - 浏览器标签页显示的标题
+description: A personal homepage in Blue Archive style. # 网站描述 - 用于搜索引擎优化和社交媒体分享
+favicon: /favicon144.png # 网站图标路径 - 浏览器标签页显示的小图标
+author: Yuzifu # 网站作者姓名
+keywords: 'Blue Archive, 小鱼yuzifu, Personal Homepage' # 网站关键词 - 用于搜索引擎优化，逗号分隔
+ICP: '' # ICP备案号 - 中国网站备案信息，留空表示未备案
+
+# PWA配置 - 渐进式Web应用配置（https://developer.mozilla.org/zh-CN/docs/Web/Manifest）
 manifest:
-  name: 小鱼档案 # 应用全称
-  short_name: 小鱼档案 # 应用简称
-  description: 有关小鱼的《蔚蓝档案》风格的个人主页 # 简介
-  theme_color: '#128AFA' # 主题色
-  start_url: /
-  id: Homepage
-  # 图标
+  name: Fish Archive # PWA应用完整名称
+  short_name: Fish Archive # PWA应用简短名称 - 用于桌面显示
+  description: A personal homepage in Blue Archive style. # PWA应用描述
+  theme_color: '#128AFA' # PWA主题颜色 - 影响浏览器UI颜色
+  start_url: / # PWA启动URL - 应用启动时打开的页面
+  id: Homepage # PWA应用唯一标识符
+  # PWA图标配置
   icons:
-    - src: /favicon512.png # 网站图标链接
-      sizes: 512x512 # 尺寸
+    # 大尺寸图标 - 用于桌面安装
+    - src: /favicon512.png
+      sizes: 512x512
       purpose: any maskable
-# 个人信息
-level: 85 # 等级
-exp: 8382 # 经验值
-nextExp: 8381 # 到达下一等级经验值（比exp小则显示满级）
-# Iconfont图标导入
+    # 小尺寸图标 - 用于移动设备
+    - src: /favicon144.png
+      sizes: 144x144
+
+# 个人游戏等级信息
+level: 90  # 当前等级
+exp: 8382   # 当前经验值
+nextExp: 8381  # 升级所需经验值
+
+# Iconfont字体库地址 - 阿里云图标字体库
 iconfont: 'https://at.alicdn.com/t/c/font_4336463_0i6ly0yvyzb.js'
-# 底部项目信息（推荐5个，最多7个）
+
+# 底部项目展示区域 - 显示相关项目链接（推荐5个）
 dock:
-  - name: 一起吃小鱼 # 项目名称
-    href: 'https://gitee.com/sf-yuzifu/eat-fish-together' # 项目地址
-    imgSrc: /img/fish.png # 项目图标
-# 左边联系方式（推荐4个）
+  # 项目1
+  - name: Fish Archive Project
+    href: 'https://gitee.com/sf-yuzifu/eat-fish-together'
+    imgSrc: /img/fish.png
+  # 项目2
+  - name: BCM Converter Project
+    href: 'https://gitee.com/sf-yuzifu/bcm_convertor'
+    imgSrc: /img/convertor.png
+  # 项目3
+  - name: Waddle Project
+    href: 'https://waddle.cocotais.cn/'
+    imgSrc: /img/waddle2.png
+  # 项目4
+  - name: PICKDUCK Project
+    href: 'https://shequ.pgaot.com/'
+    imgSrc: /img/pickduck.png
+  # 项目5
+  - name: Boxy Project
+    href: 'https://boxy.cocotais.cn/'
+    imgSrc: /img/boxy.png
+
+# 左侧联系方式区域（推荐4个）
 contact:
-  - name: QQ # 联系方式
-    href: 'https://wpa.qq.com/msgrd?v=3&uin=2512902451&site=qq&menu=yes&jumpflag=1' # 联系地址
-    iconfont: icon-qq # iconfont图标id（只有icon-qq/github/bilibili/gitee）
-# 任务按钮启动
+  # 联系方式1
+  - name: QQ Contact
+    href: 'https://wpa.qq.com/msgrd?v=3&uin=2512902451&site=qq&menu=yes&jumpflag=1'
+    iconfont: icon-qq
+  # 联系方式2
+  - name: Gitee Profile
+    href: 'https://gitee.com/sf-yuzifu'
+    iconfont: icon-gitee
+  # 联系方式3
+  - name: Github Profile
+    href: 'https://github.com/sf-yuzifu'
+    iconfont: icon-github
+  # 联系方式4
+  - name: BiliBili Channel
+    href: 'https://space.bilibili.com/447666445'
+    iconfont: icon-bilibili
+
+# 任务按钮配置 - 页面左下角的任务按钮
 task:
-  name: 个人博客 # 任务名称
-  href: 'https://blog.yzf.moe/' # 跳转地址
+  # 任务按钮显示文本
+  name: Blog Link
+  # 任务按钮链接地址
+  href: 'https://blog.yzf.moe/'
+
+# Banner音乐播放器配置
 banner:
-  musicID: # 音乐ID（暂时只支持网易云音乐）
+  # 网易云音乐歌曲ID列表 - 用于随机播放
+  musicID:
     - 2059151619
-# 回忆大厅配置
+    - 2098476758
+    - 2630220461
+    - 2630217054
+    - 2630217057
+    - 2099308172
+    - 2098477269
+    - 2098478097
+    - 2098478355
+    - 2098473565
+    - 2098473572
+    - 2008994667
+    - 1840401436
+    - 2029212574
+    - 2612747239
+    - 2140425047
+    - 1832392174
+
+# Live2D角色配置
 memorialLobbies:
-  - name: Aris # 这里填学生名字
-    path: '/l2d/aris/' # 这里填回忆大厅L2D文件位置（注意最后以“/”结尾）
-    skel: 'Aris_home.skel' # 这里填回忆大厅L2D的SKEL文件
-    atlas: 'Aris_home.atlas' # 这里填回忆大厅L2D的ATLAS文件
-    voice: # 这里填学生对话（注意：前面的必须是L2D文件中有的内容，实在不清楚的可以在调试的时候获取"Background.vue"文件"onEvent"函数的"event.stringValue"的值以确保无误）
-      Aris_MemorialLobby_1: 爱丽丝觉得在基沃托斯魔法并不是空想。
-      Aris_MemorialLobby_2_1: 魔法是真正存在的。
-      Aris_MemorialLobby_2_2: 因为，老师现在让爱丽丝感到非常幸福。
-      Aris_MemorialLobby_3_1: 游戏之所以很有趣，
-      Aris_MemorialLobby_3_2: 是因为它蕴藏了这个世界所有的美丽之处。
-      Aris_MemorialLobby_3_3: 这是，老师您让我明白的道理。
-      Aris_MemorialLobby_4_1: 游戏、猫咪、和好朋友……还有……
-      Aris_MemorialLobby_4_2: 现在这个瞬间，在这世界上有太多太多美好的东西。
-      Aris_MemorialLobby_5_1: 爱丽丝还想知道更多更多。
-      Aris_MemorialLobby_5_2: 想和老师一起……两个人一起，继续探索这个世界！
-    offset: 0.45 # 这里填学生在回忆大厅的位置，方便在小屏时居中定位学生（百分比定位）
-    dialogueDisplay: # 这里填学生对话框位置（百分比定位）
+  # 角色1 - Aris
+  - name: Aris
+    # Live2D模型文件路径
+    path: '/l2d/aris/'
+    # 骨骼动画文件
+    skel: 'Aris_home.skel'
+    # 纹理图集文件
+    atlas: 'Aris_home.atlas'
+    # 角色在屏幕中的水平位置偏移（0-1之间）
+    offset: 0.45
+    # 对话框显示位置配置
+    dialogueDisplay:
+      # X坐标位置（可以是分数）
       x: -1/4 - 1/16
+      # Y坐标位置（可以是分数）
       y: -1/16
-      position: right # 这里是对话框朝向
-translate: # 这里是一些杂项，需要翻译
-  about: 关于
-  projectWebsite: 项目地址：
-  info: 通知
-  ifSkip: 是否跳过？
-  update: 老师！站点已更新，刷新即可访问最新内容！
-  ok: 确认
-  cancel: 取消
+      # 对话框位置（left/right）
+      position: right
+
+  # 角色2 - Hina
+  - name: Hina_swimsuit
+    # Live2D模型文件路径
+    path: '/l2d/hina_swimsuit/'
+    # 骨骼动画文件
+    skel: 'CH0063_home.skel'
+    # 纹理图集文件
+    atlas: 'CH0063_home.atlas'
+    # 角色在屏幕中的水平位置偏移（0-1之间）
+    offset: 0.68
+    # 对话框显示位置配置
+    dialogueDisplay:
+      # X坐标位置（可以是分数）
+      x: 1/4 + 1/8
+      # Y坐标位置（可以是分数）
+      y: -1/8
+      # 对话框位置（left/right）
+      position: left
 ```
 > 修改其中相关内容，之后重新按上述方式部署即可完成修改
 
 ## 有关i18n
-新版本也开始支持i18n了，其中`简体中文`为本项目默认语言，位于`_config.yaml`中，并内置了`English`和`日本語`，分别位于`src/locales/en-US.yaml`和`src/locales/ja-JP.yaml`
+本项目支持多语言国际化，其中`简体中文`为本项目默认语言，位于`_config.yaml`中，并内置了`English`和`日本語`，分别位于`src/locales/en-US.yaml`和`src/locales/ja-JP.yaml`。
 
-**修改需保证每个词条都有对应的翻译，不得空缺！**
+### 翻译文件目录结构
+```
+src/locales/
+├── zh-CN.yaml  # 中文翻译文件
+├── en-US.yaml  # 英文翻译文件
+└── ja-JP.yaml  # 日文翻译文件
+```
+
+### 翻译文件配置项
+以`src/locales/zh-CN.yaml`为例，翻译文件包含以下配置项：
+```yaml
+# 网站标题、描述和关键词
+title: 网站标题
+description: 网站描述
+keywords: 关键词列表
+
+# PWA配置
+manifest:
+  name: PWA应用名称
+  short_name: PWA应用短名
+  description: PWA应用描述
+
+# 作者名称
+author: 作者名称
+
+# 底部项目展示区域
+dock:
+  - name: 项目名称
+
+# 左侧联系方式区域
+contact:
+  - name: 联系方式名称
+
+# 任务按钮配置
+task:
+  name: 任务按钮显示文本
+
+# 纪念大厅角色显示名称
+memorialLobbies:
+  - name: 角色名称
+
+# 角色语音对话翻译
+memorialLobbies[0]:
+  voice:
+    对话键: 对话内容
+
+# 通用界面翻译字符串
+translate:
+  about: 关于
+  projectWebsite: 项目地址：
+  info: 通知
+  ifSkip: 是否跳过？
+  update: 站点更新提示
+  ok: 确认
+  cancel: 取消
+```
 
 ## 有关学生回忆大厅L2D文件获取
 

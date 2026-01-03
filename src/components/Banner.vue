@@ -1,16 +1,18 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import axios from 'axios'
 import 'aplayer/dist/APlayer.min.css'
 import APlayer from 'aplayer'
-import config from '/_config.yaml'
+import { useConfig } from '@/composables/useConfig'
 
 const ap = ref(null)
 const songTimes = ref(0)
 const songName = ref('')
 const isMiniMode = ref(false)
 
-const songlist = config.banner.musicID
+// 使用i18n配置系统
+const { configs } = useConfig()
+const songlist = computed(() => configs.value?.banner?.musicID || [])
 
 const checkScreenSize = () => {
   isMiniMode.value = window.innerWidth <= 768
@@ -58,17 +60,35 @@ const fetchSongData = async (songId) => {
     const response = await axios.get(
       `https://www.lihouse.xyz/coco_widget/music_resource/id/${songId}`
     )
-    const data = response.data.song_data
-
-    songName.value = data.name
-
-    return {
-      name: data.name,
-      artist: data.artist,
-      url: data.url,
-      cover: data.pic,
-      lrc: data.lyric || '[00:00.000]暂无歌词\n'
+    
+    // 检查响应数据结构
+    console.log('API响应:', response.data)
+    
+    const data = response.data.song_data || response.data
+    
+    // 验证数据结构
+    if (!data) {
+      throw new Error('无效的响应数据')
     }
+    
+    // 检查必要的字段
+    const songInfo = {
+      name: data.name || data.song_name || '未知歌曲',
+      artist: data.artist || data.singer || '未知艺术家',
+      url: data.url || data.song_url,
+      cover: data.pic || data.cover || data.image,
+      lrc: data.lyric || data.lrc || '[00:00.000]暂无歌词\n'
+    }
+    
+    // 验证URL字段
+    if (!songInfo.url) {
+      throw new Error('歌曲URL不存在')
+    }
+    
+    songName.value = songInfo.name
+    console.log('歌曲信息:', songInfo)
+
+    return songInfo
   } catch (error) {
     console.error('获取歌曲数据失败:', error)
     return null
@@ -80,13 +100,25 @@ const addRandomSong = async () => {
   if (!ap.value) return
 
   try {
+    // 检查歌曲列表是否有效
+    if (!songlist.value || songlist.value.length === 0) {
+      console.warn('歌曲列表为空')
+      return
+    }
+
     // 清空当前播放列表
     ap.value.lrc.hide()
     ap.value.list.clear()
 
     // 随机选择一首歌
-    const randomIndex = Math.floor(Math.random() * songlist.length)
-    const songId = songlist[randomIndex]
+    const randomIndex = Math.floor(Math.random() * songlist.value.length)
+    const songId = songlist.value[randomIndex]
+
+    if (!songId) {
+      throw new Error('无效的歌曲ID')
+    }
+
+    console.log(`尝试加载歌曲 ID: ${songId}`)
 
     // 获取歌曲数据
     const songData = await fetchSongData(songId)
@@ -96,14 +128,23 @@ const addRandomSong = async () => {
       ap.value.list.add(songData)
       ap.value.lrc.show()
       ap.value.play()
-    } else if (songTimes.value === 0) {
-      // 如果第一次尝试就失败，销毁播放器
-      ap.value.destroy()
+      console.log('歌曲加载成功:', songData.name)
+    } else {
+      throw new Error('无法获取歌曲数据')
     }
   } catch (error) {
     console.error('添加歌曲失败:', error)
+    
+    // 如果是第一次尝试失败，销毁播放器
     if (songTimes.value === 0) {
+      console.log('首次加载失败，销毁播放器')
       ap.value.destroy()
+    } else {
+      // 如果不是第一次，尝试加载其他歌曲
+      console.log('尝试加载其他歌曲')
+      if (songTimes.value < 3) { // 最多尝试3次
+        setTimeout(() => addRandomSong(), 1000)
+      }
     }
   }
 }
