@@ -88,9 +88,11 @@ const onEvent = (entry, event) => {
   
   // 播放语音
   let voicePath
-  if (locale.value.startsWith('zh')) {
+  if (locale.value === 'zh-CN') {
+    // 只有简体中文使用中文语音
     voicePath = lobby.path + 'zh-CN/' + event.stringValue + '.ogg'
   } else {
+    // 繁体中文、英文、日文都使用日语语音
     voicePath = lobby.path + 'ja-JP/' + event.stringValue + '.ogg'
   }
   
