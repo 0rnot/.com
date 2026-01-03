@@ -14,9 +14,15 @@ const effects = []
 document.addEventListener('mousemove', showMousePosition, false)
 
 function showMousePosition(event) {
-  posX.value = event.clientX
-  posY.value = event.clientY
-  document.querySelector('#cursor .inner').style.opacity = 1
+  // 使用page坐标而不是client坐标，以避免导航栏等影响
+  posX.value = event.pageX
+  posY.value = event.pageY
+  
+  // 显示光标
+  const cursorInner = document.querySelector('#cursor .inner')
+  if (cursorInner) {
+    cursorInner.style.opacity = 1
+  }
 }
 
 document.body.onmouseleave = function () {
@@ -230,12 +236,11 @@ class ClickEffect {
 function initCanvas() {
   if (!canvas.value) return
   
-  // 直接使用窗口尺寸，确保响应式
+  const devicePixelRatio = window.devicePixelRatio || 1
   const width = window.innerWidth
   const height = window.innerHeight
-  const devicePixelRatio = window.devicePixelRatio || 1
   
-  // 设置Canvas的实际像素尺寸
+  // 设置Canvas的实际像素尺寸（考虑设备像素比）
   canvas.value.width = width * devicePixelRatio
   canvas.value.height = height * devicePixelRatio
   
@@ -267,12 +272,9 @@ function animate() {
 }
 
 function handleClickEvent(event) {
-  const clientX = event.clientX
-  const clientY = event.clientY
-  
   const rect = canvas.value.getBoundingClientRect()
-  const x = clientX - rect.left
-  const y = clientY - rect.top
+  const x = event.clientX - rect.left
+  const y = event.clientY - rect.top
   
   effects.push(new ClickEffect(x, y))
   
@@ -348,7 +350,7 @@ onUnmounted(() => {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   pointer-events: none;
   z-index: 9998;
 }
