@@ -54,14 +54,14 @@ const author = computed(() => {
 
 <style scoped>
 .level-box {
-  width: 300px;
-  height: 96px;
+  width: clamp(300px, 18.75vw, 100vw);
+  height: clamp(96px, 6vw, 100vw);
   background: linear-gradient(120deg, #003153, #2265bb 15%, #003153 70%, #003153);
   position: absolute;
   left: 0;
-  top: 40px;
-  border-radius: 0 8px 8px 0;
-  filter: drop-shadow(0 3px 3px black);
+  top: clamp(40px, 2.5vw, 100vw);
+  border-radius: clamp(8px, 0.5vw, 100vw);
+  filter: drop-shadow(0 clamp(3px, 0.1875vw, 100vw) clamp(3px, 0.1875vw, 100vw) black);
   display: flex;
 }
 
@@ -69,10 +69,10 @@ const author = computed(() => {
   content: '';
   position: absolute;
   top: 0;
-  right: -20px;
+  right: clamp(-20px, -1.25vw, 100vw);
   bottom: 0;
-  width: 60px;
-  border-radius: 8px;
+  width: clamp(60px, 3.75vw, 100vw);
+  border-radius: clamp(8px, 0.5vw, 100vw);
   background: #003153;
   transform: skewX(-10deg);
   z-index: -1;
@@ -82,9 +82,9 @@ const author = computed(() => {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin: auto 0 auto 26px;
+  margin: auto 0 auto clamp(26px, 1.625vw, 100vw);
   width: 100%;
-  height: calc(100% - 26px);
+  height: calc(100% - clamp(26px, 1.625vw, 100vw));
 }
 
 .level {
@@ -100,27 +100,27 @@ const author = computed(() => {
 
 .container .level p {
   color: #fff;
-  font-size: 42px;
+  font-size: clamp(42px, 2.625vw, 100vw);
   font-weight: 600;
   transform: skewX(-10deg);
 }
 
 .container .name {
   color: #fff;
-  font-size: 24px;
+  font-size: clamp(24px, 1.5vw, 100vw);
   font-weight: 600;
 }
 
 .container .level span {
   color: #ffe433;
-  font-size: 24px;
+  font-size: clamp(24px, 1.5vw, 100vw);
   font-weight: 600;
   transform: skewX(-10deg);
 }
 
 .right {
   align-self: flex-start;
-  margin: 0 20px;
+  margin: 0 clamp(20px, 1.25vw, 100vw);
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -129,7 +129,7 @@ const author = computed(() => {
 }
 
 .right p {
-  font-size: 20px;
+  font-size: clamp(20px, 1.25vw, 100vw);
   font-weight: 600;
 }
 
