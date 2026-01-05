@@ -77,15 +77,24 @@ setInterval(() => {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-1.6666666667rem);
+    transform: translateY(-26.6666666672px);
   }
   100% {
     transform: translateY(0);
   }
 }
 
+@media screen and (min-width: 1600px) {
+  @keyframes move {
+    50% {
+      transform: translateY(-1.6666666667vw);
+    }
+  }
+}
+
 .loading {
   animation: move 2s ease-in-out infinite;
+  width: 100%;
 }
 
 img {
@@ -123,36 +132,36 @@ img {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  margin-top: 2rem;
+  margin-top: clamp(32px, 2vw, 100vw);
 }
 
 .progress_wrapper .title {
   font-family: TVPS-Vain-Capital-2, system-ui;
   color: #1289f9;
-  font-size: 1.8rem;
+  font-size: clamp(28.8px, 1.8vw, 100vw);
 }
 
 .progress_wrapper .percent {
-  margin-top: 0.3666666667rem;
-  font-size: 1.4rem;
+  margin-top: clamp(5.8666666672px, 0.3666666667vw, 100vw);
+  font-size: clamp(22.4px, 1.4vw, 100vw);
   font-family: TVPS-Vain-Capital-2, system-ui;
   color: #1289f9;
 }
 
 /* 加载详情样式 */
 .loading_details {
-  margin-top: 1rem;
+  margin-top: clamp(16px, 1vw, 100vw);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: clamp(8px, 0.5vw, 100vw);
   align-items: center;
 }
 
 .detail_item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
+  gap: clamp(8px, 0.5vw, 100vw);
+  font-size: clamp(14.4px, 0.9vw, 100vw);
   color: #666;
 }
 
@@ -182,6 +191,7 @@ img {
 }
 
 .avatar_img {
-  height: 340px;
+  height: clamp(340px, 21.25vw, 100vw);
+  width: clamp(250px, 15.625vw, 100vw);;
 }
 </style>
