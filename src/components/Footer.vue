@@ -56,39 +56,39 @@ setInterval(() => {
 
 <style scoped>
 .footer {
-  width: calc(100% - 80px);
-  height: 60px;
+  width: calc(100% - clamp(80px, 5vw, 100vw));
+  height: clamp(60px, 3.75vw, 100vw);
   background: #e8f3ffee;
   position: absolute;
-  bottom: 25px;
+  bottom: clamp(25px, 1.5625vw, 100vw);
   transform: skew(-20deg);
   align-self: center;
-  border-radius: 8px;
+  border-radius: clamp(8px, 0.5vw, 100vw);
   display: inline-flex;
   justify-content: center;
-  filter: drop-shadow(0px 0px 6px #0003);
+  filter: drop-shadow(0px 0px clamp(6px, 0.375vw, 100vw) #0003);
   transition: all 0.3s;
   align-items: flex-end;
 }
 
 .footer::after {
   content: '';
-  width: calc(100% - 360px);
+  width: calc(100% - clamp(360px, 22.5vw, 100vw));
   height: 100%;
   background: #ffffffdd;
   position: absolute;
   transform: skew(50deg);
-  border-radius: 4px;
+  border-radius: clamp(4px, 0.25vw, 100vw);
   z-index: -1;
   transition: all 0.3s;
 }
 
 .project-box {
-  width: calc(100% - 120px);
-  height: calc(100% + 20px + 24px);
+  width: calc(100% - clamp(120px, 7.5vw, 100vw));
+  height: calc(100% + clamp(20px, 1.25vw, 100vw) + clamp(24px, 1.5vw, 100vw));
   transform: skew(20deg);
   position: absolute;
-  left: 20px;
+  left: clamp(20px, 1.25vw, 100vw);
   display: inline-flex;
   align-items: flex-end;
   overflow: auto;
@@ -101,12 +101,12 @@ setInterval(() => {
 .time {
   transform: skew(20deg);
   position: absolute;
-  right: 40px;
-  bottom: 10px;
+  right: clamp(40px, 2.5vw, 100vw);
+  bottom: clamp(10px, 0.625vw, 100vw);
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
-  font-size: 18px;
+  font-size: clamp(18px, 1.125vw, 100vw);
   flex-direction: column;
 }
 
@@ -126,7 +126,7 @@ setInterval(() => {
   align-items: center;
   justify-content: flex-end;
   position: relative;
-  bottom: 15px;
+  bottom: clamp(15px, 0.9375vw, 100vw);
   margin: 0 0 0 5%;
   transition: transform 0.05s;
 }
@@ -136,19 +136,19 @@ setInterval(() => {
 }
 
 .project span {
-  margin: 5px 0 0;
+  margin: clamp(5px, 0.3125vw, 100vw) 0 0;
   color: #003153;
-  font-size: 16px;
+  font-size: clamp(16px, 1vw, 100vw);
   word-break: keep-all;
 }
 
 .arco-icon {
-  font-size: 64px;
+  font-size: clamp(64px, 4vw, 100vw);
 }
 
 .project img {
-  width: 64px;
-  height: 64px;
+  width: clamp(64px, 4vw, 100vw);
+  height: clamp(64px, 4vw, 100vw);
 }
 
 @media screen and (max-width: 830px) {
