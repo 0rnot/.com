@@ -41,11 +41,11 @@ const IconFont = computed(() => {
 <style scoped>
 .contact-box {
   position: absolute;
-  left: 20px;
-  top: 186px;
+  left: clamp(20px, 1.25vw, 100vw);
+  top: clamp(186px, 11.625vw, 100vw);
   display: grid;
-  grid-template-columns: repeat(2, 130px);
-  grid-gap: 20px;
+  grid-template-columns: repeat(2, clamp(130px, 8.125vw, 100vw));
+  grid-gap: clamp(20px, 1.25vw, 100vw);
   height: auto;
   justify-items: center;
 }
@@ -58,14 +58,14 @@ const IconFont = computed(() => {
   align-items: center;
   justify-content: flex-end;
   position: relative;
-  bottom: 15px;
-  margin: 0 20px;
+  bottom: clamp(15px, 0.9375vw, 100vw);
+  margin: 0 clamp(20px, 1.25vw, 100vw);
   transition: transform 0.05s;
 }
 
 .contact span {
-  margin: 5px 0 0;
-  font-size: 20px;
+  margin: clamp(5px, 0.3125vw, 100vw) 0 0;
+  font-size: clamp(20px, 1.25vw, 100vw);
   color: #003153;
   font-weight: 800;
 }
@@ -79,13 +79,13 @@ const IconFont = computed(() => {
 }
 
 .arco-icon {
-  font-size: 48px;
-  filter: drop-shadow(0px 0px 4px #fff6);
+  font-size: clamp(48px, 3vw, 100vw);
+  filter: drop-shadow(0px 0px clamp(4px, 0.25vw, 100vw) #fff6);
 }
 
 .contact img {
-  height: 48px;
-  filter: drop-shadow(0px 0px 4px #fff6);
+  height: clamp(48px, 3vw, 100vw);
+  filter: drop-shadow(0px 0px clamp(4px, 0.25vw, 100vw) #fff6);
 }
 
 .contact:active {
