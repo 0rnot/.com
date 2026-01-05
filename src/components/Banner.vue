@@ -157,9 +157,9 @@ const addRandomSong = async () => {
 <style scoped>
 #aplayer {
   position: absolute;
-  left: 50px;
-  bottom: 180px;
-  width: 300px;
+  left: clamp(50px, 3.125vw, 100vw);
+  bottom: clamp(180px, 11.25vw, 100vw);
+  width: clamp(300px, 18.75vw, 100vw);
   aspect-ratio: 446 / 158;
   opacity: 0.9;
   transition: transform 0.3s;
@@ -208,12 +208,12 @@ const addRandomSong = async () => {
 }
 
 .aplayer.aplayer-withlrc .aplayer-info {
-  margin-left: 103px;
+  margin-left: clamp(103px, 6.4375vw, 100vw);
   height: 100%;
 }
 
 .aplayer .aplayer-lrc {
-  height: 45px;
+  height: calc(100% - 50px);
 }
 
 .aplayer .aplayer-lrc:after,
