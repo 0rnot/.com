@@ -99,16 +99,16 @@ const skip = () => {
 }
 
 .curtain img {
-  width: 500px;
+  width: clamp(500px, 31.25vw, 100vw);
   height: auto;
 }
 
 .task {
   position: absolute;
-  bottom: 140px;
-  right: 60px;
-  width: 150px;
-  height: 150px;
+  bottom: clamp(140px, 8.75vw, 100vw);
+  right: clamp(60px, 3.75vw, 100vw);
+  width: clamp(150px, 9.375vw, 100vw);
+  aspect-ratio: 1 / 1;
   background: url('/task.png') center;
   background-size: cover;
   transition: transform 0.1s;
@@ -117,11 +117,11 @@ const skip = () => {
 .task:before {
   content: '';
   position: absolute;
-  left: 10px;
+  left: clamp(10px, 0.625vw, 100vw);
   bottom: 0;
-  height: 50px;
-  width: calc(100% + 10px);
-  border-radius: 8px;
+  height: clamp(50px, 3.125vw, 100vw);
+  width: calc(100% + clamp(10px, 0.625vw, 100vw));
+  border-radius: clamp(8px, 0.5vw, 100vw);
   background: #003153;
   transform: skewX(-10deg);
 }
@@ -129,15 +129,15 @@ const skip = () => {
 .task:after {
   content: attr(name);
   position: absolute;
-  left: 10px;
+  left: clamp(10px, 0.625vw, 100vw);
   bottom: 0;
-  height: 50px;
+  height: clamp(50px, 3.125vw, 100vw);
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: 26px;
+  font-size: clamp(26px, 1.625vw, 100vw);
   font-weight: 800;
 }
 
