@@ -109,51 +109,38 @@ setInterval(() => {
   <div class="toolbox-box">
     <div
       class="toolbox"
-      :style="{
-        transform: (!props.l2dOnly ? 'translateY(0)' : 'translateY(-300px)') + ' skew(-10deg)',
-        transition: 'transform 0.3s ' + (!props.l2dOnly ? 'ease-out' : 'ease-in')
-      }"
+      :class="{ 'toolbox-l2d': props.l2dOnly }"
     >
       <img src="/img/ap.png" alt="" />
       <span>{{ ap + '/' + max_ap }}</span>
     </div>
     <div
       class="toolbox"
-      :style="{
-        transform: (!props.l2dOnly ? 'translateY(0)' : 'translateY(-300px)') + ' skew(-10deg)',
-        transition: 'transform 0.3s ' + (!props.l2dOnly ? 'ease-out' : 'ease-in')
-      }"
+      :class="{ 'toolbox-l2d': props.l2dOnly }"
     >
       <img src="/img/gold.png" alt="" />
       <span>11,451,419</span>
     </div>
     <div
       class="toolbox"
-      :style="{
-        transform: (!props.l2dOnly ? 'translateY(0)' : 'translateY(-300px)') + ' skew(-10deg)',
-        transition: 'transform 0.3s ' + (!props.l2dOnly ? 'ease-out' : 'ease-in')
-      }"
+      :class="{ 'toolbox-l2d': props.l2dOnly }"
     >
       <img src="/img/pyroxene.png" alt="" />
       <span>24,000</span>
     </div>
     <a
       class="about toolbox"
+      :class="{ 'toolbox-l2d': props.l2dOnly }"
       @click="about"
-      :style="{
-        transform: (!props.l2dOnly ? 'translateY(0)' : 'translateY(-300px)') + ' skew(-10deg)',
-        transition: 'transform 0.3s ' + (!props.l2dOnly ? 'ease-out' : 'ease-in')
-      }"
     >
       <icon-info-circle class="css-cursor-hover-enabled" />
     </a>
     <a
       id="change"
       class="l2d toolbox"
-      :class="{ canHover: !hover && !props.canskip }"
+      :class="{ 'toolbox-l2d': props.l2dOnly, 'canHover': !hover && !props.canskip }"
       @click="change"
       :style="{
-        transform: (!props.l2dOnly ? 'translateY(0)' : 'translateY(-76px)') + ' skew(-10deg)',
         transition: 'transform 0.3s ' + (!props.l2dOnly ? 'ease-out' : 'ease-in') + ',opacity 0.6s',
         opacity: (!props.l2dOnly || (showMin && hover)) && !props.canskip ? 1 : 0
       }"
@@ -166,23 +153,25 @@ setInterval(() => {
 <style scoped>
 .toolbox-box {
   position: absolute;
-  right: 20px;
-  top: 40px;
+  right: clamp(20px, 1.25vw, 100vw);
+  top: clamp(40px, 2.5vw, 100vw);
   display: inline-flex;
 }
 
 .toolbox-box .toolbox {
-  width: 220px;
-  height: 56px;
+  min-width: 220px;
+  min-height: 56px;
+  width: 13.75vw;
+  aspect-ratio: 220 / 56;
   background: #fffd;
   color: #003153;
-  margin: 0 10px;
-  transform: skew(-10deg);
-  border-radius: 6px;
-  filter: drop-shadow(0px 0px 3px #0003);
+  margin: 0 clamp(10px, 0.625vw, 100vw);
+  transform: translateY(0) skew(-10deg);
+  border-radius: clamp(6px, 0.375vw, 100vw);
+  filter: drop-shadow(0px 0px clamp(3px, 0.1875vw, 100vw) #0003);
   transition:
     background-color 0.3s,
-    transform 0.1s;
+    transform 0.3s;
   display: flex;
   align-items: center;
 }
@@ -190,16 +179,19 @@ setInterval(() => {
 .toolbox img {
   height: 70%;
   transform: skew(10deg);
-  margin: 0 8px 0 10px;
+  margin: 0 clamp(8px, 0.5vw, 100vw) 0 clamp(10px, 0.625vw, 100vw);
 }
 .toolbox span {
-  font-size: 26px;
+  font-size: clamp(26px, 1.625vw, 100vw);
   transform: skew(10deg);
 }
 
 .toolbox-box .toolbox.about,
 .toolbox-box .toolbox.l2d {
-  width: 80px;
+  min-width: 80px;
+  min-height: 56px;
+  width: 5vw;
+  aspect-ratio: 80 / 56;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -208,14 +200,16 @@ setInterval(() => {
 .toolbox-box .toolbox.l2d {
   position: absolute;
   right: 0;
-  top: 76px;
+  top: clamp(76px, 4.75vw, 100vw);
   overflow: hidden;
+  transform: translateY(0) skew(-10deg);
 }
 
 .toolbox.l2d img {
   filter: drop-shadow(-100vw 0px 0px #003153);
   transform: translateX(100vw);
-  height: 32px;
+  height: 2vw;
+  min-height: 32px;
 }
 
 .toolbox-box .toolbox:hover {
@@ -224,17 +218,35 @@ setInterval(() => {
 
 .toolbox-box .toolbox.about:active,
 .toolbox-box .toolbox.l2d:active {
-  transform: skew(-10deg) scale(0.9);
+  transform: translateY(0) skew(-10deg) scale(0.9);
 }
 
 .arco-icon {
-  font-size: 32px;
+  font-size: clamp(32px, 2vw, 100vw);
   transform: skew(10deg);
 }
 
 @media screen and (max-width: 1199px) {
   .toolbox:not(.about) {
     display: none;
+  }
+}
+
+@media screen and (max-width: 1600px) {
+  .toolbox.toolbox-l2d {
+    transform: translateY(-300px) skew(-10deg);
+  }
+  .toolbox.l2d.toolbox-l2d {
+    transform: translateY(-76px) skew(-10deg);
+  }
+}
+
+@media screen and (min-width: 1601px) {
+  .toolbox.toolbox-l2d {
+    transform: translateY(-18.75vw) skew(-10deg);
+  }
+  .toolbox.l2d.toolbox-l2d {
+    transform: translateY(-4.75vw) skew(-10deg);
   }
 }
 
