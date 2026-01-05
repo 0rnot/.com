@@ -10,6 +10,29 @@ let ctx = null
 let animationId = null
 const effects = []
 
+// 响应式配置
+function getEffectConfig() {
+  const viewportWidth = window.innerWidth
+  const baseWidth = 1600
+  const scale = viewportWidth / baseWidth
+  
+  return {
+    radius: 25 * Math.max(1, scale),
+    duration: 800,
+    sizeMin: 8 * Math.max(1, scale),
+    sizeMax: 12 * Math.max(1, scale),
+    speedMin: 30 * Math.max(1, scale),
+    speedMax: 40 * Math.max(1, scale),
+    delayMax: 200,
+    shadowBlur: 10 * Math.max(1, scale),
+    tailShadowBlur: 8 * Math.max(1, scale),
+    innerShadowBlur: 20 * Math.max(1, scale),
+    offset: 8 * Math.max(1, scale),
+    outerRadiusOffset: 8 * Math.max(1, scale),
+    radiusGrowth: 6 * Math.max(1, scale)
+  }
+}
+
 // 光标移动相关
 document.addEventListener('mousemove', showMousePosition, false)
 
@@ -55,30 +78,32 @@ window.document.body.onmouseover = function (event) {
 // 点击效果类
 class ClickEffect {
   constructor(x, y) {
+    const config = getEffectConfig()
+    
     this.x = x
     this.y = y
     this.startTime = Date.now()
-    this.duration = 800
+    this.duration = config.duration
     this.rotation1 = Math.random() * Math.PI * 2
     this.rotation2 = Math.random() * Math.PI * 2
-    this.radius = 25
+    this.radius = config.radius
     
     this.triangles = []
-    this.createTriangles()
+    this.createTriangles(config)
   }
 
-  createTriangles() {
+  createTriangles(config) {
     const triangleCount = 3 + Math.floor(Math.random() * 4)
     
     for (let i = 0; i < triangleCount; i++) {
       const angle = Math.random() * Math.PI * 2
-      const delay = Math.random() * 200
+      const delay = Math.random() * config.delayMax
       
       this.triangles.push({
         angle: angle,
         delay: delay,
-        size: 8 + Math.random() * 12,
-        speed: 30 + Math.random() * 40,
+        size: config.sizeMin + Math.random() * config.sizeMax,
+        speed: config.speedMin + Math.random() * config.speedMax,
         color: Math.random() > 0.5 ? '#77deff' : '#ffffff',
         rotationSpeed: (Math.random() - 0.5) * 0.1
       })
@@ -86,6 +111,7 @@ class ClickEffect {
   }
 
   draw(ctx, currentTime) {
+    const config = getEffectConfig()
     const elapsed = currentTime - this.startTime
     const progress = Math.min(elapsed / this.duration, 1)
     
@@ -94,22 +120,22 @@ class ClickEffect {
     
     const scale = 1 + progress * 0.3
     const alpha = Math.pow(1 - progress, 1.5)
-    const currentRadius = this.radius + 8 + progress * 6
+    const currentRadius = this.radius + config.outerRadiusOffset + progress * config.radiusGrowth
     
     ctx.globalAlpha = alpha
     ctx.scale(scale, scale)
     
-    this.drawOuterCircle(ctx, alpha, currentRadius)
-    this.drawArcTails(ctx, progress, currentRadius)
-    this.drawTriangles(ctx, elapsed)
+    this.drawOuterCircle(ctx, alpha, currentRadius, config)
+    this.drawArcTails(ctx, progress, currentRadius, config)
+    this.drawTriangles(ctx, elapsed, config)
     
     ctx.restore()
     
     return progress < 1
   }
 
-  drawOuterCircle(ctx, alpha, currentRadius) {
-    const centerRadius = currentRadius + 8
+  drawOuterCircle(ctx, alpha, currentRadius, config) {
+    const centerRadius = currentRadius + config.outerRadiusOffset
     
     ctx.beginPath()
     ctx.arc(0, 0, centerRadius, 0, Math.PI * 2)
@@ -121,12 +147,12 @@ class ClickEffect {
     
     ctx.fillStyle = gradient
     ctx.shadowColor = '#c3ebff'
-    ctx.shadowBlur = 10
+    ctx.shadowBlur = config.shadowBlur
     ctx.fill()
     ctx.shadowBlur = 0
   }
 
-  drawArcTails(ctx, progress, currentRadius) {
+  drawArcTails(ctx, progress, currentRadius, config) {
     if (progress < 0.3) return
     
     const tailProgress = (progress - 0.3) / 0.7
@@ -138,7 +164,7 @@ class ClickEffect {
     const tail2Angle = this.rotation2 + Math.PI - tailProgress * 2
     
     for (let i = 0; i < 8; i++) {
-      const offset = i * 8
+      const offset = i * config.offset
       const alpha = (1 - progress) * (1 - i * 0.12)
       
       ctx.save()
@@ -148,7 +174,7 @@ class ClickEffect {
       ctx.lineCap = 'round'
       
       ctx.shadowColor = '#77deff'
-      ctx.shadowBlur = 8 - i
+      ctx.shadowBlur = config.tailShadowBlur - i
       
       const startAngle = tail1Angle - (offset * Math.PI / 180)
       const endAngle = tail1Angle + Math.PI * 0.6 - (offset * Math.PI / 180)
@@ -160,7 +186,7 @@ class ClickEffect {
     }
     
     for (let i = 0; i < 8; i++) {
-      const offset = i * 8
+      const offset = i * config.offset
       const alpha = (1 - progress) * (1 - i * 0.12)
       
       ctx.save()
@@ -170,7 +196,7 @@ class ClickEffect {
       ctx.lineCap = 'round'
       
       ctx.shadowColor = '#ffffff'
-      ctx.shadowBlur = 8 - i
+      ctx.shadowBlur = config.tailShadowBlur - i
       
       const startAngle = tail2Angle - (offset * Math.PI / 180)
       const endAngle = tail2Angle + Math.PI * 0.4 - (offset * Math.PI / 180)
@@ -184,7 +210,7 @@ class ClickEffect {
     ctx.restore()
   }
 
-  drawTriangles(ctx, elapsed) {
+  drawTriangles(ctx, elapsed, config) {
     this.triangles.forEach((triangle) => {
       const triangleProgress = Math.max(0, (elapsed - triangle.delay) / (this.duration - triangle.delay))
       
@@ -206,7 +232,7 @@ class ClickEffect {
       
       ctx.fillStyle = triangle.color
       ctx.shadowColor = triangle.color
-      ctx.shadowBlur = 10
+      ctx.shadowBlur = config.shadowBlur
       
       ctx.beginPath()
       ctx.moveTo(0, -size)
@@ -218,7 +244,7 @@ class ClickEffect {
       ctx.globalCompositeOperation = 'lighter'
       ctx.fillStyle = triangle.color
       ctx.globalAlpha = brightness * 0.3
-      ctx.shadowBlur = 20
+      ctx.shadowBlur = config.innerShadowBlur
       ctx.shadowColor = triangle.color
       ctx.beginPath()
       ctx.moveTo(0, -size * 0.8)
@@ -369,8 +395,8 @@ onUnmounted(() => {
   background: url(data:image/png;base64,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)
     no-repeat;
   background-size: 100%;
-  width: 1.3666666667rem;
-  height: 1.4666666667rem;
+  width: clamp(21.8666666672px, 1.3666666667vw, 100vw);
+  height: clamp(23.4666666672px, 1.4666666667vw, 100vw);
   display: inline-block;
   position: absolute;
   top: 0;
@@ -388,11 +414,17 @@ onUnmounted(() => {
   box-shadow: initial !important;
   border-radius: initial !important;
   background-size: 100% !important;
-  width: 1.4333333333rem !important;
-  height: 1.7333333333rem !important;
+  width: clamp(22.9333333328px, 1.4333333333vw, 100vw) !important;
+  height: clamp(27.7333333328px, 1.7333333333vw, 100vw) !important;
   display: inline-block !important;
   transition: all 0.3s ease;
-  transform: translate(-0.3333333333rem) !important;
+  transform: translate(-5.3333333328px) !important;
   opacity: 0;
+}
+
+@media screen and (min-width: 1600px) {
+  #cursor .inner {
+    transform: translate(-0.3333333333vw) !important;
+  }
 }
 </style>
