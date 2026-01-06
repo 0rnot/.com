@@ -261,19 +261,17 @@ class ClickEffect {
 // Canvas相关函数
 function initCanvas() {
   if (!canvas.value) return
-  
-  const devicePixelRatio = window.devicePixelRatio || 1
+
   const width = window.innerWidth
   const height = window.innerHeight
   
-  // 设置Canvas的实际像素尺寸（考虑设备像素比）
-  canvas.value.width = width * devicePixelRatio
-  canvas.value.height = height * devicePixelRatio
+  // 设置Canvas的实际像素尺寸
+  canvas.value.width = width
+  canvas.value.height = height
   
   ctx = canvas.value.getContext('2d')
   // 重置变换矩阵，然后应用设备像素比缩放
   ctx.setTransform(1, 0, 0, 1, 0, 0)
-  ctx.scale(devicePixelRatio, devicePixelRatio)
 }
 
 function animate() {
