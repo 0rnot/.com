@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useConfig } from '@/composables/useConfig'
 const { configs } = useConfig()
 
@@ -24,6 +24,24 @@ const author = computed(() => {
   if (!currentConfig.value || !currentConfig.value.author) return 'Unknown'
   return currentConfig.value.author
 })
+
+const windowWidth = ref(window.innerWidth)
+
+const updateWidth = () => {
+  windowWidth.value = window.innerWidth
+}
+
+onMounted(() => {
+  window.addEventListener('resize', updateWidth)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateWidth)
+})
+
+const strokeWidth = computed(() => {
+  return Math.max(4, Math.round(windowWidth.value * 0.0025))
+})
 </script>
 
 <template>
@@ -40,6 +58,7 @@ const author = computed(() => {
             :percent="exp / nextExp"
             :show-text="false"
             :color="exp >= nextExp ? '#ffe433' : '#89d5fd'"
+            :stroke-width="strokeWidth"
             trackColor="#535E67"
           >
           </a-progress>

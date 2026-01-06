@@ -515,13 +515,13 @@ watch(
 
 <style scoped>
 .dialogue {
-  padding: 30px 20px;
-  max-width: 280px;
-  width: calc(40vw - 20px);
-  font-size: 24px;
+  padding: clamp(30px, 1.875vw, 100vw) clamp(20px, 1.25vw, 100vw);
+  max-width: clamp(280px, 17.5vw, 100vw);
+  width: calc(40vw - clamp(20px, 1.25vw, 100vw));
+  font-size: clamp(24px, 1.5vw, 100vw);
   background-color: #f0f0f0dd;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
+  border-radius: clamp(10px, 0.625vw, 100vw);
+  box-shadow: 0 clamp(2px, 0.125vw, 100vw) clamp(8px, 0.5vw, 100vw) 0 rgba(0, 0, 0, 0.15);
 }
 
 #change {
@@ -550,7 +550,7 @@ watch(
 }
 
 img {
-  width: 32px;
+  width: clamp(32px, 2vw, 100vw);
   height: auto;
   animation: move 2s ease-in-out infinite;
   z-index: 1000;
@@ -563,25 +563,25 @@ img:last-child {
 
 @keyframes move {
   0% {
-    transform: translateX(10px);
+    transform: translateX(clamp(10px, 0.625vw, 100vw));
   }
   50% {
-    transform: translateX(30px);
+    transform: translateX(clamp(30px, 1.875vw, 100vw));
   }
   100% {
-    transform: translateX(10px);
+    transform: translateX(clamp(10px, 0.625vw, 100vw));
   }
 }
 
 @keyframes moveReverse {
   0% {
-    transform: rotate(180deg) translateX(10px);
+    transform: rotate(180deg) translateX(clamp(10px, 0.625vw, 100vw));
   }
   50% {
-    transform: rotate(180deg) translateX(30px);
+    transform: rotate(180deg) translateX(clamp(30px, 1.875vw, 100vw));
   }
   100% {
-    transform: rotate(180deg) translateX(10px);
+    transform: rotate(180deg) translateX(clamp(10px, 0.625vw, 100vw));
   }
 }
 </style>

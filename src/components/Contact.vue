@@ -33,7 +33,7 @@ const IconFont = computed(() => {
     >
       <img v-if="contact.imgSrc" :src="contact.imgSrc" alt="" />
       <icon-font v-if="contact.iconfont" :type="contact.iconfont" />
-      <span>{{ contact.name }}</span>
+      <span :data-text="contact.name">{{ contact.name }}</span>
     </a>
   </div>
 </template>
@@ -68,14 +68,16 @@ const IconFont = computed(() => {
   font-size: clamp(20px, 1.25vw, 100vw);
   color: #003153;
   font-weight: 800;
+  position: relative;
 }
 
-.contact span {
-  text-shadow:
-    #fff 1px 0 0,
-    #fff 0 1px 0,
-    #fff -1px 0 0,
-    #fff 0 -1px 0;
+.contact span::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  color: transparent;
+  -webkit-text-stroke: clamp(2px, 0.125vw, 100vw) #fff;
+  z-index: -1;
 }
 
 .arco-icon {
