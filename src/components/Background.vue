@@ -484,8 +484,8 @@ const skipStartIdle = () => {
 
 // 骨骼点击交互处理
 const handleBoneClick = (event) => {
-  // 检查动画是否可以交互
-  if (!animation || !animation.state || !animationReady || talking) {
+  // 检查动画是否可以交互，添加摸头状态检查
+  if (!animation || !animation.state || !animationReady || talking || ifPetting.value) {
     return
   }
 
@@ -619,13 +619,28 @@ const cancelLongPressTimer = (event) => {
     } else {
       // 如果是长按结束，检查是否需要结束抚摸动画
       if (ifPetting.value && animation && animation.skeleton && animationReady) {
-        ifPetting.value = false
+        // 先添加结束动画，不立即设置ifPetting为false
         animation.state.addAnimation(1, 'PatEnd_01_A')._mixDuration = 0.3
         animation.state.addAnimation(2, 'PatEnd_01_M')._mixDuration = 0.3
         animation.state.addAnimation(1, 'Dummy', true)._mixDuration = 0.3
         animation.state.addAnimation(2, 'Dummy', true)._mixDuration = 0.3
         // 恢复所有头部骨骼到原始状态
         restoreAllHeadBones()
+        
+        // 为摸头结束动画添加监听器，确保动画完成后才重置状态
+        let patEndListener = {
+          complete: (entry) => {
+            // 确保只处理摸头结束动画的完成事件
+            if (entry.trackIndex === 1 && entry.animation.name === 'PatEnd_01_A') {
+              ifPetting.value = false
+              // 移除该监听器以避免冲突
+              animation.state.listeners = animation.state.listeners.filter(l => l !== patEndListener)
+            }
+          }
+        }
+        
+        // 添加监听器
+        animation.state.addListener(patEndListener)
       }
     }
 
@@ -747,8 +762,12 @@ const checkFaceBoneClick = (x, y) => {
   return false
 }
 
-// 播放对话动画
+// 播放对话动画，添加摸头状态检查
 const playTalkAnimation = () => {
+  // 如果正在摸头，则不播放对话动画
+  if (ifPetting.value) {
+    return
+  }
   if (
     animation.state.data.skeletonData.findAnimation('Talk_0' + talkIndex + '_A_CN') &&
     locale.value.startsWith('zh')
@@ -764,11 +783,15 @@ const playTalkAnimation = () => {
 
   let listener = {
     complete: (entry) => {
-      if (entry.trackIndex === 1 && entry.animation.name !== 'Dummy') {
-        animation.state.listeners = []
-        animation.state.addListener({
-          event: onEvent
-        })
+      if (entry.trackIndex === 1 && entry.animation.name !== 'Dummy' && entry.animation.name.startsWith('Talk_')) {
+        // 只移除当前对话动画的监听器，保留其他监听器
+        animation.state.listeners = animation.state.listeners.filter(l => l !== listener)
+        // 确保始终保留event监听器
+        if (!animation.state.listeners.some(l => l.event === onEvent)) {
+          animation.state.addListener({
+            event: onEvent
+          })
+        }
         talking = false
         showDialogue.value = false
       }
@@ -783,8 +806,12 @@ const playTalkAnimation = () => {
   talking = true
 }
 
-// 播放抚摸动画
+// 播放抚摸动画，添加对话状态检查
 const playPatAnimation = () => {
+  // 如果正在对话，则不播放摸头动画
+  if (talking) {
+    return
+  }
   animation.state.addAnimation(1, 'Pat_01_A', true)._mixDuration = 0.3
   animation.state.addAnimation(2, 'Pat_01_M', true)._mixDuration = 0.3
   ifPetting.value = true
