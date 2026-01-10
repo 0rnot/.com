@@ -6,7 +6,7 @@ import { useConfig } from '@/composables/useConfig'
 const { configs, locale } = useConfig()
 const emit = defineEmits(['canskip', 'update:changeL2D'])
 import { Howl } from 'howler'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps(['l2dOnly'])
 
@@ -20,10 +20,20 @@ let talking = false,
 let modalRef
 let originalOffsetPercent = 70 // 默认值，等待配置加载后更新
 
+// 长按相关变量
+let longPressTimer = null
+let longPressThreshold = 500 // 长按阈值（毫秒）
+let isLongPress = false
+
 const dialogue = ref('')
 const showDialogue = ref(false)
 const ifPetting = ref(false)
 const currentConfig = computed(() => configs.value)
+
+// 直接使用eval解析分数表达式
+const parseFraction = (fractionString) => {
+  return eval(fractionString)
+}
 
 const updateDialoguePosition = () => {
   if (
@@ -32,8 +42,10 @@ const updateDialoguePosition = () => {
     currentConfig.value.memorialLobbies[id]
   ) {
     const lobby = currentConfig.value.memorialLobbies[id]
-    dialogueDisplay.value.x = eval(lobby.dialogueDisplay.x) * document.documentElement.clientWidth
-    dialogueDisplay.value.y = eval(lobby.dialogueDisplay.y) * document.documentElement.clientHeight
+    dialogueDisplay.value.x =
+      parseFraction(lobby.dialogueDisplay.x) * document.documentElement.clientWidth
+    dialogueDisplay.value.y =
+      parseFraction(lobby.dialogueDisplay.y) * document.documentElement.clientHeight
   }
 }
 
@@ -53,7 +65,41 @@ const l2d = new PIXI.Application({
   backgroundAlpha: 0
 })
 
-document.querySelector('#background').appendChild(l2d.view)
+// 安全地将canvas添加到background div中的函数
+const addCanvasToBackground = () => {
+  try {
+    // 查找background元素
+    const backgroundElement = document.querySelector('#background')
+    if (backgroundElement) {
+      // 检查canvas是否已经在background中
+      if (!l2d.view.parentNode || l2d.view.parentNode !== backgroundElement) {
+        // 先移除canvas从当前父节点（如果有的话）
+        if (l2d.view.parentNode) {
+          l2d.view.parentNode.removeChild(l2d.view)
+        }
+        // 将canvas添加到background div
+        backgroundElement.appendChild(l2d.view)
+
+        // 设置canvas样式和id
+        l2d.view.id = 'l2d-canvas'
+        l2d.view.style.position = 'relative'
+        l2d.view.style.pointerEvents = 'auto'
+        l2d.view.style.zIndex = '1' // 提高canvas的z-index，使其可以接收点击事件
+      }
+    } else {
+      // 如果找不到background元素，延迟重试
+      setTimeout(addCanvasToBackground, 100)
+    }
+  } catch (error) {
+    // 发生错误时也延迟重试
+    setTimeout(addCanvasToBackground, 100)
+  }
+}
+
+// 组件挂载后尝试添加canvas
+onMounted(() => {
+  addCanvasToBackground()
+})
 
 const changeL2D = (value) => {
   emit('update:changeL2D', value)
@@ -69,7 +115,6 @@ const onEvent = (entry, event) => {
     !currentConfig.value.memorialLobbies ||
     !currentConfig.value.memorialLobbies[id]
   ) {
-    console.warn('配置未准备好')
     return
   }
 
@@ -77,15 +122,14 @@ const onEvent = (entry, event) => {
   const voiceSource = lobby?.voice
 
   if (!voiceSource || !voiceSource[event.stringValue]) {
-    // 如果没有语音配置，静默处理或者显示无语音提示
-    console.warn(`未找到语音配置: ${event.stringValue} for character ${lobby.name}`)
+    // 如果没有语音配置，静默处理
     return
   }
 
   const dialogueText = voiceSource[event.stringValue]
   dialogue.value = dialogueText
   showDialogue.value = true
-  
+
   // 播放语音
   let voicePath
   if (locale.value === 'zh-CN') {
@@ -95,25 +139,27 @@ const onEvent = (entry, event) => {
     // 繁体中文、英文、日文都使用日语语音
     voicePath = lobby.path + 'ja-JP/' + event.stringValue + '.ogg'
   }
-  
+
   let voice = new Howl({
     src: [voicePath],
     volume: 0.3,
-    onloaderror: (id, err) => {
-      console.warn(`语音文件加载失败: ${voicePath}`, err)
+    onloaderror: () => {
+      // 静默处理加载错误
     },
-    onplayerror: (id, err) => {
-      console.warn(`语音文件播放失败: ${voicePath}`, err)
+    onplayerror: () => {
+      // 静默处理播放错误
     }
   })
-  
+
   voice.play()
   soundList.push(voice)
 }
 
 const setL2D = async (num) => {
+  // 确保canvas已经添加到background div
+  addCanvasToBackground()
+
   if (!currentConfig.value || !currentConfig.value.memorialLobbies) {
-    console.warn('配置未准备好，跳过Live2D切换')
     return
   }
 
@@ -147,7 +193,6 @@ const setL2D = async (num) => {
   }
 
   if (id < 0 || id >= lobbies.length) {
-    console.error('角色索引超出范围:', id, '角色总数:', lobbies.length)
     return
   }
 
@@ -155,30 +200,17 @@ const setL2D = async (num) => {
 
   // 检查必需的属性
   if (!lobby.path || !lobby.skel || !lobby.atlas) {
-    console.error('角色资源配置不完整:', {
-      角色名: lobby.name,
-      path: lobby.path,
-      skel: lobby.skel,
-      atlas: lobby.atlas,
-      完整配置: lobby
-    })
     return
   }
 
-  dialogueDisplay.value.x = eval(lobby.dialogueDisplay.x) * document.documentElement.clientWidth
-  dialogueDisplay.value.y = eval(lobby.dialogueDisplay.y) * document.documentElement.clientHeight
+  dialogueDisplay.value.x = parseFraction(lobby.dialogueDisplay.x) * document.documentElement.clientWidth
+  dialogueDisplay.value.y = parseFraction(lobby.dialogueDisplay.y) * document.documentElement.clientHeight
   dialogueDisplay.value.position = lobby.dialogueDisplay.position
 
   try {
     // 使用配置文件中定义的实际资源路径
     const skeletonPath = lobby.path + lobby.skel
     const atlasPath = lobby.path + lobby.atlas
-
-    console.log('加载Live2D资源:', {
-      角色: lobby.name,
-      骨架路径: skeletonPath,
-      图集路径: atlasPath
-    })
 
     // 先预加载资源 (使用与 live2d.js 相同的别名格式)
     const skeletonAlias = `skeleton_${id}`
@@ -197,11 +229,9 @@ const setL2D = async (num) => {
       animation.state.setAnimation(4, 'Dummy', true)
       l2d.stage.addChild(animation)
     } else {
-      console.error('Live2D 动画创建失败，角色:', lobby.name)
       return
     }
   } catch (error) {
-    console.error('Live2D 资源加载失败:', error, '角色:', lobby.name, '资源路径:', lobby.path)
     return
   }
   animation.scale.set(0.85)
@@ -224,9 +254,12 @@ const setL2D = async (num) => {
     changeL2D(true)
     animation.state.setAnimation(0, startIdle, false)
     const currentTrack = animation.state.getCurrent(0)
-    if (currentTrack && currentTrack.animation && 
-        currentTrack.animation.name !== 'Idle_01' &&
-        animation.state.data.skeletonData.findAnimation('Idle_01')) {
+    if (
+      currentTrack &&
+      currentTrack.animation &&
+      currentTrack.animation.name !== 'Idle_01' &&
+      animation.state.data.skeletonData.findAnimation('Idle_01')
+    ) {
       animation.state.addAnimation(0, 'Idle_01', true)
     }
     let listener = {
@@ -250,9 +283,12 @@ const setL2D = async (num) => {
     changeL2D(false)
     if (animation && animation.state) {
       const currentTrack = animation.state.getCurrent(0)
-      if (currentTrack && currentTrack.animation && 
-          currentTrack.animation.name !== 'Idle_01' &&
-          animation.state.data.skeletonData.findAnimation('Idle_01')) {
+      if (
+        currentTrack &&
+        currentTrack.animation &&
+        currentTrack.animation.name !== 'Idle_01' &&
+        animation.state.data.skeletonData.findAnimation('Idle_01')
+      ) {
         animation.state.setAnimation(0, 'Idle_01', true)
         animation.state.listeners = []
         animation.state.addListener({
@@ -269,12 +305,124 @@ const setL2D = async (num) => {
 
   // 标记动画初始化完成
   animationReady = true
+
+  // 直接在l2d.view上添加事件监听，因为现在canvas有了正确的层级
+  addEventListenersToCanvas()
 }
+
+// 在canvas上添加事件监听
+const addEventListenersToCanvas = () => {
+  if (l2d.view) {
+    // 移除可能存在的旧监听
+    removeEventListenersFromCanvas()
+    
+    // 添加事件监听
+    l2d.view.addEventListener('mousedown', handleMouseDown)
+    l2d.view.addEventListener('mouseup', handleMouseUp)
+    l2d.view.addEventListener('mouseleave', () => {
+      handleMouseUp()
+      handleMouseLeaveCanvas()
+    })
+    l2d.view.addEventListener('touchstart', handleTouchStart)
+    l2d.view.addEventListener('touchmove', handleTouchMove)
+    l2d.view.addEventListener('touchend', handleTouchEnd)
+    l2d.view.addEventListener('touchcancel', handleTouchEnd)
+    
+    // 添加鼠标移动事件监听用于骨骼悬停检测
+    l2d.view.addEventListener('mousemove', handleBoneHover)
+  }
+}
+
+// 移除canvas上的事件监听
+const removeEventListenersFromCanvas = () => {
+  if (l2d.view) {
+    l2d.view.removeEventListener('mousedown', handleMouseDown)
+    l2d.view.removeEventListener('mouseup', handleMouseUp)
+    l2d.view.removeEventListener('mouseleave', handleMouseUp)
+    l2d.view.removeEventListener('touchstart', handleTouchStart)
+    l2d.view.removeEventListener('touchmove', handleTouchMove)
+    l2d.view.removeEventListener('touchend', handleTouchEnd)
+    l2d.view.removeEventListener('touchcancel', handleTouchEnd)
+    l2d.view.removeEventListener('mousemove', handleBoneHover)
+  }
+}
+
+// 骨骼悬停检测函数
+const handleBoneHover = (event) => {
+  if (!animation || !animation.skeleton || !animationReady) {
+    return
+  }
+
+  // 获取鼠标位置
+  const rect = l2d.view.getBoundingClientRect()
+  const canvasX = event.clientX - rect.left
+  const canvasY = event.clientY - rect.top
+
+  // 计算canvas的缩放比例
+  const scaleX = rect.width / l2d.screen.width
+  const scaleY = rect.height / l2d.screen.height
+
+  // 计算实际的世界坐标
+  const worldX = canvasX / scaleX - animation.x
+  const worldY = canvasY / scaleY - animation.y
+
+  // 检测是否悬停在可交互骨骼上
+  let isHovering = false
+  const skeleton = animation.skeleton
+
+  for (let i = skeleton.bones.length - 1; i >= 0; i--) {
+    const bone = skeleton.bones[i]
+    if (
+      bone.data.name === 'root' ||
+      bone.data.name.startsWith('chair') ||
+      bone.data.name.startsWith('Back_') ||
+      bone.data.name.startsWith('Light')
+    ) {
+      continue // 跳过不需要交互的骨骼
+    }
+
+    const boneX = bone.worldX
+    const boneY = bone.worldY
+    const radius = 100 // 悬停检测半径
+    const distance = Math.sqrt((worldX - boneX) ** 2 + (worldY - boneY) ** 2)
+
+    if (distance < radius) {
+      isHovering = true
+      break
+    }
+  }
+
+  // 更新光标状态
+  const cursorElement = document.querySelector('#cursor')
+  if (cursorElement) {
+    if (isHovering) {
+      cursorElement.classList.add('hover')
+    } else {
+      cursorElement.classList.remove('hover')
+    }
+  }
+}
+
+// 组件卸载时清理资源
+onUnmounted(() => {
+  // 移除事件监听
+  removeEventListenersFromCanvas()
+
+  // 销毁PIXI应用
+  if (l2d) {
+    l2d.destroy(true)
+  }
+
+  // 移除canvas容器
+  const canvasContainer = l2d.view?.parentElement
+  if (canvasContainer && canvasContainer.parentElement) {
+    canvasContainer.parentElement.removeChild(canvasContainer)
+  }
+})
 
 const skipStartIdle = () => {
   // 检查动画是否已正确初始化
   if (!animation || !animation.state || !animationReady) {
-    console.warn('Live2D 动画未初始化，无法跳过')
     changeL2D(false)
     return
   }
@@ -283,7 +431,6 @@ const skipStartIdle = () => {
     // 检查当前动画状态和可用的动画
     const currentTrack = animation.state.getCurrent(0)
     if (!currentTrack || !currentTrack.animation) {
-      console.warn('无法获取当前动画状态')
       changeL2D(false)
       return
     }
@@ -293,7 +440,6 @@ const skipStartIdle = () => {
       animation.state.data.skeletonData.findAnimation('Idle_01')
     ) {
       if (!currentConfig.value || !currentConfig.value.translate) {
-        console.warn('配置未准备好，无法显示跳过对话框')
         changeL2D(false)
         return
       }
@@ -309,7 +455,7 @@ const skipStartIdle = () => {
             for (let i in soundList) soundList[i].stop()
             soundList = []
           }
-          
+
           // 再次检查动画状态
           if (animation && animation.state) {
             animation.state.setAnimation(1, 'Dummy', true)
@@ -322,34 +468,270 @@ const skipStartIdle = () => {
               event: onEvent
             })
           }
-          
+
           canSkip = false
           emit('canskip', false)
         }
       })
     }
   } catch (error) {
-    console.error('跳过动画时出错:', error)
     changeL2D(false)
   }
 }
 
-const onInteractionWithStudent = () => {
-  if (!animation || !animation.state || !animationReady) {
-    console.warn('Live2D 动画未初始化，无法进行交互')
+// 骨骼点击交互处理
+const handleBoneClick = (event) => {
+  // 检查动画是否可以交互
+  if (!animation || !animation.state || !animationReady || talking) {
     return
   }
 
   const currentTrack = animation.state.getCurrent(0)
-
-  if (
-    talking ||
-    !currentTrack || !currentTrack.animation ||
-    currentTrack.animation.name.toLowerCase().startsWith('start_idle')
-  ) {
+  if (!currentTrack || !currentTrack.animation) {
+    return
+  }
+  if (currentTrack.animation.name.toLowerCase().startsWith('start_idle')) {
     return
   }
 
+  // 获取点击位置
+  const rect = l2d.view.getBoundingClientRect()
+  
+  // 计算相对于canvas的坐标
+  const canvasX = event.clientX - rect.left
+  const canvasY = event.clientY - rect.top
+  
+  // 计算canvas的缩放比例
+  const scaleX = rect.width / l2d.screen.width
+  const scaleY = rect.height / l2d.screen.height
+  
+  // 计算实际的世界坐标
+  const worldX = canvasX / scaleX - animation.x
+  const worldY = canvasY / scaleY - animation.y
+  
+  // 检测点击的骨骼
+  const hitBones = []
+  const skeleton = animation.skeleton
+  
+  // 遍历所有骨骼，找到被点击的骨骼
+  for (let i = skeleton.bones.length - 1; i >= 0; i--) {
+    const bone = skeleton.bones[i]
+    if (
+      bone.data.name === 'root' ||
+      bone.data.name.startsWith('chair') ||
+      bone.data.name.startsWith('Back_') ||
+      bone.data.name.startsWith('Light')
+    ) {
+      continue // 跳过不需要交互的骨骼
+    }
+    
+    const boneX = bone.worldX
+    const boneY = bone.worldY
+    const radius = 100 // 点击检测半径
+    const distance = Math.sqrt((worldX - boneX) ** 2 + (worldY - boneY) ** 2)
+    
+    if (distance < radius) {
+      hitBones.push({ name: bone.data.name, distance: distance })
+    }
+  }
+  
+  // 只有检测到骨骼才触发互动
+  if (hitBones.length > 0) {
+    // 按距离排序，取最近的骨骼
+    hitBones.sort((a, b) => a.distance - b.distance)
+    const clickedBone = hitBones[0].name
+    triggerInteractionByBone(clickedBone)
+  } else {
+    // 使用更大的检测半径重新检测
+    const largerRadius = 60
+    for (let i = skeleton.bones.length - 1; i >= 0; i--) {
+      const bone = skeleton.bones[i]
+      if (
+        bone.data.name === 'root' ||
+        bone.data.name.startsWith('chair') ||
+        bone.data.name.startsWith('Back_') ||
+        bone.data.name.startsWith('Light')
+      ) {
+        continue
+      }
+      
+      const boneX = bone.worldX
+      const boneY = bone.worldY
+      const distance = Math.sqrt((worldX - boneX) ** 2 + (worldY - boneY) ** 2)
+      
+      if (distance < largerRadius) {
+        triggerInteractionByBone(bone.data.name)
+        break
+      }
+    }
+  }
+}
+
+// 根据骨骼触发互动
+const triggerInteractionByBone = () => {
+  // 点击身体任意部位都触发对话
+  playTalkAnimation()
+}
+
+// 长按检测相关函数
+const startLongPressTimer = (event) => {
+  // 重置状态
+  isLongPress = false
+
+  // 保存事件对象，以便在长按触发时使用
+  startLongPressTimer._lastEvent = event
+
+  // 启动长按计时器
+  longPressTimer = setTimeout(() => {
+    isLongPress = true
+
+    if (!animation || !animation.skeleton || !animationReady) {
+      return
+    }
+
+    // 检查是否点击到脸部相关骨骼
+    const rect = l2d.view.getBoundingClientRect()
+    const canvasX = event.clientX - rect.left
+    const canvasY = event.clientY - rect.top
+    const scaleX = rect.width / l2d.screen.width
+    const scaleY = rect.height / l2d.screen.height
+    const worldX = canvasX / scaleX - animation.x
+    const worldY = canvasY / scaleY - animation.y
+
+    // 检查是否点击到脸部骨骼
+    if (checkFaceBoneClick(worldX, worldY)) {
+      playPatAnimation()
+    }
+  }, longPressThreshold)
+}
+
+const cancelLongPressTimer = (event) => {
+  if (longPressTimer) {
+    clearTimeout(longPressTimer)
+    longPressTimer = null
+
+    // 如果不是长按，则处理为点击事件
+    if (!isLongPress) {
+      handleBoneClick(event)
+    } else {
+      // 如果是长按结束，检查是否需要结束抚摸动画
+      if (ifPetting.value) {
+        ifPetting.value = false
+        animation.state.addAnimation(1, 'PatEnd_01_A')._mixDuration = 0.3
+        animation.state.addAnimation(2, 'PatEnd_01_M')._mixDuration = 0.3
+        animation.state.addAnimation(1, 'Dummy', true)._mixDuration = 0.3
+        animation.state.addAnimation(2, 'Dummy', true)._mixDuration = 0.3
+      }
+    }
+
+    // 重置状态
+    isLongPress = false
+    delete startLongPressTimer._lastEvent
+  }
+}
+
+// 鼠标事件处理
+const handleMouseDown = (event) => {
+  startLongPressTimer(event)
+}
+
+const handleMouseUp = (event) => {
+  cancelLongPressTimer(event)
+}
+
+// 处理鼠标离开canvas事件
+const handleMouseLeaveCanvas = () => {
+  // 确保鼠标离开canvas时恢复光标状态
+  const cursorElement = document.querySelector('#cursor')
+  if (cursorElement) {
+    cursorElement.classList.remove('hover')
+  }
+}
+
+// 触摸事件处理
+const handleTouchStart = (event) => {
+  if (event.touches.length > 0) {
+    const touchEvent = event.touches[0]
+    const mouseEvent = new MouseEvent('mousedown', {
+      clientX: touchEvent.clientX,
+      clientY: touchEvent.clientY
+    })
+    startLongPressTimer(mouseEvent)
+  }
+}
+
+// 处理触摸移动事件，确保长按过程中移动也能保持长按状态
+const handleTouchMove = (event) => {
+  // 如果已经开始长按计时，保持长按状态
+  if (longPressTimer && !isLongPress) {
+    // 可以选择更新最后一个事件，以便在长按触发时使用最新的位置
+    if (event.touches.length > 0) {
+      const touchEvent = event.touches[0]
+      const mouseEvent = new MouseEvent('mousemove', {
+        clientX: touchEvent.clientX,
+        clientY: touchEvent.clientY
+      })
+      startLongPressTimer._lastEvent = mouseEvent
+    }
+  }
+}
+
+const handleTouchEnd = (event) => {
+  if (event.changedTouches.length > 0) {
+    const touchEvent = event.changedTouches[0]
+    const mouseEvent = new MouseEvent('mouseup', {
+      clientX: touchEvent.clientX,
+      clientY: touchEvent.clientY
+    })
+    cancelLongPressTimer(mouseEvent)
+  }
+}
+
+// 精确检测是否点击到脸部骨骼
+const checkFaceBoneClick = (x, y) => {
+  if (!animation || !animation.skeleton) {
+    return false
+  }
+
+  const skeleton = animation.skeleton
+  const faceBones = [
+    'Head_Rot',
+    'face',
+    'Neck_01',
+    'R_Eyebrows_default',
+    'L_Eyebrows_default',
+    'R_eye_default_1',
+    'L_eye_default_1',
+    'nose',
+    'mouth_1'
+  ]
+
+  // 使用更小的检测半径，提高精度
+  const radius = 100
+
+  // 遍历所有骨骼，检查是否点击到脸部骨骼
+  for (let i = skeleton.bones.length - 1; i >= 0; i--) {
+    const bone = skeleton.bones[i]
+
+    // 只检查脸部相关骨骼
+    if (!faceBones.includes(bone.data.name)) {
+      continue
+    }
+
+    const boneX = bone.worldX
+    const boneY = bone.worldY
+    const distance = Math.sqrt((x - boneX) ** 2 + (y - boneY) ** 2)
+
+    if (distance < radius) {
+      return true
+    }
+  }
+
+  return false
+}
+
+// 播放对话动画
+const playTalkAnimation = () => {
   if (
     animation.state.data.skeletonData.findAnimation('Talk_0' + talkIndex + '_A_CN') &&
     locale.value.startsWith('zh')
@@ -362,7 +744,7 @@ const onInteractionWithStudent = () => {
   }
   animation.state.addAnimation(1, 'Dummy', true)._mixDuration = 0.3
   animation.state.addAnimation(2, 'Dummy', true)._mixDuration = 0.3
-  
+
   let listener = {
     complete: (entry) => {
       if (entry.trackIndex === 1 && entry.animation.name !== 'Dummy') {
@@ -375,7 +757,7 @@ const onInteractionWithStudent = () => {
       }
     }
   }
-  
+
   animation.state.addListener(listener)
   talkIndex++
   if (!animation.state.data.skeletonData.findAnimation('Talk_0' + talkIndex + '_A')) {
@@ -384,77 +766,11 @@ const onInteractionWithStudent = () => {
   talking = true
 }
 
-const onPetStudent = () => {
-  if (!animation || !animation.state || !animationReady) {
-    return
-  }
-
-  const currentTrack = animation.state.getCurrent(0)
-  if (
-    talking ||
-    !currentTrack || !currentTrack.animation ||
-    currentTrack.animation.name.toLowerCase().startsWith('start_idle')
-  )
-    return
+// 播放抚摸动画
+const playPatAnimation = () => {
   animation.state.addAnimation(1, 'Pat_01_A', true)._mixDuration = 0.3
   animation.state.addAnimation(2, 'Pat_01_M', true)._mixDuration = 0.3
   ifPetting.value = true
-}
-
-let pressTimer = null
-
-// 处理长按事件的回调函数
-const handleLongPress = () => {
-  if (talking) return
-  onPetStudent()
-
-  let a = setInterval(() => {
-    if (pressTimer === null) {
-      ifPetting.value = false
-      animation.state.addAnimation(1, 'PatEnd_01_A')._mixDuration = 0.3
-      animation.state.addAnimation(2, 'PatEnd_01_M')._mixDuration = 0.3
-      animation.state.addAnimation(1, 'Dummy', true)._mixDuration = 0.3
-      animation.state.addAnimation(2, 'Dummy', true)._mixDuration = 0.3
-      console.log('end!')
-      clearInterval(a)
-    }
-  }, 10)
-}
-
-const vLongPress = {
-  mounted(el, binding) {
-    // 创建定时器
-    const start = (e) => {
-      // 防止重复设置定时器
-      if (pressTimer === null) {
-        pressTimer = setTimeout(() => {
-          // 执行绑定值中的函数
-          binding.value(e)
-        }, 500)
-      }
-    }
-
-    // 取消定时器
-    const cancel = () => {
-      if (pressTimer !== null) {
-        clearTimeout(pressTimer)
-        if (!ifPetting.value) {
-          onInteractionWithStudent()
-        }
-        pressTimer = null
-      }
-    }
-
-    // 添加事件监听器
-    el.addEventListener('mousedown', start)
-    el.addEventListener('touchstart', start)
-
-    // 取消定时器的事件
-    el.addEventListener('click', cancel)
-    el.addEventListener('mouseout', cancel)
-    el.addEventListener('touchend', cancel)
-    el.addEventListener('touchcancel', cancel)
-  }
 }
 
 // 等待配置加载完成后初始化Live2D
@@ -468,19 +784,8 @@ const initLive2DWhenReady = () => {
 watch(
   currentConfig,
   (newConfig) => {
-    console.log('Background.vue - 配置更新:', {
-      配置存在: !!newConfig,
-      memorialLobbies存在: !!newConfig?.memorialLobbies,
-      memorialLobbies数量: newConfig?.memorialLobbies?.length,
-      memorialLobbies内容: newConfig?.memorialLobbies,
-      可以初始化: newConfig && newConfig.memorialLobbies && newConfig.memorialLobbies.length > 0
-    })
-    
     if (newConfig && newConfig.memorialLobbies && newConfig.memorialLobbies.length > 0) {
-      console.log('Background.vue - 开始初始化Live2D')
       initLive2DWhenReady()
-    } else {
-      console.warn('Background.vue - 配置未准备好或memorialLobbies为空')
     }
   },
   { immediate: true }
@@ -498,13 +803,13 @@ watch(
     @click="skipStartIdle()"
   ></div>
   <a-trigger
-    v-else
+    v-if="showDialogue"
     :popup-visible="showDialogue"
     :popup-translate="[dialogueDisplay.x, dialogueDisplay.y]"
     :position="dialogueDisplay.position"
     :show-arrow="true"
   >
-    <div class="interaction css-cursor-hover-enabled" v-long-press="handleLongPress"></div>
+    <div class="interaction"></div>
     <template #content>
       <div class="dialogue">
         {{ dialogue }}
@@ -522,6 +827,13 @@ watch(
   background-color: #f0f0f0dd;
   border-radius: clamp(10px, 0.625vw, 100vw);
   box-shadow: 0 clamp(2px, 0.125vw, 100vw) clamp(8px, 0.5vw, 100vw) 0 rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  position: relative;
+}
+
+/* 确保a-trigger组件及其弹出内容有足够高的层级 */
+:deep(.arco-trigger-popup) {
+  z-index: 1000 !important;
 }
 
 #change {
@@ -547,6 +859,8 @@ watch(
   cursor: pointer;
   user-select: none;
   -webkit-user-drag: none;
+  opacity: 0;
+  pointer-events: none;
 }
 
 img {
