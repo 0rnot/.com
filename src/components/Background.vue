@@ -167,6 +167,8 @@ const setL2D = async (num) => {
   emit('canskip', true)
   talking = false
   talkIndex = 1
+  // 重置骨骼状态缓存，解决角色切换时摸头错位问题
+  originalBoneStates.value = {}
   if (soundList.length !== 0) {
     for (let i in soundList) soundList[i].stop()
     soundList = []
@@ -372,12 +374,8 @@ const handleBoneHover = (event) => {
 
   for (let i = skeleton.bones.length - 1; i >= 0; i--) {
     const bone = skeleton.bones[i]
-    if (
-      bone.data.name === 'root' ||
-      bone.data.name.startsWith('chair') ||
-      bone.data.name.startsWith('Back_') ||
-      bone.data.name.startsWith('Light')
-    ) {
+    if (bone.data.name === 'root' || bone.data.name.startsWith('chair') ||
+        bone.data.name.startsWith('Back_') || bone.data.name.startsWith('Light')) {
       continue // 跳过不需要交互的骨骼
     }
 
@@ -400,6 +398,11 @@ const handleBoneHover = (event) => {
     } else {
       cursorElement.classList.remove('hover')
     }
+  }
+  
+  // 如果正在摸头状态，让头部骨骼跟随鼠标移动
+  if (ifPetting.value) {
+    handleHeadBoneFollow(event)
   }
 }
 
@@ -615,12 +618,14 @@ const cancelLongPressTimer = (event) => {
       handleBoneClick(event)
     } else {
       // 如果是长按结束，检查是否需要结束抚摸动画
-      if (ifPetting.value) {
+      if (ifPetting.value && animation && animation.skeleton && animationReady) {
         ifPetting.value = false
         animation.state.addAnimation(1, 'PatEnd_01_A')._mixDuration = 0.3
         animation.state.addAnimation(2, 'PatEnd_01_M')._mixDuration = 0.3
         animation.state.addAnimation(1, 'Dummy', true)._mixDuration = 0.3
         animation.state.addAnimation(2, 'Dummy', true)._mixDuration = 0.3
+        // 恢复所有头部骨骼到原始状态
+        restoreAllHeadBones()
       }
     }
 
@@ -672,6 +677,18 @@ const handleTouchMove = (event) => {
         clientY: touchEvent.clientY
       })
       startLongPressTimer._lastEvent = mouseEvent
+    }
+  }
+  
+  // 如果正在摸头状态，让头部骨骼跟随鼠标移动
+  if (ifPetting.value && animation && animation.skeleton && animationReady) {
+    if (event.touches.length > 0) {
+      const touchEvent = event.touches[0]
+      const mouseEvent = new MouseEvent('mousemove', {
+        clientX: touchEvent.clientX,
+        clientY: touchEvent.clientY
+      })
+      handleHeadBoneFollow(mouseEvent)
     }
   }
 }
@@ -771,6 +788,144 @@ const playPatAnimation = () => {
   animation.state.addAnimation(1, 'Pat_01_A', true)._mixDuration = 0.3
   animation.state.addAnimation(2, 'Pat_01_M', true)._mixDuration = 0.3
   ifPetting.value = true
+}
+
+// 保存原始骨骼状态，用于摸完头后恢复
+const originalBoneStates = ref({})
+
+// 头部骨骼跟随鼠标移动的处理函数
+const handleHeadBoneFollow = (event) => {
+  if (!animation || !animation.skeleton || !animationReady) {
+    return
+  }
+
+  // 获取鼠标位置
+  const rect = l2d.view.getBoundingClientRect()
+  const canvasX = event.clientX - rect.left
+
+  // 计算canvas的缩放比例
+  const scaleX = rect.width / l2d.screen.width
+
+  // 计算实际的世界坐标X（主要关注左右移动）
+  const worldX = canvasX / scaleX - animation.x
+
+  // 获取头部旋转骨骼
+  const headBone = animation.skeleton.findBone('Head_Rot')
+  if (!headBone) {
+    return
+  }
+
+  // 如果是第一次调用，保存原始骨骼状态
+  if (Object.keys(originalBoneStates.value).length === 0) {
+    saveOriginalBoneStates()
+  }
+
+  const headCenterX = headBone.worldX
+
+  // 计算左右偏移量，主要实现左右摆动效果
+  // 增加X轴的影响，减少Y轴的影响
+  const offsetX = (headCenterX - worldX) * 0.004 // 反转符号修复方向问题，减小缩放因子，使效果更轻微
+  
+  // 限制最大旋转角度，避免过度变形
+  const maxRotation = 2 // 限制最大旋转角度（弧度）
+  const clampedRotation = Math.max(-maxRotation, Math.min(maxRotation, offsetX))
+
+  // 只应用旋转效果到头部旋转骨骼，实现左右摆动
+  const skeleton = animation.skeleton
+  for (let i = skeleton.bones.length - 1; i >= 0; i--) {
+    const bone = skeleton.bones[i]
+    
+    // 只对头部旋转骨骼应用跟随效果
+    if (bone.data.name === 'Head_Rot') {
+      // 重置到原始位置，然后应用新的旋转
+      restoreBoneToOriginal(bone)
+      bone.rotation += clampedRotation
+    }
+  }
+  
+  // 更新骨架以应用变化，添加错误处理防止physics undefined错误
+  try {
+    skeleton.updateWorldTransform()
+  } catch (error) {
+    // 静默处理physics undefined错误，通常在动画对象已被销毁时发生
+  }
+}
+
+// 保存原始骨骼状态
+const saveOriginalBoneStates = () => {
+  if (!animation || !animation.skeleton) {
+    return
+  }
+  
+  const skeleton = animation.skeleton
+  const headBones = [
+    'Head_Rot',
+    'face',
+    'Neck_01',
+    'R_Eyebrows_default',
+    'L_Eyebrows_default',
+    'R_eye_default_1',
+    'L_eye_default_1',
+    'nose',
+    'mouth_1'
+  ]
+  
+  // 保存每个头部骨骼的原始状态
+  headBones.forEach(boneName => {
+    const bone = skeleton.findBone(boneName)
+    if (bone) {
+      originalBoneStates.value[boneName] = {
+        x: bone.x,
+        y: bone.y,
+        rotation: bone.rotation,
+        scaleX: bone.scaleX,
+        scaleY: bone.scaleY
+      }
+    }
+  })
+}
+
+// 将骨骼恢复到原始状态
+const restoreBoneToOriginal = (bone) => {
+  const originalState = originalBoneStates.value[bone.data.name]
+  if (originalState) {
+    bone.x = originalState.x
+    bone.y = originalState.y
+    bone.rotation = originalState.rotation
+    bone.scaleX = originalState.scaleX
+    bone.scaleY = originalState.scaleY
+  }
+}
+
+// 恢复所有头部骨骼到原始状态
+const restoreAllHeadBones = () => {
+  if (!animation || !animation.skeleton) {
+    return
+  }
+  
+  const skeleton = animation.skeleton
+  
+  // 遍历并恢复每个保存的骨骼状态
+  for (const [boneName, originalState] of Object.entries(originalBoneStates.value)) {
+    const bone = skeleton.findBone(boneName)
+    if (bone) {
+      bone.x = originalState.x
+      bone.y = originalState.y
+      bone.rotation = originalState.rotation
+      bone.scaleX = originalState.scaleX
+      bone.scaleY = originalState.scaleY
+    }
+  }
+  
+  // 更新骨架以应用变化
+  try {
+    skeleton.updateWorldTransform()
+  } catch (error) {
+    // 静默处理physics undefined错误，通常在动画对象已被销毁时发生
+  }
+  
+  // 清空保存的状态
+  originalBoneStates.value = {}
 }
 
 // 等待配置加载完成后初始化Live2D
