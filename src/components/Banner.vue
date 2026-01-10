@@ -162,6 +162,7 @@ const addRandomSong = async () => {
   width: clamp(300px, 18.75vw, 100vw);
   aspect-ratio: 446 / 158;
   opacity: 0.9;
+  z-index: 2;
   transition: transform 0.3s;
 }
 

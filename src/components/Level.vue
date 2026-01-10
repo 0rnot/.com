@@ -82,6 +82,7 @@ const strokeWidth = computed(() => {
   border-radius: clamp(8px, 0.5vw, 100vw);
   filter: drop-shadow(0 clamp(3px, 0.1875vw, 100vw) clamp(3px, 0.1875vw, 100vw) black);
   display: flex;
+  z-index: 2;
 }
 
 .level-box:before {

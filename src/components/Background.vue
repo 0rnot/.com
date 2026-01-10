@@ -494,7 +494,7 @@ watch(
   </div>
   <div
     v-if="props.l2dOnly && canSkip"
-    style="position: fixed; width: 100%; height: 100%"
+    style="position: fixed; width: 100%; height: 100%; z-index: 2"
     @click="skipStartIdle()"
   ></div>
   <a-trigger

@@ -47,6 +47,7 @@ const IconFont = computed(() => {
   grid-template-columns: repeat(2, clamp(130px, 8.125vw, 100vw));
   grid-gap: clamp(20px, 1.25vw, 100vw);
   height: auto;
+  z-index: 2;
   justify-items: center;
 }
 

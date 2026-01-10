@@ -112,6 +112,7 @@ const skip = () => {
   background: url('/task.png') center;
   background-size: cover;
   transition: transform 0.1s;
+  z-index: 2;
 }
 
 .task:before {

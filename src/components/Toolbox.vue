@@ -156,6 +156,7 @@ setInterval(() => {
   right: clamp(20px, 1.25vw, 100vw);
   top: clamp(40px, 2.5vw, 100vw);
   display: inline-flex;
+  z-index: 2;
 }
 
 .toolbox-box .toolbox {

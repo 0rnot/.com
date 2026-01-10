@@ -69,6 +69,7 @@ setInterval(() => {
   filter: drop-shadow(0px 0px clamp(6px, 0.375vw, 100vw) #0003);
   transition: all 0.3s;
   align-items: flex-end;
+  z-index: 2;
 }
 
 .footer::after {
