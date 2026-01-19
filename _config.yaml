@@ -56,7 +56,7 @@ exp: 8382   # 当前经验值
 nextExp: 8381  # 升级所需经验值
 
 # Iconfont字体库地址 - 阿里云图标字体库
-iconfont: 'https://at.alicdn.com/t/c/font_4336463_0i6ly0yvyzb.js'
+iconfont: 'https://at.alicdn.com/t/c/font_4336463_r5p9u2rf30h.js'
 
 # 底部项目展示区域 - 显示相关项目链接
 dock:
@@ -88,22 +88,22 @@ dock:
 # 左侧联系方式区域
 contact:
   # 联系方式1
-  - name: QQ Contact
-    href: 'https://wpa.qq.com/msgrd?v=3&uin=2512902451&site=qq&menu=yes&jumpflag=1'
-    iconfont: icon-qq
+  - name: BandBBS
+    href: 'https://www.bandbbs.cn/members/969142/'
+    iconfont: icon-bandbbs
   
   # 联系方式2
-  - name: Gitee Profile
+  - name: Gitee
     href: 'https://gitee.com/sf-yuzifu'
     iconfont: icon-gitee
   
   # 联系方式3
-  - name: Github Profile
+  - name: Github
     href: 'https://github.com/sf-yuzifu'
     iconfont: icon-github
   
   # 联系方式4
-  - name: BiliBili Channel
+  - name: BiliBili
     href: 'https://space.bilibili.com/447666445'
     iconfont: icon-bilibili
 

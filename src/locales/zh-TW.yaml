@@ -34,7 +34,7 @@ dock:
 
 # 左側聯絡方式區域 - 聯絡方式名稱翻譯
 contact:
-  - name: QQ
+  - name: BandBBS
   - name: Gitee
   - name: Github
   - name: BiliBili
