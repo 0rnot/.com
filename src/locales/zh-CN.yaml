@@ -26,11 +26,11 @@ author: 小鱼yuzifu
 
 # 底部项目展示区域 - 项目名称翻译
 dock:
-  - name: 一起吃小鱼
+  - name: 腕上漫画
   - name: 编程猫格式工厂
   - name: Waddle编辑器
-  - name: PICKDUCK
   - name: Boxy编辑器
+  - name: 一起吃小鱼
 
 # 左侧联系方式区域 - 联系方式名称翻译
 contact:

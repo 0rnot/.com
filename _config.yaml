@@ -61,9 +61,9 @@ iconfont: 'https://at.alicdn.com/t/c/font_4336463_r5p9u2rf30h.js'
 # 底部项目展示区域 - 显示相关项目链接
 dock:
   # 项目1
-  - name: Fish Archive Project
-    href: 'https://gitee.com/sf-yuzifu/eat-fish-together'
-    imgSrc: /img/fish.png
+  - name: Bandcomic
+    href: 'https://github.com/sf-yuzifu/bandcomic'
+    imgSrc: /img/bandcomic.png
   
   # 项目2
   - name: BCM Converter Project
@@ -76,14 +76,14 @@ dock:
     imgSrc: /img/waddle2.png
   
   # 项目4
-  - name: PICKDUCK Project
-    href: 'https://shequ.pgaot.com/'
-    imgSrc: /img/pickduck.png
-  
-  # 项目5
   - name: Boxy Project
     href: 'https://boxy.cocotais.cn/'
     imgSrc: /img/boxy.png
+
+  # 项目5
+  - name: Fish Archive Project
+    href: 'https://gitee.com/sf-yuzifu/eat-fish-together'
+    imgSrc: /img/fish.png
 
 # 左侧联系方式区域
 contact:

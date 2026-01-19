@@ -26,11 +26,11 @@ author: 小魚yuzifu
 
 # 底部項目展示區域 - 項目名稱翻譯
 dock:
-  - name: 一起吃小魚
+  - name: 腕上漫畫
   - name: 程式貓格式工廠
   - name: Waddle編輯器
-  - name: PICKDUCK
   - name: Boxy編輯器
+  - name: 一起吃小魚
 
 # 左側聯絡方式區域 - 聯絡方式名稱翻譯
 contact:

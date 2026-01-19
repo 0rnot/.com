@@ -25,11 +25,11 @@ author: Yuzifu
 
 # Bottom project display area - Project name translations
 dock:
-  - name: Eat Fish Together
+  - name: Bandcomic
   - name: BCM Converter
   - name: Waddle
-  - name: PICKDUCK
   - name: Boxy
+  - name: Eat Fish Together
 
 # Left contact methods area - Contact method name translations
 contact:

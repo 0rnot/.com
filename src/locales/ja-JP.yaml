@@ -26,11 +26,11 @@ author: ゆづふ
 
 # 底部プロジェクト表示エリア - プロジェクト名翻訳
 dock:
-  - name: 一緒に魚を食べよう
+  - name: Bandcomic
   - name: BCM変換ツール
   - name: Waddle
-  - name: PICKDUCK
   - name: Boxy
+  - name: 一緒に魚を食べよう
 
 # 左側連絡先方法エリア - 連絡先方法名翻訳
 contact:
