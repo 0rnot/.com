@@ -24,6 +24,7 @@ let originalOffsetPercent = 70 // 默认值，等待配置加载后更新
 let longPressTimer = null
 let longPressThreshold = 500 // 长按阈值（毫秒）
 let isLongPress = false
+let patTimer = null // 摸头随机动作定时器
 
 const dialogue = ref('')
 const showDialogue = ref(false)
@@ -131,23 +132,38 @@ const onEvent = (entry, event) => {
   showDialogue.value = true
 
   // 播放语音
-  let voicePath
+  const jpPath = lobby.path + 'ja-JP/' + event.stringValue + '.ogg'
+  let voicePath = jpPath
+  
   if (locale.value === 'zh-CN') {
-    // 只有简体中文使用中文语音
+    // 只有简体中文优先尝试使用中文语音
     voicePath = lobby.path + 'zh-CN/' + event.stringValue + '.ogg'
-  } else {
-    // 繁体中文、英文、日文都使用日语语音
-    voicePath = lobby.path + 'ja-JP/' + event.stringValue + '.ogg'
   }
 
   let voice = new Howl({
     src: [voicePath],
     volume: 0.3,
     onloaderror: () => {
-      // 静默处理加载错误
+      // 如果加载失败且当前尝试的是中文语音，则降级到日文语音
+      if (voicePath !== jpPath) {
+        const fallbackVoice = new Howl({
+          src: [jpPath],
+          volume: 0.3
+        })
+        fallbackVoice.play()
+        soundList.push(fallbackVoice)
+      }
     },
     onplayerror: () => {
-      // 静默处理播放错误
+      // 播放错误尝试降级
+      if (voicePath !== jpPath) {
+        const fallbackVoice = new Howl({
+          src: [jpPath],
+          volume: 0.3
+        })
+        fallbackVoice.play()
+        soundList.push(fallbackVoice)
+      }
     }
   })
 
@@ -205,8 +221,10 @@ const setL2D = async (num) => {
     return
   }
 
-  dialogueDisplay.value.x = parseFraction(lobby.dialogueDisplay.x) * document.documentElement.clientWidth
-  dialogueDisplay.value.y = parseFraction(lobby.dialogueDisplay.y) * document.documentElement.clientHeight
+  dialogueDisplay.value.x =
+    parseFraction(lobby.dialogueDisplay.x) * document.documentElement.clientWidth
+  dialogueDisplay.value.y =
+    parseFraction(lobby.dialogueDisplay.y) * document.documentElement.clientHeight
   dialogueDisplay.value.position = lobby.dialogueDisplay.position
 
   try {
@@ -317,7 +335,7 @@ const addEventListenersToCanvas = () => {
   if (l2d.view) {
     // 移除可能存在的旧监听
     removeEventListenersFromCanvas()
-    
+
     // 添加事件监听
     l2d.view.addEventListener('mousedown', handleMouseDown)
     l2d.view.addEventListener('mouseup', handleMouseUp)
@@ -329,7 +347,7 @@ const addEventListenersToCanvas = () => {
     l2d.view.addEventListener('touchmove', handleTouchMove)
     l2d.view.addEventListener('touchend', handleTouchEnd)
     l2d.view.addEventListener('touchcancel', handleTouchEnd)
-    
+
     // 添加鼠标移动事件监听用于骨骼悬停检测
     l2d.view.addEventListener('mousemove', handleBoneHover)
   }
@@ -374,8 +392,12 @@ const handleBoneHover = (event) => {
 
   for (let i = skeleton.bones.length - 1; i >= 0; i--) {
     const bone = skeleton.bones[i]
-    if (bone.data.name === 'root' || bone.data.name.startsWith('chair') ||
-        bone.data.name.startsWith('Back_') || bone.data.name.startsWith('Light')) {
+    if (
+      bone.data.name === 'root' ||
+      bone.data.name.startsWith('chair') ||
+      bone.data.name.startsWith('Back_') ||
+      bone.data.name.startsWith('Light')
+    ) {
       continue // 跳过不需要交互的骨骼
     }
 
@@ -399,9 +421,9 @@ const handleBoneHover = (event) => {
       cursorElement.classList.remove('hover')
     }
   }
-  
+
   // 如果正在摸头状态，让头部骨骼跟随鼠标移动
-  if (ifPetting.value) {
+  if (ifPetting.value && isLongPress) {
     handleHeadBoneFollow(event)
   }
 }
@@ -485,7 +507,8 @@ const skipStartIdle = () => {
 // 骨骼点击交互处理
 const handleBoneClick = (event) => {
   // 检查动画是否可以交互，添加摸头状态检查
-  if (!animation || !animation.state || !animationReady || talking || ifPetting.value) {
+  // 允许在摸头结束阶段（isLongPress为false）进行交互
+  if (!animation || !animation.state || !animationReady || talking || (ifPetting.value && isLongPress)) {
     return
   }
 
@@ -499,23 +522,23 @@ const handleBoneClick = (event) => {
 
   // 获取点击位置
   const rect = l2d.view.getBoundingClientRect()
-  
+
   // 计算相对于canvas的坐标
   const canvasX = event.clientX - rect.left
   const canvasY = event.clientY - rect.top
-  
+
   // 计算canvas的缩放比例
   const scaleX = rect.width / l2d.screen.width
   const scaleY = rect.height / l2d.screen.height
-  
+
   // 计算实际的世界坐标
   const worldX = canvasX / scaleX - animation.x
   const worldY = canvasY / scaleY - animation.y
-  
+
   // 检测点击的骨骼
   const hitBones = []
   const skeleton = animation.skeleton
-  
+
   // 遍历所有骨骼，找到被点击的骨骼
   for (let i = skeleton.bones.length - 1; i >= 0; i--) {
     const bone = skeleton.bones[i]
@@ -527,17 +550,17 @@ const handleBoneClick = (event) => {
     ) {
       continue // 跳过不需要交互的骨骼
     }
-    
+
     const boneX = bone.worldX
     const boneY = bone.worldY
     const radius = 100 // 点击检测半径
     const distance = Math.sqrt((worldX - boneX) ** 2 + (worldY - boneY) ** 2)
-    
+
     if (distance < radius) {
       hitBones.push({ name: bone.data.name, distance: distance })
     }
   }
-  
+
   // 只有检测到骨骼才触发互动
   if (hitBones.length > 0) {
     // 按距离排序，取最近的骨骼
@@ -557,11 +580,11 @@ const handleBoneClick = (event) => {
       ) {
         continue
       }
-      
+
       const boneX = bone.worldX
       const boneY = bone.worldY
       const distance = Math.sqrt((worldX - boneX) ** 2 + (worldY - boneY) ** 2)
-      
+
       if (distance < largerRadius) {
         triggerInteractionByBone(bone.data.name)
         break
@@ -619,26 +642,38 @@ const cancelLongPressTimer = (event) => {
     } else {
       // 如果是长按结束，检查是否需要结束抚摸动画
       if (ifPetting.value && animation && animation.skeleton && animationReady) {
+        // 清除随机动作定时器
+        if (patTimer) {
+          clearTimeout(patTimer)
+          patTimer = null
+        }
+
         // 先添加结束动画，不立即设置ifPetting为false
-        animation.state.addAnimation(1, 'PatEnd_01_A')._mixDuration = 0.3
-        animation.state.addAnimation(2, 'PatEnd_01_M')._mixDuration = 0.3
+        if (animation.state.data.skeletonData.findAnimation('PatEnd_01_A')) {
+          animation.state.setAnimation(1, 'PatEnd_01_A', false)._mixDuration = 0.3
+          animation.state.setAnimation(2, 'PatEnd_01_M', false)._mixDuration = 0.3
+        } else {
+          animation.state.setAnimation(1, 'PatEnd_01_M', false)._mixDuration = 0.3
+        }
         animation.state.addAnimation(1, 'Dummy', true)._mixDuration = 0.3
         animation.state.addAnimation(2, 'Dummy', true)._mixDuration = 0.3
         // 恢复所有头部骨骼到原始状态
         restoreAllHeadBones()
-        
+
         // 为摸头结束动画添加监听器，确保动画完成后才重置状态
         let patEndListener = {
           complete: (entry) => {
             // 确保只处理摸头结束动画的完成事件
-            if (entry.trackIndex === 1 && entry.animation.name === 'PatEnd_01_A') {
+            if (entry.trackIndex === 1 && entry.animation.name === 'PatEnd_01_M') {
               ifPetting.value = false
               // 移除该监听器以避免冲突
-              animation.state.listeners = animation.state.listeners.filter(l => l !== patEndListener)
+              animation.state.listeners = animation.state.listeners.filter(
+                (l) => l !== patEndListener
+              )
             }
           }
         }
-        
+
         // 添加监听器
         animation.state.addListener(patEndListener)
       }
@@ -694,9 +729,9 @@ const handleTouchMove = (event) => {
       startLongPressTimer._lastEvent = mouseEvent
     }
   }
-  
+
   // 如果正在摸头状态，让头部骨骼跟随鼠标移动
-  if (ifPetting.value && animation && animation.skeleton && animationReady) {
+  if (ifPetting.value && isLongPress && animation && animation.skeleton && animationReady) {
     if (event.touches.length > 0) {
       const touchEvent = event.touches[0]
       const mouseEvent = new MouseEvent('mousemove', {
@@ -764,9 +799,14 @@ const checkFaceBoneClick = (x, y) => {
 
 // 播放对话动画，添加摸头状态检查
 const playTalkAnimation = () => {
-  // 如果正在摸头，则不播放对话动画
+  // 如果正在摸头
   if (ifPetting.value) {
-    return
+    // 如果正在长按（真正的摸头中），则忽略点击
+    if (isLongPress) {
+      return
+    }
+    // 否则（摸头结束动画中），允许打断，重置状态
+    ifPetting.value = false
   }
   if (
     animation.state.data.skeletonData.findAnimation('Talk_0' + talkIndex + '_A_CN') &&
@@ -783,11 +823,15 @@ const playTalkAnimation = () => {
 
   let listener = {
     complete: (entry) => {
-      if (entry.trackIndex === 1 && entry.animation.name !== 'Dummy' && entry.animation.name.startsWith('Talk_')) {
+      if (
+        entry.trackIndex === 1 &&
+        entry.animation.name !== 'Dummy' &&
+        entry.animation.name.startsWith('Talk_')
+      ) {
         // 只移除当前对话动画的监听器，保留其他监听器
-        animation.state.listeners = animation.state.listeners.filter(l => l !== listener)
+        animation.state.listeners = animation.state.listeners.filter((l) => l !== listener)
         // 确保始终保留event监听器
-        if (!animation.state.listeners.some(l => l.event === onEvent)) {
+        if (!animation.state.listeners.some((l) => l.event === onEvent)) {
           animation.state.addListener({
             event: onEvent
           })
@@ -812,9 +856,36 @@ const playPatAnimation = () => {
   if (talking) {
     return
   }
-  animation.state.addAnimation(1, 'Pat_01_A', true)._mixDuration = 0.3
-  animation.state.addAnimation(2, 'Pat_01_M', true)._mixDuration = 0.3
+  if (animation.state.data.skeletonData.findAnimation('Pat_02_M')) {
+    animation.state.addAnimation(1, 'Pat_01_M', false)._mixDuration = 0.3
+    // 启动随机动作定时器
+    startPatRandomLoop()
+  } else {
+    animation.state.addAnimation(1, 'Pat_01_A', true)._mixDuration = 0.3
+    animation.state.addAnimation(2, 'Pat_01_M', true)._mixDuration = 0.3
+  }
   ifPetting.value = true
+}
+
+// 摸头期间随机播放 Pat_02_M
+const startPatRandomLoop = () => {
+  if (patTimer) clearTimeout(patTimer)
+  
+  // 随机时间 5-15秒 (平均10秒)
+  const delay = 5000 + Math.random() * 10000
+  
+  patTimer = setTimeout(() => {
+    if (ifPetting.value && animation && animation.state && animationReady) {
+      try {
+        // 使用 setAnimation 来打断当前的循环并重新开始播放
+        animation.state.setAnimation(1, 'Pat_02_M', true)._mixDuration = 0.3
+      } catch (e) {
+        console.error('随机播放Pat_02_M失败:', e)
+      }
+      // 递归调用，继续下一次随机播放
+      startPatRandomLoop()
+    }
+  }, delay)
 }
 
 // 保存原始骨骼状态，用于摸完头后恢复
@@ -852,7 +923,7 @@ const handleHeadBoneFollow = (event) => {
   // 计算左右偏移量，主要实现左右摆动效果
   // 增加X轴的影响，减少Y轴的影响
   const offsetX = (headCenterX - worldX) * 0.004 // 反转符号修复方向问题，减小缩放因子，使效果更轻微
-  
+
   // 限制最大旋转角度，避免过度变形
   const maxRotation = 2 // 限制最大旋转角度（弧度）
   const clampedRotation = Math.max(-maxRotation, Math.min(maxRotation, offsetX))
@@ -861,7 +932,7 @@ const handleHeadBoneFollow = (event) => {
   const skeleton = animation.skeleton
   for (let i = skeleton.bones.length - 1; i >= 0; i--) {
     const bone = skeleton.bones[i]
-    
+
     // 只对头部旋转骨骼应用跟随效果
     if (bone.data.name === 'Head_Rot') {
       // 重置到原始位置，然后应用新的旋转
@@ -869,7 +940,7 @@ const handleHeadBoneFollow = (event) => {
       bone.rotation += clampedRotation
     }
   }
-  
+
   // 更新骨架以应用变化，添加错误处理防止physics undefined错误
   try {
     skeleton.updateWorldTransform()
@@ -883,7 +954,7 @@ const saveOriginalBoneStates = () => {
   if (!animation || !animation.skeleton) {
     return
   }
-  
+
   const skeleton = animation.skeleton
   const headBones = [
     'Head_Rot',
@@ -896,9 +967,9 @@ const saveOriginalBoneStates = () => {
     'nose',
     'mouth_1'
   ]
-  
+
   // 保存每个头部骨骼的原始状态
-  headBones.forEach(boneName => {
+  headBones.forEach((boneName) => {
     const bone = skeleton.findBone(boneName)
     if (bone) {
       originalBoneStates.value[boneName] = {
@@ -929,9 +1000,9 @@ const restoreAllHeadBones = () => {
   if (!animation || !animation.skeleton) {
     return
   }
-  
+
   const skeleton = animation.skeleton
-  
+
   // 遍历并恢复每个保存的骨骼状态
   for (const [boneName, originalState] of Object.entries(originalBoneStates.value)) {
     const bone = skeleton.findBone(boneName)
@@ -943,14 +1014,14 @@ const restoreAllHeadBones = () => {
       bone.scaleY = originalState.scaleY
     }
   }
-  
+
   // 更新骨架以应用变化
   try {
     skeleton.updateWorldTransform()
   } catch (error) {
     // 静默处理physics undefined错误，通常在动画对象已被销毁时发生
   }
-  
+
   // 清空保存的状态
   originalBoneStates.value = {}
 }
