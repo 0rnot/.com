@@ -48,8 +48,20 @@ memorialLobbies:
   - name: アリス
   - name: ヒナ（水着）
 
-# アリスキャラクター音声対話翻訳
+
+# Aris(Battle)
 memorialLobbies[0]:
+  voice:
+    CH0334_MemorialLobby_1_1: えへへ。先生、惊きましたか？
+    CH0334_MemorialLobby_1_2: 先生と一绪に、この夜空を见たくて……呼んだんです。
+    CH0334_MemorialLobby_2_1: とても……绮丽ですね。
+    CH0334_MemorialLobby_2_2: アリスの世界にも、まだ行ったことのない世界にも……きっとこんな绮丽なものがたくさんあると思うんです。
+    CH0334_MemorialLobby_3_1: でも……不思议です。
+    CH0334_MemorialLobby_3_2: 世界って、こんなに绮丽なのに……どうして人は争うんでしょう？
+    CH0334_MemorialLobby_4: あの星空みたいに、この世界は、みんなで分け合っても大丈夫なくらい美しいものであふれているのに……。
+    CH0334_MemorialLobby_5: ……やっぱり、アリスにはまだわかりません。
+# アリスキャラクター音声対話翻訳
+memorialLobbies[1]:
   voice:
       Aris_MemorialLobby_1: アリスはキヴォトスに魔法がないと思えません。
       Aris_MemorialLobby_2_1: 魔法は存在しています。
@@ -63,7 +75,7 @@ memorialLobbies[0]:
       Aris_MemorialLobby_5_2: 先生と一緒にこの世界のことをもっと学びたいです！
 
 # ヒナ水着版キャラクター音声対話翻訳
-memorialLobbies[1]:
+memorialLobbies[2]:
   voice:
       CH0063_MemorialLobby_1_1: 何でみんな、そんなに海が好きなんだろう……って、いつもそう思ってた。
       CH0063_MemorialLobby_1_2: みんなは楽しそうだけど、私はどうしても好きになれなくて…

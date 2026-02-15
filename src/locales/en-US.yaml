@@ -47,8 +47,20 @@ memorialLobbies:
   - name: Aris
   - name: Hina_swimsuit
 
-# Aris character voice dialogue translations
+
+# Aris(Battle) Voice Dialogue
 memorialLobbies[0]:
+  voice:
+    CH0334_MemorialLobby_1_1: Hehe. Sensei, were you surprised?
+    CH0334_MemorialLobby_1_2: I wanted to enjoy this night sky with you, Sensei... so I called you here.
+    CH0334_MemorialLobby_2_1: It really is... absolutely beautiful.
+    CH0334_MemorialLobby_2_2: Whether it's Aris's world, or worlds I haven't visited yet... I'm sure there are many more wonderful things like this.
+    CH0334_MemorialLobby_3_1: But, it's so strange.
+    CH0334_MemorialLobby_3_2: The world is this beautiful, yet why do people still fight each other?
+    CH0334_MemorialLobby_4: Just like that starry sky, the beauty of this world is surely enough to share with everyone...
+    CH0334_MemorialLobby_5: ...As expected, Aris still doesn't understand.
+# Aris character voice dialogue translations
+memorialLobbies[1]:
   voice:
       Aris_MemorialLobby_1: I believe magic exists in Kivotos as well.
       Aris_MemorialLobby_2_1: It must.
@@ -62,7 +74,7 @@ memorialLobbies[0]:
       Aris_MemorialLobby_5_2: I want to learn more about this world!
 
 # Hina swimsuit character voice dialogue translations
-memorialLobbies[1]:
+memorialLobbies[2]:
   voice:
       CH0063_MemorialLobby_1_1: Honestly, I've never understood people's fascination with the ocean.
       CH0063_MemorialLobby_1_2: While everyone's having a good time, I've never felt the same way.
