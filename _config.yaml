@@ -23,37 +23,37 @@ ICP: ''
 manifest:
   # PWA应用完整名称
   name: Fish Archive
-  
+
   # PWA应用简短名称 - 用于桌面显示
   short_name: Fish Archive
-  
+
   # PWA应用描述
   description: A personal homepage in Blue Archive style.
-  
+
   # PWA主题颜色 - 影响浏览器UI颜色
   theme_color: '#128AFA'
-  
+
   # PWA启动URL - 应用启动时打开的页面
   start_url: /
-  
+
   # PWA应用唯一标识符
   id: Homepage
-  
+
   # PWA图标配置
   icons:
     # 大尺寸图标 - 用于桌面安装
     - src: /favicon512.png
       sizes: 512x512
       purpose: any maskable
-    
+
     # 小尺寸图标 - 用于移动设备
     - src: /favicon144.png
       sizes: 144x144
 
 # 个人游戏等级信息
-level: 90  # 当前等级
-exp: 8382   # 当前经验值
-nextExp: 8381  # 升级所需经验值
+level: 90 # 当前等级
+exp: 8382 # 当前经验值
+nextExp: 8381 # 升级所需经验值
 
 # Iconfont字体库地址 - 阿里云图标字体库
 iconfont: 'https://at.alicdn.com/t/c/font_4336463_r5p9u2rf30h.js'
@@ -64,17 +64,17 @@ dock:
   - name: Bandcomic
     href: 'https://github.com/sf-yuzifu/bandcomic'
     imgSrc: /img/bandcomic.png
-  
+
   # 项目2
   - name: BCM Converter Project
     href: 'https://gitee.com/sf-yuzifu/bcm_convertor'
     imgSrc: /img/convertor.png
-  
+
   # 项目3
   - name: Waddle Project
     href: 'https://waddle.cocotais.cn/'
     imgSrc: /img/waddle2.png
-  
+
   # 项目4
   - name: Boxy Project
     href: 'https://boxy.cocotais.cn/'
@@ -91,17 +91,17 @@ contact:
   - name: BandBBS
     href: 'https://www.bandbbs.cn/members/969142/'
     iconfont: icon-bandbbs
-  
+
   # 联系方式2
   - name: Gitee
     href: 'https://gitee.com/sf-yuzifu'
     iconfont: icon-gitee
-  
+
   # 联系方式3
   - name: Github
     href: 'https://github.com/sf-yuzifu'
     iconfont: icon-github
-  
+
   # 联系方式4
   - name: BiliBili
     href: 'https://space.bilibili.com/447666445'
@@ -138,6 +138,24 @@ banner:
 
 # Live2D角色配置
 memorialLobbies:
+  # 角色1 - Aris
+  - name: Aris(Battle)
+    # Live2D模型文件路径
+    path: '/l2d/aris_battle/'
+    # 骨骼动画文件
+    skel: 'CH0334_home.skel'
+    # 纹理图集文件
+    atlas: 'CH0334_home.atlas'
+    # 角色在屏幕中的水平位置偏移（0-1之间）
+    offset: 0.5
+    # 对话框显示位置配置
+    dialogueDisplay:
+      # X坐标位置（可以是分数）
+      x: -1/4 - 1/16
+      # Y坐标位置（可以是分数）
+      y: -1/16
+      # 对话框位置（left/right）
+      position: right
   # 角色1 - Aris
   - name: Aris
     # Live2D模型文件路径

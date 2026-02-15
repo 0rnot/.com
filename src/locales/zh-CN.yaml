@@ -45,11 +45,23 @@ task:
 
 # 纪念大厅角色显示名称翻译
 memorialLobbies:
+  - name: Aris(Battle)
   - name: Aris
   - name: Hina_swimsuit
 
-# Aris角色的语音对话翻译
+# Aris(Battle)角色的语音对话翻译
 memorialLobbies[0]:
+  voice:
+    CH0334_MemorialLobby_1_1: 诶嘿嘿。老师，吓到了吗？
+    CH0334_MemorialLobby_1_2: 因为想要和老师欣赏这片夜空……所以呼唤了您。
+    CH0334_MemorialLobby_2_1: 真是……十分美丽呢。
+    CH0334_MemorialLobby_2_2: 爱丽丝的世界也好，还没有去过的世界也好……肯定还会有很多这样美好的事物。
+    CH0334_MemorialLobby_3_1: 但是，真不可思议。
+    CH0334_MemorialLobby_3_2: 世界是，这么地美丽，但为何人与人之间还是会有纷争呢？
+    CH0334_MemorialLobby_4: 就如同那片星空一般，这个世界的美好，明明已经可以多到和大家一起分享也没关系的程度了……
+    CH0334_MemorialLobby_5: ……果然，爱丽丝还是不能理解。
+# Aris角色的语音对话翻译
+memorialLobbies[1]:
   voice:
     Aris_MemorialLobby_1: 爱丽丝觉得在基沃托斯魔法并不是空想。
     Aris_MemorialLobby_2_1: 魔法是真正存在的。
@@ -62,7 +74,7 @@ memorialLobbies[0]:
     Aris_MemorialLobby_5_1: 爱丽丝还想知道更多更多。
     Aris_MemorialLobby_5_2: 想和老师一起……两个人一起，继续探索这个世界！
 
-memorialLobbies[1]:
+memorialLobbies[2]:
   voice:
     CH0063_MemorialLobby_1_1: 为什么大家都那么喜欢大海呢？我一直在思考这个问题。
     CH0063_MemorialLobby_1_2: 虽然大家看起来都很开心……可我却无论如何都喜欢不起来……
