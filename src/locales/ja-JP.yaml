@@ -60,19 +60,20 @@ memorialLobbies[0]:
     CH0334_MemorialLobby_3_2: 世界って、こんなに绮丽なのに……どうして人は争うんでしょう？
     CH0334_MemorialLobby_4: あの星空みたいに、この世界は、みんなで分け合っても大丈夫なくらい美しいものであふれているのに……。
     CH0334_MemorialLobby_5: ……やっぱり、アリスにはまだわかりません。
-# アリスキャラクター音声対話翻訳
+
+# Kei角色的语音对话翻译
 memorialLobbies[1]:
   voice:
-      Aris_MemorialLobby_1: アリスはキヴォトスに魔法がないと思えません。
-      Aris_MemorialLobby_2_1: 魔法は存在しています。
-      Aris_MemorialLobby_2_2: だって，先生は今アリスを幸せにしてくれましたから
-      Aris_MemorialLobby_3_1: ゲームが面白い理由は
-      Aris_MemorialLobby_3_2: そこに世界の美しさを込められているから。
-      Aris_MemorialLobby_3_3: これは先生を通じてわかったことです。
-      Aris_MemorialLobby_4_1: ゲームも猫も友達も、そして、
-      Aris_MemorialLobby_4_2: 今この瞬間もこの世界には美しいものが沢山あります。
-      Aris_MemorialLobby_5_1: アリスはもっと知りたいです。
-      Aris_MemorialLobby_5_2: 先生と一緒にこの世界のことをもっと学びたいです！
+    CH0335_MemorialLobby_1_1: 心配しないでください。
+    CH0335_MemorialLobby_1_2: 私が消えることはありません。
+    CH0335_MemorialLobby_2_1: むしろ、その逆ですね。
+    CH0335_MemorialLobby_2_2: 私は、どんな手を使ってでも生き残ってやるつもりですから。
+    CH0335_MemorialLobby_3_1: 先生がこの世界を見捨てないというのなら。
+    CH0335_MemorialLobby_3_2: 私だって最後まで、絶対に諦めたりしません。
+    CH0335_MemorialLobby_4_1: だから大丈夫……絶対、大丈夫です。
+    CH0335_MemorialLobby_4_2: 私はずっとここにいます。
+    CH0335_MemorialLobby_5_1: ここだけの話ですけど……私は――
+    CH0335_MemorialLobby_5_2: 先生のこと、嫌いじゃありませんから。
 
 # ヒナ水着版キャラクター音声対話翻訳
 memorialLobbies[2]:

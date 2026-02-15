@@ -60,19 +60,19 @@ memorialLobbies[0]:
     CH0334_MemorialLobby_3_2: 世界是，这么地美丽，但为何人与人之间还是会有纷争呢？
     CH0334_MemorialLobby_4: 就如同那片星空一般，这个世界的美好，明明已经可以多到和大家一起分享也没关系的程度了……
     CH0334_MemorialLobby_5: ……果然，爱丽丝还是不能理解。
-# Aris角色的语音对话翻译
+# Kei角色的语音对话翻译
 memorialLobbies[1]:
   voice:
-    Aris_MemorialLobby_1: 爱丽丝觉得在基沃托斯魔法并不是空想。
-    Aris_MemorialLobby_2_1: 魔法是真正存在的。
-    Aris_MemorialLobby_2_2: 因为，老师现在让爱丽丝感到非常幸福。
-    Aris_MemorialLobby_3_1: 游戏之所以很有趣，
-    Aris_MemorialLobby_3_2: 是因为它蕴藏了这个世界所有的美丽之处。
-    Aris_MemorialLobby_3_3: 这是，老师您让我明白的道理。
-    Aris_MemorialLobby_4_1: 游戏、猫咪、和好朋友……还有……
-    Aris_MemorialLobby_4_2: 现在这个瞬间，在这世界上有太多太多美好的东西。
-    Aris_MemorialLobby_5_1: 爱丽丝还想知道更多更多。
-    Aris_MemorialLobby_5_2: 想和老师一起……两个人一起，继续探索这个世界！
+    CH0335_MemorialLobby_1_1: 别担心。
+    CH0335_MemorialLobby_1_2: 我是不会消失的。
+    CH0335_MemorialLobby_2_1: 恰恰相反。
+    CH0335_MemorialLobby_2_2: 不管用什么手段，我都会活下去。
+    CH0335_MemorialLobby_3_1: 如果老师不抛弃这个世界的话。
+    CH0335_MemorialLobby_3_2: 那我到最后也不会放弃的。
+    CH0335_MemorialLobby_4_1: 所以放心吧……绝对，没问题的。
+    CH0335_MemorialLobby_4_2: 我会一直在这里。
+    CH0335_MemorialLobby_5_1: 这话我只在这里说……我——
+    CH0335_MemorialLobby_5_2: 并不讨厌老师呢。
 
 memorialLobbies[2]:
   voice:

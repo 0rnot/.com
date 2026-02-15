@@ -59,19 +59,20 @@ memorialLobbies[0]:
     CH0334_MemorialLobby_3_2: The world is this beautiful, yet why do people still fight each other?
     CH0334_MemorialLobby_4: Just like that starry sky, the beauty of this world is surely enough to share with everyone...
     CH0334_MemorialLobby_5: ...As expected, Aris still doesn't understand.
-# Aris character voice dialogue translations
+
+# Kei Voice Dialogue
 memorialLobbies[1]:
   voice:
-      Aris_MemorialLobby_1: I believe magic exists in Kivotos as well.
-      Aris_MemorialLobby_2_1: It must.
-      Aris_MemorialLobby_2_2: How else could you make me so happy, Sensei?
-      Aris_MemorialLobby_3_1: Games are fun,
-      Aris_MemorialLobby_3_2: because they reflect the beauty of the world.
-      Aris_MemorialLobby_3_3: You taught me that.
-      Aris_MemorialLobby_4_1: Games, cats, friends...and even this moment.
-      Aris_MemorialLobby_4_2: The world is full of beautiful things.
-      Aris_MemorialLobby_5_1: And I want to know more of them. Together with you, Sensei.
-      Aris_MemorialLobby_5_2: I want to learn more about this world!
+    CH0335_MemorialLobby_1_1: Don't worry.
+    CH0335_MemorialLobby_1_2: I will not disappear.
+    CH0335_MemorialLobby_2_1: Quite the opposite.
+    CH0335_MemorialLobby_2_2: No matter what means I must use, I will survive.
+    CH0335_MemorialLobby_3_1: As long as you do not abandon this world, Sensei.
+    CH0335_MemorialLobby_3_2: Then I will not give up until the very end.
+    CH0335_MemorialLobby_4_1: So rest assured... absolutely, everything will be fine.
+    CH0335_MemorialLobby_4_2: I will always be here.
+    CH0335_MemorialLobby_5_1: I will only say this here... I—
+    CH0335_MemorialLobby_5_2: Do not hate you, Sensei.
 
 # Hina swimsuit character voice dialogue translations
 memorialLobbies[2]:
