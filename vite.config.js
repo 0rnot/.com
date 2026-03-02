@@ -8,7 +8,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import viteCompression from 'vite-plugin-compression'
-import viteImagemin from 'vite-plugin-imagemin'
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 import { VitePWA } from 'vite-plugin-pwa'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import Font from 'vite-plugin-font'
@@ -49,32 +49,32 @@ export default defineConfig({
         }
       }
     }),
-    viteImagemin({
-      gifsicle: {
-        optimizationLevel: 7,
-        interlaced: false
+    ViteImageOptimizer({
+      png: {
+        quality: 85,
       },
-      optipng: {
-        optimizationLevel: 3
+      jpeg: {
+        quality: 85,
       },
-      mozjpeg: {
-        quality: 50
+      jpg: {
+        quality: 85,
       },
-      pngquant: {
-        quality: [0.9, 1],
-        speed: 4
+      webp: {
+        quality: 85,
       },
-      svgo: {
+      svg: {
+        multipass: true,
         plugins: [
           {
-            name: 'removeViewBox'
+            name: 'preset-default',
+            params: {
+              overrides: {
+                removeViewBox: false,
+              },
+            },
           },
-          {
-            name: 'removeEmptyAttrs',
-            active: false
-          }
-        ]
-      }
+        ],
+      },
     }),
     VitePWA({
       mode: 'production',
