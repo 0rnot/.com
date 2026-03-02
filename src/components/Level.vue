@@ -1,7 +1,10 @@
 <script setup>
 import { computed, ref, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useConfig } from '@/composables/useConfig'
+
 const { configs } = useConfig()
+const router = useRouter()
 
 const currentConfig = computed(() => configs.value)
 
@@ -42,10 +45,14 @@ onUnmounted(() => {
 const strokeWidth = computed(() => {
   return Math.max(4, Math.round(windowWidth.value * 0.0025))
 })
+
+const goToBio = () => {
+  router.push('/bio')
+}
 </script>
 
 <template>
-  <div class="level-box">
+  <div class="level-box" @click="goToBio">
     <div class="container">
       <div class="level css-cursor-hover-enabled">
         <span>Lv.</span>
