@@ -56,7 +56,7 @@ exp: 8382 # 当前经验值
 nextExp: 8381 # 升级所需经验值
 
 # Iconfont字体库地址 - 阿里云图标字体库
-iconfont: 'https://at.alicdn.com/t/c/font_4336463_r5p9u2rf30h.js'
+iconfont: 'https://at.alicdn.com/t/c/font_4336463_umq8x001wf9.js'
 
 # 底部项目展示区域 - 显示相关项目链接
 dock:
