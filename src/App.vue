@@ -17,6 +17,10 @@ const { loading, percent } = useLoading()
       <component :is="Component" />
     </keep-alive>
   </router-view>
+
+  <!-- 幕布效果 -->
+  <div id="curtain"></div>
+  
   <!-- 自定义光标 -->
   <Cursor />
 </template>

@@ -1,13 +1,12 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useConfig } from '@/composables/useConfig'
+import { navigateWithCurtain } from '@/init/links.js'
 
-const router = useRouter()
 const { configs } = useConfig()
 
 const goBack = () => {
-  router.back()
+  navigateWithCurtain('/')
 }
 
 const bioSections = ref([

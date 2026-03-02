@@ -61,9 +61,6 @@ const canSkip = (value) => {
     <transition name="down">
       <Footer v-if="!l2dOnly" />
     </transition>
-
-    <!-- 幕布效果 -->
-    <div id="curtain"></div>
   </main>
 </template>
 

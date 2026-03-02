@@ -1,10 +1,9 @@
 <script setup>
 import { computed, ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { useConfig } from '@/composables/useConfig'
+import { navigateWithCurtain } from '@/init/links.js'
 
 const { configs } = useConfig()
-const router = useRouter()
 
 const currentConfig = computed(() => configs.value)
 
@@ -47,7 +46,7 @@ const strokeWidth = computed(() => {
 })
 
 const goToBio = () => {
-  router.push('/bio')
+  navigateWithCurtain('/bio')
 }
 </script>
 

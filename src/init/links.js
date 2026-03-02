@@ -1,3 +1,19 @@
+import router from '@/router'
+
+// 独立的幕布跳转函数，可以直接导出使用
+export function navigateWithCurtain(path) {
+  const curtain = document.querySelector('#curtain')
+  if (curtain) {
+    curtain.style.display = 'block'
+    setTimeout(() => {
+      curtain.style.display = ''
+    }, 3000)
+  }
+  setTimeout(() => {
+    router.push(path)
+  }, 900)
+}
+
 export function initLinkHandler() {
   let initialized = false
 
