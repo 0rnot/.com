@@ -1,91 +1,99 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useConfig } from '@/composables/useConfig'
-import { navigateWithCurtain } from '@/init/links.js'
+import Header from '@/components/Header.vue'
 
 const { configs } = useConfig()
 
-const goBack = () => {
-  navigateWithCurtain('/')
+const currentConfig = computed(() => configs.value)
+
+const exp = computed(() => {
+  if (!currentConfig.value || currentConfig.value.exp === undefined) return 0
+  return currentConfig.value.exp
+})
+
+const nextExp = computed(() => {
+  if (!currentConfig.value || currentConfig.value.nextExp === undefined) return 100
+  return currentConfig.value.nextExp
+})
+
+const level = computed(() => {
+  if (!currentConfig.value || currentConfig.value.level === undefined) return 1
+  return currentConfig.value.level
+})
+
+const author = computed(() => {
+  if (!currentConfig.value || !currentConfig.value.author) return 'Unknown'
+  return currentConfig.value.author
+})
+
+const windowWidth = ref(window.innerWidth)
+
+const updateWidth = () => {
+  windowWidth.value = window.innerWidth
 }
 
-const bioSections = ref([
-  {
-    title: '关于我',
-    icon: 'icon-user',
-    content: '热爱技术与创作的开发者，喜欢探索新技术，致力于打造优秀的用户体验。'
-  },
-  {
-    title: '技能栈',
-    icon: 'icon-code',
-    content: 'Vue.js, JavaScript, TypeScript, Node.js, Python, 以及更多前端技术。'
-  },
-  {
-    title: '兴趣爱好',
-    icon: 'icon-heart',
-    content: '游戏开发, Live2D, 音乐, 以及一切有趣的技术探索。'
-  },
-  {
-    title: '联系方式',
-    icon: 'icon-email',
-    content: '欢迎通过各个社交平台与我交流，一起探讨技术与创意！'
-  }
-])
+onMounted(() => {
+  window.addEventListener('resize', updateWidth)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateWidth)
+})
+
+const strokeWidth = computed(() => {
+  return Math.max(4, Math.round(windowWidth.value * 0.0025))
+})
 </script>
 
 <template>
   <div class="bio-page">
+    <!-- 头栏 -->
+    <Header />
     <!-- 背景 -->
     <div class="bio-background"></div>
-    
-    <!-- 返回按钮 -->
-    <div class="back-button" @click="goBack">
-      <div class="back-icon">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <span>返回</span>
-    </div>
-
-    <!-- 主要内容 -->
+    <!-- 主容器 -->
     <div class="bio-container">
-      <!-- 标题区域 -->
-      <div class="bio-header">
-        <div class="avatar-section">
-          <div class="avatar">
-            <img src="/favicon144.png" alt="Avatar" />
-          </div>
-          <div class="title-section">
-            <h1>{{ configs.author || '小鱼' }}</h1>
-            <p class="subtitle">个人档案</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- 信息卡片区域 -->
-      <div class="bio-content">
-        <div 
-          v-for="(section, index) in bioSections" 
-          :key="index"
-          class="bio-card"
-          :style="{ animationDelay: `${index * 0.1}s` }"
-        >
-          <div class="card-header">
-            <div class="card-icon">
-              <i :class="section.icon"></i>
+      <div id="left">
+        <div class="level-box">
+          <div class="container">
+            <div class="level">
+              <span>Lv.</span>
+              <p>{{ level }}</p>
             </div>
-            <h3>{{ section.title }}</h3>
-          </div>
-          <div class="card-body">
-            <p>{{ section.content }}</p>
+            <div class="right">
+              <span class="name">{{ author }}</span>
+              <div>
+                <a-progress
+                  :percent="exp / nextExp"
+                  :show-text="false"
+                  :color="exp >= nextExp ? '#ffe433' : '#89d5fd'"
+                  :stroke-width="strokeWidth"
+                  trackColor="#535E67"
+                >
+                </a-progress>
+                <p :style="{ color: exp >= nextExp ? '#ffe433' : '#66E0FE' }">
+                  {{ exp >= nextExp ? 'MAX' : exp + '/' + nextExp }}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <!-- 底部装饰 -->
-      <div class="bio-footer">
-        <p>「 蔚蓝档案风格个人主页 」</p>
+      <div id="right">
+        <div class="intro-title">
+          <div class="title">自我介绍</div>
+        </div>
+        <div class="intro-content">
+          <p>
+            点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本
+          </p>
+        </div>
+        <div class="btn-container">
+          <a-button class="btn" type="primary">关于我</a-button>
+          <a-button class="btn">关于我</a-button>
+          <a-button class="btn" type="primary">关于我</a-button>
+        </div>
       </div>
     </div>
   </div>
@@ -93,214 +101,162 @@ const bioSections = ref([
 
 <style scoped>
 .bio-page {
-  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
   position: relative;
-  overflow-x: hidden;
-  font-family: 'BlueakaBeta2GBK', sans-serif;
+  overflow: hidden;
 }
 
+/* 背景 */
 .bio-background {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  background-image: url('/shitim/Event_Main_Stage_Bg.png');
+  background-position: center;
+  background-size: cover;
   z-index: -1;
 }
 
-.bio-background::before {
-  content: '';
+.bio-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  padding-top: clamp(60px, 3.75vw, 100vw);
+}
+
+.bio-container #left,
+.bio-container #right {
+  flex: 1;
+}
+
+#left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+/* Level.vue 样式复刻 */
+.level-box {
+  width: 40%;
+  height: clamp(96px, 6vw, 100vw);
+  background: #003153dd;
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(18, 138, 250, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(137, 213, 253, 0.1) 0%, transparent 50%);
-  pointer-events: none;
+  bottom: clamp(40px, 2.5vw, 100vw);
+  border-radius: clamp(8px, 0.5vw, 100vw);
+  transform: skewX(-10deg);
+  display: flex;
+  z-index: 2;
 }
 
-/* 返回按钮 */
-.back-button {
-  position: fixed;
-  top: clamp(20px, 2vw, 40px);
-  left: clamp(20px, 2vw, 40px);
+.level-box .container {
   display: flex;
+  justify-content: flex-start;
   align-items: center;
-  gap: 8px;
-  padding: clamp(10px, 1vw, 15px) clamp(15px, 1.5vw, 25px);
-  background: rgba(0, 49, 83, 0.8);
-  border-radius: 8px;
+  margin: auto 0 auto clamp(26px, 1.625vw, 100vw);
+  width: 100%;
+  height: calc(100% - clamp(26px, 1.625vw, 100vw));
+  transform: skewX(10deg);
+}
+
+.level {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.1s;
+}
+
+.level-box:active .level {
+  transform: scale(0.85);
+}
+
+.container .level p {
   color: #fff;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 100;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(137, 213, 253, 0.3);
+  font-size: clamp(42px, 2.625vw, 100vw);
+  font-weight: 600;
+  transform: skewX(-10deg);
 }
 
-.back-button:hover {
-  background: rgba(0, 49, 83, 1);
-  transform: translateX(-5px);
-  box-shadow: 0 4px 15px rgba(137, 213, 253, 0.3);
-}
-
-.back-icon {
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.back-icon svg {
-  width: 100%;
-  height: 100%;
-}
-
-.back-button span {
-  font-size: clamp(14px, 1.2vw, 18px);
+.container .name {
+  color: #fff;
+  font-size: clamp(24px, 1.5vw, 100vw);
   font-weight: 600;
 }
 
-/* 主容器 */
-.bio-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: clamp(80px, 10vw, 120px) clamp(20px, 4vw, 60px) clamp(40px, 5vw, 80px);
+.container .level span {
+  color: #ffe433;
+  font-size: clamp(24px, 1.5vw, 100vw);
+  font-weight: 600;
+  transform: skewX(-10deg);
 }
 
-/* 头部区域 */
-.bio-header {
-  margin-bottom: clamp(40px, 5vw, 60px);
-}
-
-.avatar-section {
+.right {
+  align-self: flex-start;
+  margin: 0 clamp(20px, 1.25vw, 100vw);
   display: flex;
-  align-items: center;
-  gap: clamp(20px, 3vw, 40px);
-  flex-wrap: wrap;
-}
-
-.avatar {
-  width: clamp(80px, 10vw, 120px);
-  height: clamp(80px, 10vw, 120px);
-  border-radius: 50%;
-  overflow: hidden;
-  border: 3px solid #89d5fd;
-  box-shadow: 0 0 30px rgba(137, 213, 253, 0.4);
-  background: linear-gradient(135deg, #003153, #2265bb);
-}
-
-.avatar img {
+  flex-direction: column;
   width: 100%;
+  justify-content: space-between;
   height: 100%;
-  object-fit: cover;
 }
 
-.title-section h1 {
-  font-size: clamp(28px, 4vw, 48px);
+.right p {
+  font-size: clamp(20px, 1.25vw, 100vw);
+  font-weight: 600;
+}
+
+#right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.intro-title {
+  width: 80%;
   color: #fff;
-  margin: 0 0 8px 0;
-  text-shadow: 0 2px 10px rgba(137, 213, 253, 0.5);
-}
-
-.subtitle {
-  font-size: clamp(16px, 2vw, 24px);
-  color: #89d5fd;
-  margin: 0;
-  font-weight: 500;
-}
-
-/* 内容卡片区域 */
-.bio-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: clamp(20px, 3vw, 30px);
-  margin-bottom: clamp(40px, 5vw, 60px);
-}
-
-.bio-card {
-  background: rgba(0, 49, 83, 0.6);
-  border-radius: 16px;
-  padding: clamp(20px, 2.5vw, 30px);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(137, 213, 253, 0.2);
-  transition: all 0.3s ease;
-  animation: fadeInUp 0.6s ease forwards;
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.bio-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(137, 213, 253, 0.2);
-  border-color: rgba(137, 213, 253, 0.4);
-}
-
-.card-header {
+  background-color: #003153;
+  transform: skewX(-10deg);
+  padding: clamp(10px, 0.625vw, 100vw) clamp(20px, 1.25vw, 100vw);
   display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 15px;
-}
-
-.card-icon {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #89d5fd, #128AFA);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  color: #fff;
-  font-size: 20px;
+  align-items: center;
+  border-radius: clamp(8px, 0.5vw, 100vw);
 }
 
-.card-header h3 {
-  font-size: clamp(18px, 2vw, 24px);
-  color: #fff;
-  margin: 0;
+.intro-title .title {
+  font-size: clamp(32px, 2.0625vw, 100vw);
+  transform: skewX(10deg);
 }
 
-.card-body p {
-  font-size: clamp(14px, 1.5vw, 16px);
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.6;
-  margin: 0;
+#right .intro-content {
+  width: 80%;
+  margin-top: clamp(20px, 1.25vw, 100vw);
+  padding: clamp(20px, 1.25vw, 100vw);
+  background-color: #fff;
+  border-radius: clamp(8px, 0.5vw, 100vw);
+  font-size: clamp(20px, 1.25vw, 100vw);
 }
 
-/* 底部 */
-.bio-footer {
-  text-align: center;
-  padding-top: clamp(20px, 3vw, 40px);
-  border-top: 1px solid rgba(137, 213, 253, 0.2);
+#right .btn-container {
+  width: 40%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  direction: rtl;
+  gap: clamp(10px, 0.625vw, 100vw);
+  position: absolute;
+  bottom: clamp(40px, 2.5vw, 100vw);
 }
 
-.bio-footer p {
-  font-size: clamp(12px, 1.2vw, 14px);
-  color: rgba(137, 213, 253, 0.6);
-  margin: 0;
+#right .btn {
+  width: 100%;
+  padding: clamp(30px, 1.875vw, 100vw) 0 !important;
+  font-size: clamp(24px, 1.5vw, 100vw) !important;
 }
 
-/* 响应式 */
 @media screen and (max-width: 768px) {
-  .avatar-section {
-    justify-content: center;
-    text-align: center;
-  }
-  
-  .bio-content {
-    grid-template-columns: 1fr;
-  }
+
 }
 </style>
