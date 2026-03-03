@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useConfig } from '@/composables/useConfig'
 import Header from '@/components/Header.vue'
+import Live2D from '@/components/Live2D.vue'
 
 const { configs } = useConfig()
 
@@ -55,6 +56,7 @@ const strokeWidth = computed(() => {
     <!-- 主容器 -->
     <div class="bio-container">
       <div id="left">
+        <Live2D />
         <div class="level-box">
           <div class="container">
             <div class="level">

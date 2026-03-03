@@ -194,3 +194,13 @@ memorialLobbies:
       y: -1/8
       # 对话框位置（left/right）
       position: left
+
+bio:
+  # 角色4 - CH0334_spr
+  - name: CH0334_spr
+    # Live2D模型文件路径
+    path: '/l2d/CH0334_spr/'
+    # 骨骼动画文件
+    skel: 'CH0334_spr.skel'
+    # 纹理图集文件
+    atlas: 'CH0334_spr.atlas'
