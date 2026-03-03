@@ -62,10 +62,10 @@ const openImageDialog = (btn) => {
       h('img', {
         src: btn.path,
         style: {
-          width: '100%',
+          width: '100%'
         }
       }),
-    footer: false,
+    footer: false
   })
 }
 
@@ -189,7 +189,9 @@ onUnmounted(() => {
               <div class="title">{{ translate.bioTitle || '' }}</div>
             </div>
             <div class="intro-content">
-              <p>{{ translate.bioContent || '' }}</p>
+              <div class="content">
+                <p v-for="(item, index) in translate.bioContent" :key="index" v-html="item"></p>
+              </div>
             </div>
             <div class="btn-container">
               <a-button
@@ -465,13 +467,13 @@ onUnmounted(() => {
   font-size: clamp(20px, 1.25vw, 100vw);
 }
 
-#right .intro-content p {
+#right .intro-content .content {
   height: 101%;
   overflow-y: auto;
   font-size: clamp(24px, 1.5vw, 100vw);
 }
 
-#right .intro-content p::-webkit-scrollbar {
+#right .intro-content .content::-webkit-scrollbar {
   display: none;
 }
 
