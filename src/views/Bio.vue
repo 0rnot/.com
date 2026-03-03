@@ -431,7 +431,7 @@ onUnmounted(() => {
 #right .btn-container {
   width: 80%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   direction: rtl;
   margin-top: auto;
   gap: clamp(10px, 0.625vw, 100vw);
@@ -440,6 +440,7 @@ onUnmounted(() => {
 
 #right .btn {
   width: 100%;
+  filter: drop-shadow(0px clamp(1px, 0.0625vw, 100vw) clamp(2px, 0.125vw, 100vw)#0004);
   padding: clamp(30px, 1.875vw, 100vw) 0 !important;
   font-size: clamp(24px, 1.5vw, 100vw) !important;
   border-radius: clamp(8px, 0.5vw, 100vw) !important;
