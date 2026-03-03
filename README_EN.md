@@ -11,7 +11,8 @@
 
 <div align="center">A Blue Archive-style personal homepage for me.</div>
 
-![Fish Archive](shots/main.png)
+![Fish Archive](shots/en/pic1.png)
+![Fish Archive - bio](shots/en/pic2.png)
 
 ## Preview Links
 

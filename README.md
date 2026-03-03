@@ -11,7 +11,9 @@
 
 <div align="center">有关小鱼的《蔚蓝档案》风格的个人主页</div>
 
-![小鱼档案](shots/main.png)
+![小鱼档案](shots/zh/pic1.png)
+![小鱼档案 - 个人简介](shots/zh/pic2.png)
+
 
 ## 预览链接
 
