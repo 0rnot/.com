@@ -6,7 +6,8 @@ import { useConfig } from '@/composables/useConfig'
 const { configs, locale } = useConfig()
 const emit = defineEmits(['canskip', 'update:changeL2D'])
 import { Howl } from 'howler'
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted, onActivated } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
 
 const props = defineProps(['l2dOnly'])
 
@@ -100,6 +101,12 @@ const addCanvasToBackground = () => {
 // 组件挂载后尝试添加canvas
 onMounted(() => {
   addCanvasToBackground()
+})
+
+// 路由离开前停止语音和清理
+onBeforeRouteLeave((to, from, next) => {
+  stopAllVoiceAndCleanup()
+  next()
 })
 
 const changeL2D = (value) => {
@@ -426,6 +433,154 @@ const handleBoneHover = (event) => {
   if (ifPetting.value && isLongPress) {
     handleHeadBoneFollow(event)
   }
+}
+
+// 清理语音和对话框
+const clearVoiceAndDialogue = () => {
+  // 停止所有语音
+  if (soundList.length !== 0) {
+    for (let i in soundList) soundList[i].stop()
+    soundList = []
+  }
+  // 隐藏对话框
+  showDialogue.value = false
+  dialogue.value = ''
+  // 关闭可能打开的Modal
+  if (modalRef) {
+    modalRef.close()
+    modalRef = null
+  }
+}
+
+// 停止所有语音和清理的通用函数
+const stopAllVoiceAndCleanup = () => {
+  clearVoiceAndDialogue()
+  // 彻底清除动画实例，阻止所有事件
+  if (animation) {
+    if (animation.state) {
+      animation.state.listeners = []
+    }
+    l2d.stage.removeChild(animation)
+    animation.destroy()
+    animation = null
+  }
+  // 重置交互状态
+  talking = false
+  talkIndex = 1
+  ifPetting.value = false
+  isLongPress = false
+  animationReady = false
+  if (longPressTimer) {
+    clearTimeout(longPressTimer)
+    longPressTimer = null
+  }
+  if (patTimer) {
+    clearTimeout(patTimer)
+    patTimer = null
+  }
+}
+
+// 组件重新激活时的处理
+onActivated(() => {
+  // 重新添加canvas到DOM
+  addCanvasToBackground()
+  // 如果动画被销毁了，重新加载并跳过初始动画
+  if (!animation && currentConfig.value?.memorialLobbies) {
+    loadL2DSkipIdle(id)
+  }
+  // 重置 talking 状态
+  talking = false
+  talkIndex = 1
+})
+
+// 加载Live2D并跳过初始动画
+const loadL2DSkipIdle = async (num) => {
+  // 确保canvas已经添加到background div
+  addCanvasToBackground()
+
+  if (!currentConfig.value || !currentConfig.value.memorialLobbies) {
+    return
+  }
+
+  canSkip = false
+  emit('canskip', false)
+  talking = false
+  talkIndex = 1
+  // 重置骨骼状态缓存
+  originalBoneStates.value = {}
+  if (soundList.length !== 0) {
+    for (let i in soundList) soundList[i].stop()
+    soundList = []
+  }
+
+  const lobbies = currentConfig.value.memorialLobbies
+
+  if (num < 0 || num >= lobbies.length) {
+    return
+  }
+
+  const lobby = lobbies[num]
+
+  // 检查必需的属性
+  if (!lobby.path || !lobby.skel || !lobby.atlas) {
+    return
+  }
+
+  dialogueDisplay.value.x =
+    parseFraction(lobby.dialogueDisplay.x) * document.documentElement.clientWidth
+  dialogueDisplay.value.y =
+    parseFraction(lobby.dialogueDisplay.y) * document.documentElement.clientHeight
+  dialogueDisplay.value.position = lobby.dialogueDisplay.position
+
+  try {
+    // 使用配置文件中定义的实际资源路径
+    const skeletonPath = lobby.path + lobby.skel
+    const atlasPath = lobby.path + lobby.atlas
+
+    // 先预加载资源
+    const skeletonAlias = `skeleton_${num}`
+    const atlasAlias = `atlas_${num}`
+
+    PIXI.Assets.add({ alias: skeletonAlias, src: skeletonPath })
+    PIXI.Assets.add({ alias: atlasAlias, src: atlasPath })
+    await PIXI.Assets.load([skeletonAlias, atlasAlias])
+
+    // 然后创建动画
+    animation = Spine.from(skeletonAlias, atlasAlias)
+    if (animation) {
+      animation.state.setAnimation(1, 'Dummy', true)
+      animation.state.setAnimation(2, 'Dummy', true)
+      animation.state.setAnimation(3, 'Dummy', true)
+      animation.state.setAnimation(4, 'Dummy', true)
+      l2d.stage.addChild(animation)
+    } else {
+      return
+    }
+  } catch (error) {
+    return
+  }
+  animation.scale.set(0.85)
+  // 直接播放Idle_01，跳过Start_Idle
+  animation.state.setAnimation(0, 'Idle_01', true)
+  animation.state.timeScale = 1
+  animation.autoUpdate = true
+  animation.y = 1440
+  animation.x = 2560 / 2
+
+  originalOffsetPercent = (parseFloat(lobby.offset) || 0.7) * 100
+  l2d.view.style.transform = `translateX(calc((50% - ${originalOffsetPercent} * 1%) * (1 - min(1, 100vw / 1200px))))`
+
+  showDialogue.value = false
+  // 添加事件监听器
+  animation.state.addListener({
+    event: onEvent
+  })
+
+  // 标记动画初始化完成
+  animationReady = true
+
+  // 直接在l2d.view上添加事件监听
+  addEventListenersToCanvas()
 }
 
 // 组件卸载时清理资源
