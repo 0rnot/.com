@@ -1,5 +1,6 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, h } from 'vue'
+import { Modal } from '@arco-design/web-vue'
 import { useConfig } from '@/composables/useConfig'
 import Header from '@/components/Header.vue'
 import Live2D from '@/components/Live2D.vue'
@@ -41,6 +42,32 @@ const bioConfig = computed(() => {
 const bioButtons = computed(() => {
   return bioConfig.value?.bth || []
 })
+
+// Dialog 状态
+const dialogVisible = ref(false)
+const currentImage = ref('')
+const currentImageName = ref('')
+
+// 打开图片 Dialog
+const openImageDialog = (btn) => {
+  if (!btn.path) return
+  currentImage.value = btn.path
+  currentImageName.value = btn.name
+  dialogVisible.value = true
+
+  Modal.open({
+    title: btn.name,
+    modalClass: 'card',
+    content: () =>
+      h('img', {
+        src: btn.path,
+        style: {
+          width: '100%',
+        }
+      }),
+    footer: false,
+  })
+}
 
 const windowWidth = ref(window.innerWidth)
 
@@ -170,6 +197,7 @@ onUnmounted(() => {
                 :key="index"
                 class="btn"
                 type="primary"
+                @click="openImageDialog(btn)"
               >
                 {{ btn.name }}
               </a-button>
@@ -458,7 +486,7 @@ onUnmounted(() => {
 
 #right .btn {
   width: 100%;
-  filter: drop-shadow(0px clamp(1px, 0.0625vw, 100vw) clamp(2px, 0.125vw, 100vw)#0004);
+  filter: drop-shadow(0px clamp(1px, 0.0625vw, 100vw) clamp(2px, 0.125vw, 100vw) #0004);
   padding: clamp(30px, 1.875vw, 100vw) 0 !important;
   font-size: clamp(24px, 1.5vw, 100vw) !important;
   border-radius: clamp(8px, 0.5vw, 100vw) !important;
@@ -518,5 +546,13 @@ onUnmounted(() => {
     position: relative;
     margin-top: auto;
   }
+}
+</style>
+
+<style>
+.card.arco-modal .arco-modal-body {
+  max-width: 75vw !important;
+  max-height: calc(90vh - clamp(48px, 3vw, 100vw)) !important;
+  padding: 0 !important;
 }
 </style>
