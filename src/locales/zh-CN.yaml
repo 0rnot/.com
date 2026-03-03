@@ -95,6 +95,7 @@ translate:
   update: 老师！站点已更新，刷新即可访问最新内容！
   ok: 确认
   cancel: 取消
+  bio: 个人简介
   bioTitle: 自我介绍
   bioContent: 这里是个人简介内容，可以在配置文件中自定义。
   prevPage: 上一页

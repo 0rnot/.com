@@ -6,6 +6,13 @@ import { Icon } from '@arco-design/web-vue'
 import { useConfig } from '@/composables/useConfig'
 import { useAp } from '@/composables/useAp'
 
+const props = defineProps({
+  title: {
+    type: String,
+    default: ''
+  }
+})
+
 const { configs } = useConfig()
 const { ap, maxAp } = useAp()
 
@@ -45,7 +52,7 @@ const goBack = () => {
     </div>
 
     <div class="page-title">
-      <p>个人简介</p>
+      <p>{{ title }}</p>
     </div>
 
     <div class="toolbox">

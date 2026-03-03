@@ -97,6 +97,7 @@ translate:
   update: Sensei! The site has been updated. Refresh to view the newest content!
   ok: OK
   cancel: Cancel
+  bio: Biography
   bioTitle: Self Introduction
   bioContent: This is the personal introduction content, which can be customized in the configuration file.
   prevPage: Previous

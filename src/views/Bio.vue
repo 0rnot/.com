@@ -90,7 +90,7 @@ onUnmounted(() => {
 <template>
   <div class="bio-page">
     <!-- 头栏 -->
-    <Header />
+    <Header :title="translate.bio || ''" />
     <!-- 背景 -->
     <div class="bio-background"></div>
     <!-- 主容器 -->
