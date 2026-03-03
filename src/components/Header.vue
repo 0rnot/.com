@@ -180,4 +180,11 @@ const goBack = () => {
   margin: 0 clamp(4px, 0.75vw, 100vw);
   border-left-width: clamp(2px, 0.125vw, 100vw);
 }
+
+@media screen and (max-width: 1088px) {
+  .toolbox .item,
+  .divider {
+    display: none;
+  }
+}
 </style>
