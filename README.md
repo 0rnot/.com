@@ -30,7 +30,7 @@
 - [x] 学生回忆大厅全局观赏
 - [x] 学生摸头和对话互动
 - [x] i18n适配
-- [ ] 个人信息等二级界面
+- [x] 个人信息等二级界面
 
 ## 使用到的项目
 
@@ -242,6 +242,21 @@ memorialLobbies:
       y: -1/8
       # 对话框位置（left/right）
       position: left
+
+bio:
+  student:
+    - name: CH0334_spr
+      # Live2D模型文件路径
+      path: '/l2d/CH0334_spr/'
+      # 骨骼动画文件
+      skel: 'CH0334_spr.skel'
+      # 纹理图集文件
+      atlas: 'CH0334_spr.atlas'
+  bth:
+  - name: 蔚蓝档案
+    path: /img/card/ba.png
+  - name: 明日方舟
+    path: /img/card/arknight.png
 ```
 > 修改其中相关内容，之后重新按上述方式部署即可完成修改
 
@@ -304,11 +319,23 @@ translate:
   update: 站点更新提示
   ok: 确认
   cancel: 取消
+  bio: 个人简介
+  bioTitle: 自我介绍
+  bioContent:
+    - 这里是小鱼yuzifu，很高兴你能看到这个网站>_<！
+    - <br/>
+  prevPage: 上一页
+  nextPage: 下一页
+
+bio:
+  bth:
+  - name: 蔚蓝档案
+  - name: 明日方舟
 ```
 
 ## 有关学生回忆大厅L2D文件获取
 
-1. 自己去游戏解包中获取（[教程1](https://www.bilibili.com/read/cv15934670/)、[教程2](https://www.bilibili.com/read/cv18073492/)）
+1. 自己去游戏解包中获取
 2. 去[基沃托斯古书馆](https://kivo.fun/)中的`角色图鉴`—`切换到鉴赏模式`—`回忆大厅`当中自行抓包获取
 
 ## 基于本项目的最佳实践

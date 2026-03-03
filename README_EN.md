@@ -30,7 +30,7 @@
 - [x] Student memorial lobby global viewing
 - [x] Student head-patting and dialogue interactions
 - [x] i18n support
-- [ ] Personal information and other secondary interfaces
+- [x] Personal information and other secondary interfaces
 
 ## Projects Used
 
@@ -241,6 +241,22 @@ memorialLobbies:
       y: -1/8
       # Dialogue box position (left/right)
       position: left
+
+# Bio page configuration
+bio:
+  student:
+    - name: CH0334_spr
+      # Live2D model file path
+      path: '/l2d/CH0334_spr/'
+      # Skeleton animation file
+      skel: 'CH0334_spr.skel'
+      # Texture atlas file
+      atlas: 'CH0334_spr.atlas'
+  bth:
+    - name: Blue Archive
+      path: /img/card/ba.png
+    - name: Arknights
+      path: /img/card/arknight.png
 ```
 > Modify the relevant content, then redeploy according to the above methods to complete the modification.
 
@@ -303,6 +319,18 @@ translate:
   update: Site Update Notification
   ok: Confirm
   cancel: Cancel
+  bio: Biography
+  bioTitle: Self Introduction
+  bioContent:
+    - This is yuzifu, nice to meet you >_<!
+    - <br/>
+  prevPage: Previous
+  nextPage: Next
+
+bio:
+  bth:
+    - name: Blue Archive
+    - name: Arknights
 ```
 
 ## About Student Memorial Lobby L2D File Acquisition
