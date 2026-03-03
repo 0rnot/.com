@@ -54,6 +54,8 @@ manifest:
 level: 90 # 当前等级
 exp: 8382 # 当前经验值
 nextExp: 8381 # 升级所需经验值
+gold: 11451419   # 信用点数量
+pyroxene: 24000  # 青辉石数量
 
 # Iconfont字体库地址 - 阿里云图标字体库
 iconfont: 'https://at.alicdn.com/t/c/font_4336463_umq8x001wf9.js'

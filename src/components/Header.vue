@@ -4,7 +4,10 @@ import { navigateWithCurtain } from '@/init/links.js'
 import { Icon } from '@arco-design/web-vue'
 
 import { useConfig } from '@/composables/useConfig'
+import { useAp } from '@/composables/useAp'
+
 const { configs } = useConfig()
+const { ap, maxAp } = useAp()
 
 const currentConfig = computed(() => configs.value)
 
@@ -17,6 +20,17 @@ const IconFont = computed(() => {
   const url = iconfontUrl.value
   if (!url) return null
   return Icon.addFromIconFontCn({ src: url })
+})
+
+// Gold 和 Pyroxene 从配置读取
+const gold = computed(() => {
+  if (!currentConfig.value || currentConfig.value.gold === undefined) return 0
+  return currentConfig.value.gold
+})
+
+const pyroxene = computed(() => {
+  if (!currentConfig.value || currentConfig.value.pyroxene === undefined) return 0
+  return currentConfig.value.pyroxene
 })
 
 const goBack = () => {
@@ -37,21 +51,21 @@ const goBack = () => {
     <div class="toolbox">
       <div class="item">
         <img src="/img/ap.png" alt="" />
-        <p style="white-space: nowrap">927/240</p>
+        <p style="white-space: nowrap">{{ ap + '/' + maxAp }}</p>
       </div>
 
       <a-divider direction="vertical" class="divider"></a-divider>
 
       <div class="item">
         <img src="/img/gold.png" alt="" />
-        <p>134,099,293</p>
+        <p>{{ gold.toLocaleString() }}</p>
       </div>
 
       <a-divider direction="vertical" class="divider"></a-divider>
 
       <div class="item">
         <img src="/img/pyroxene.png" alt="" />
-        <p>107,022</p>
+        <p>{{ pyroxene.toLocaleString() }}</p>
       </div>
 
       <a-divider direction="vertical" class="divider"></a-divider>

@@ -5,6 +5,7 @@ import { initApp } from '@/init/app'
 import { initPWA } from '@/init/pwa'
 import { initLinkHandler } from '@/init/links'
 import { useConfig } from '@/composables/useConfig'
+import { useAp } from '@/composables/useAp'
 
 // 初始化应用
 initApp()
@@ -31,6 +32,10 @@ async function startApp() {
     } else {
       document.title = '个人主页'
     }
+
+    // 初始化 AP
+    const { initAp } = useAp()
+    initAp()
 
     console.log('main.js 初始化完成，等待useLoading管理')
 

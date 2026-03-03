@@ -3,29 +3,15 @@ import { Modal } from '@arco-design/web-vue'
 import { h, ref, computed } from 'vue'
 
 import { useConfig } from '@/composables/useConfig'
+import { useAp } from '@/composables/useAp'
+
 const { configs } = useConfig()
+const { ap, maxAp } = useAp()
 
 const emit = defineEmits(['switch'])
 const props = defineProps(['l2dOnly', 'canskip'])
 
 const currentConfig = computed(() => configs.value)
-const max_ap = computed(() => {
-  if (!currentConfig.value || !currentConfig.value.level) return 60
-  return 60 + currentConfig.value.level * 2
-})
-const ap = ref(
-  max_ap.value -
-    Math.trunc(
-      max_ap.value *
-        ((new Date().getTime() -
-          new Date(
-            `${new Date().getFullYear()}-${
-              new Date().getMonth() + 1
-            }-${new Date().getDate()} 00:00:00`
-          )) /
-          86400000)
-    )
-)
 const img = ref('/img/max.png')
 const showMin = ref(false)
 const hover = ref(window.matchMedia('(hover: none)').matches)
@@ -100,9 +86,16 @@ window.matchMedia('(hover: none)').addListener((e) => {
   hover.value = e.matches
 })
 
-setInterval(() => {
-  ap.value++
-}, 60000)
+// Gold 和 Pyroxene 从配置读取
+const gold = computed(() => {
+  if (!currentConfig.value || currentConfig.value.gold === undefined) return 0
+  return currentConfig.value.gold
+})
+
+const pyroxene = computed(() => {
+  if (!currentConfig.value || currentConfig.value.pyroxene === undefined) return 0
+  return currentConfig.value.pyroxene
+})
 </script>
 
 <template>
@@ -112,21 +105,21 @@ setInterval(() => {
       :class="{ 'toolbox-l2d': props.l2dOnly }"
     >
       <img src="/img/ap.png" alt="" />
-      <span>{{ ap + '/' + max_ap }}</span>
+      <span>{{ ap + '/' + maxAp }}</span>
     </div>
     <div
       class="toolbox"
       :class="{ 'toolbox-l2d': props.l2dOnly }"
     >
       <img src="/img/gold.png" alt="" />
-      <span>11,451,419</span>
+      <span>{{ gold.toLocaleString() }}</span>
     </div>
     <div
       class="toolbox"
       :class="{ 'toolbox-l2d': props.l2dOnly }"
     >
       <img src="/img/pyroxene.png" alt="" />
-      <span>24,000</span>
+      <span>{{ pyroxene.toLocaleString() }}</span>
     </div>
     <a
       class="about toolbox"
