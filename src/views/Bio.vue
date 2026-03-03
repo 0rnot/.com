@@ -45,6 +45,41 @@ onUnmounted(() => {
 const strokeWidth = computed(() => {
   return Math.max(4, Math.round(windowWidth.value * 0.0025))
 })
+
+// Carousel 指示器状态
+const currentSlide = ref(0)
+const carouselWrapper = ref(null)
+
+const updateCurrentSlide = () => {
+  if (!carouselWrapper.value) return
+  const scrollLeft = carouselWrapper.value.scrollLeft
+  const slideWidth = carouselWrapper.value.clientWidth
+  currentSlide.value = Math.round(scrollLeft / slideWidth)
+}
+
+const goToSlide = (index) => {
+  if (!carouselWrapper.value) return
+  const slideWidth = carouselWrapper.value.clientWidth
+  carouselWrapper.value.scrollTo({
+    left: slideWidth * index,
+    behavior: 'smooth'
+  })
+}
+
+onMounted(() => {
+  window.addEventListener('resize', updateWidth)
+  // 监听 carousel 滚动
+  if (carouselWrapper.value) {
+    carouselWrapper.value.addEventListener('scroll', updateCurrentSlide)
+  }
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateWidth)
+  if (carouselWrapper.value) {
+    carouselWrapper.value.removeEventListener('scroll', updateCurrentSlide)
+  }
+})
 </script>
 
 <template>
@@ -55,46 +90,74 @@ const strokeWidth = computed(() => {
     <div class="bio-background"></div>
     <!-- 主容器 -->
     <div class="bio-container">
-      <div id="left">
-        <Live2D />
-        <div class="level-box">
-          <div class="container">
-            <div class="level">
-              <span>Lv.</span>
-              <p>{{ level }}</p>
-            </div>
-            <div class="right">
-              <span class="name">{{ author }}</span>
-              <div>
-                <a-progress
-                  :percent="exp / nextExp"
-                  :show-text="false"
-                  :color="exp >= nextExp ? '#ffe433' : '#89d5fd'"
-                  :stroke-width="strokeWidth"
-                  trackColor="#535E67"
-                >
-                </a-progress>
-                <p :style="{ color: exp >= nextExp ? '#ffe433' : '#66E0FE' }">
-                  {{ exp >= nextExp ? 'MAX' : exp + '/' + nextExp }}
-                </p>
+      <!-- Carousel 指示器 (移动端: 圆点, 电脑端: 箭头) -->
+      <div class="carousel-dots">
+        <div class="dot" :class="{ active: currentSlide === 0 }" @click="goToSlide(0)"></div>
+        <div class="dot" :class="{ active: currentSlide === 1 }" @click="goToSlide(1)"></div>
+      </div>
+
+      <!-- 电脑端箭头导航 -->
+      <div class="carousel-arrows">
+        <img
+          src="/l2d/arrow.png"
+          class="arrow arrow-left css-cursor-hover-enabled"
+          :class="{ disabled: currentSlide === 0 }"
+          @click="goToSlide(0)"
+          alt="上一页"
+        />
+        <img
+          src="/l2d/arrow.png"
+          class="arrow arrow-right css-cursor-hover-enabled"
+          :class="{ disabled: currentSlide === 1 }"
+          @click="goToSlide(1)"
+          alt="下一页"
+        />
+      </div>
+
+      <div ref="carouselWrapper" class="carousel-wrapper">
+        <div class="carousel-track">
+          <div class="carousel-slide" id="left">
+            <Live2D />
+            <div class="level-box">
+              <div class="container">
+                <div class="level">
+                  <span>Lv.</span>
+                  <p>{{ level }}</p>
+                </div>
+                <div class="right">
+                  <span class="name">{{ author }}</span>
+                  <div>
+                    <a-progress
+                      :percent="exp / nextExp"
+                      :show-text="false"
+                      :color="exp >= nextExp ? '#ffe433' : '#89d5fd'"
+                      :stroke-width="strokeWidth"
+                      trackColor="#535E67"
+                    >
+                    </a-progress>
+                    <p :style="{ color: exp >= nextExp ? '#ffe433' : '#66E0FE' }">
+                      {{ exp >= nextExp ? 'MAX' : exp + '/' + nextExp }}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div id="right">
-        <div class="intro-title">
-          <div class="title">自我介绍</div>
-        </div>
-        <div class="intro-content">
-          <p>
-            点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本
-          </p>
-        </div>
-        <div class="btn-container">
-          <a-button class="btn" type="primary">关于我</a-button>
-          <a-button class="btn">关于我</a-button>
-          <a-button class="btn" type="primary">关于我</a-button>
+          <div class="carousel-slide" id="right">
+            <div class="intro-title">
+              <div class="title">自我介绍</div>
+            </div>
+            <div class="intro-content">
+              <p>
+                点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本
+              </p>
+            </div>
+            <div class="btn-container">
+              <a-button class="btn" type="primary">关于我</a-button>
+              <a-button class="btn">关于我</a-button>
+              <a-button class="btn" type="primary">关于我</a-button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -124,9 +187,108 @@ const strokeWidth = computed(() => {
 
 .bio-container {
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - clamp(120px, 7.5vw, 100vw));
   display: flex;
   padding-top: clamp(60px, 3.75vw, 100vw);
+}
+
+/* Carousel 结构 */
+.carousel-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-slide {
+  flex: 1;
+  min-width: 50%;
+  height: 100%;
+}
+
+/* Carousel 指示器 */
+.carousel-dots {
+  display: none;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  gap: 10px;
+}
+
+.carousel-dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.carousel-dots .dot.active {
+  background: #fff;
+}
+
+/* 电脑端箭头导航 */
+.carousel-arrows {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 10;
+  justify-content: space-between;
+  padding: 0 20px;
+  pointer-events: none;
+}
+
+.carousel-arrows .arrow {
+  width: clamp(32px, 2vw, 100vw);
+  height: auto;
+  pointer-events: auto;
+  transition: opacity 0.3s;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  animation: moveReverse 2s ease-in-out infinite;
+}
+
+.carousel-arrows .arrow-left {
+  animation: move 2s ease-in-out infinite;
+}
+
+.carousel-arrows .arrow.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+@keyframes move {
+  0% {
+    transform: translateX(clamp(-10px, -0.625vw, 100vw));
+  }
+  50% {
+    transform: translateX(clamp(10px, 0.625vw, 100vw));
+  }
+  100% {
+    transform: translateX(clamp(-10px, -0.625vw, 100vw));
+  }
+}
+
+@keyframes moveReverse {
+  0% {
+    transform: rotate(180deg) translateX(clamp(-10px, -0.625vw, 100vw));
+  }
+  50% {
+    transform: rotate(180deg) translateX(clamp(10px, 0.625vw, 100vw));
+  }
+  100% {
+    transform: rotate(180deg) translateX(clamp(-10px, -0.625vw, 100vw));
+  }
 }
 
 .bio-container #left,
@@ -259,6 +421,58 @@ const strokeWidth = computed(() => {
 }
 
 @media screen and (max-width: 768px) {
+  .carousel-arrows {
+    display: flex;
+  }
+  .bio-container {
+    flex-direction: column;
+    position: relative;
+  }
 
+  .carousel-dots {
+    display: flex;
+  }
+
+  .carousel-wrapper {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .carousel-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel-track {
+    width: 200%;
+  }
+
+  .carousel-slide {
+    min-width: 50%;
+    scroll-snap-align: start;
+  }
+
+  /* 调整左侧内容 */
+  #left {
+    justify-content: end;
+  }
+
+  .level-box {
+    width: 80%;
+    position: relative;
+  }
+
+  /* 调整右侧内容 */
+  #right {
+    justify-content: space-between;
+  }
+
+  #right .btn-container {
+    width: 80%;
+    position: relative;
+    margin-top: auto;
+  }
 }
 </style>

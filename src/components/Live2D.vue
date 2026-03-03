@@ -117,7 +117,7 @@ onMounted(async () => {
 <style scoped>
 .live2d-container {
   width: max-content;
-  height: 100%;
+  height: 100vh;
   position: absolute;
   justify-content: center;
   display: flex;
