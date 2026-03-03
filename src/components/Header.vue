@@ -187,4 +187,10 @@ const goBack = () => {
     display: none;
   }
 }
+
+@media screen and (max-width: 425px) {
+  .home {
+    display: none;
+  }
+}
 </style>
