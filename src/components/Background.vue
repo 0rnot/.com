@@ -480,13 +480,23 @@ const stopAllVoiceAndCleanup = () => {
   }
 }
 
+// 标记是否是首次加载
+let isFirstLoad = true
+
 // 组件重新激活时的处理
 onActivated(() => {
   // 重新添加canvas到DOM
   addCanvasToBackground()
-  // 如果动画被销毁了，重新加载并跳过初始动画
+  // 如果动画被销毁了，重新加载
   if (!animation && currentConfig.value?.memorialLobbies) {
-    loadL2DSkipIdle(id)
+    if (isFirstLoad) {
+      // 首次加载，播放初始动画
+      setL2D(id)
+      isFirstLoad = false
+    } else {
+      // 路由返回，跳过初始动画
+      loadL2DSkipIdle(id)
+    }
   }
   // 重置 talking 状态
   talking = false
