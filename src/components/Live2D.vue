@@ -94,18 +94,18 @@ onMounted(async () => {
         spine.state.setAnimation(0, 'Idle_01', true)
       }
     })
-
-    // 清理函数
-    onUnmounted(() => {
-      if (spine) {
-        spine.destroy()
-      }
-      if (app) {
-        app.destroy(true, { children: true, texture: true, baseTexture: true })
-      }
-    })
   } catch (error) {
     console.error('Live2D 加载失败:', error)
+  }
+})
+
+// 清理函数 - 放在 setup 顶层
+onUnmounted(() => {
+  if (spine) {
+    spine.destroy()
+  }
+  if (app) {
+    app.destroy(true, { children: true, texture: true, baseTexture: true })
   }
 })
 </script>
