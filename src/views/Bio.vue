@@ -154,7 +154,6 @@ onUnmounted(() => {
             </div>
             <div class="btn-container">
               <a-button class="btn" type="primary">关于我</a-button>
-              <a-button class="btn">关于我</a-button>
               <a-button class="btn" type="primary">关于我</a-button>
             </div>
           </div>
@@ -390,6 +389,18 @@ onUnmounted(() => {
   border-radius: clamp(8px, 0.5vw, 100vw);
 }
 
+.intro-title::after {
+  content: '';
+  width: 80%;
+  height: 100%;
+  background: #0003;
+  position: absolute;
+  transform: skew(50deg);
+  border-radius: clamp(8px, 0.5vw, 100vw);
+  z-index: -1;
+  transition: all 0.3s;
+}
+
 .intro-title .title {
   font-size: clamp(32px, 2.0625vw, 100vw);
   transform: skewX(10deg);
@@ -410,6 +421,7 @@ onUnmounted(() => {
 #right .intro-content p {
   height: 101%;
   overflow-y: auto;
+  font-size: clamp(24px, 1.5vw, 100vw);
 }
 
 #right .intro-content p::-webkit-scrollbar {
@@ -430,6 +442,7 @@ onUnmounted(() => {
   width: 100%;
   padding: clamp(30px, 1.875vw, 100vw) 0 !important;
   font-size: clamp(24px, 1.5vw, 100vw) !important;
+  border-radius: clamp(8px, 0.5vw, 100vw) !important;
 }
 
 @media screen and (max-width: 768px) {
