@@ -415,6 +415,7 @@ onUnmounted(() => {
 .right p {
   font-size: clamp(20px, 1.25vw, 100vw);
   font-weight: 600;
+  color: #003153;
 }
 
 #right {
