@@ -102,7 +102,7 @@ translate:
   bioContent:
     - Here is yuzifu, nice to meet you :)!
     - <br/>
-    - So far:
+    - 'So far:'
     - · Proficient in Python, HTML/CSS/JS, Node.js, Vue3, React, etc
     - · Learning Rust for Tauri development
     - · Learning CTF related knowledge

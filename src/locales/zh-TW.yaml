@@ -101,7 +101,7 @@ translate:
   bioContent:
     - 這裡是小魚yuzifu，很高興你能看到這個網站>_<！
     - <br/>
-    - 目前為止：
+    - '目前為止:'
     - · 稍微擅長一點 Python、HTML/CSS/JS、Node.js、Vue3、React 等前端技術
     - · 正在學習Rust來推進Tauri的學習
     - · 正在學習CTF相關知識
