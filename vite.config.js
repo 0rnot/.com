@@ -35,7 +35,7 @@ export default defineConfig({
     vueJsx(),
     Font.vite({
       css: {
-        fontFamily: 'BlueakaBeta2GBK'
+        fontFamily: 'Resource Han Rounded CN'
       }
     }),
     createHtmlPlugin({

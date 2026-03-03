@@ -139,7 +139,7 @@ const skip = () => {
   justify-content: center;
   color: #fff;
   font-size: clamp(26px, 1.625vw, 100vw);
-  font-weight: 800;
+  font-weight: bold;
 }
 
 .task:active {

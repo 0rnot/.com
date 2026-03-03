@@ -1,5 +1,5 @@
-import { css as font1 } from '@/assets/font/BlueakaBeta2GBK-DemiBold.ttf'
-import { css as font2 } from '@/assets/font/BlueakaBeta2GBK-Bold.ttf'
+import { css as font1 } from '@/assets/font/ResourceHanRoundedCN-Medium.ttf'
+import { css as font2 } from '@/assets/font/ResourceHanRoundedCN-Bold.ttf'
 
 export function loadFonts() {
   try {

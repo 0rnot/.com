@@ -43,6 +43,7 @@
 - [cn-font-split](https://github.com/KonghaYao/cn-font-split)
 - [APlayer](https://aplayer.js.org/#/)
 - [howler.js](https://github.com/goldfire/howler.js)
+- [Resource Han Rounded CN](https://github.com/CyanoHao/Resource-Han-Rounded)
 
 ## 部署方式
 

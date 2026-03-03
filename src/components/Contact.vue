@@ -68,7 +68,7 @@ const IconFont = computed(() => {
   margin: clamp(5px, 0.3125vw, 100vw) 0 0;
   font-size: clamp(20px, 1.25vw, 100vw);
   color: #003153;
-  font-weight: 800;
+  font-weight: bold;
   position: relative;
 }
 

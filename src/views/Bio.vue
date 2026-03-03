@@ -387,20 +387,20 @@ onUnmounted(() => {
 .container .level p {
   color: #fff;
   font-size: clamp(42px, 2.625vw, 100vw);
-  font-weight: 600;
+  font-weight: medium;
   transform: skewX(-10deg);
 }
 
 .container .name {
   color: #fff;
   font-size: clamp(24px, 1.5vw, 100vw);
-  font-weight: 600;
+  font-weight: medium;
 }
 
 .container .level span {
   color: #ffe433;
   font-size: clamp(24px, 1.5vw, 100vw);
-  font-weight: 600;
+  font-weight: medium;
   transform: skewX(-10deg);
 }
 
@@ -416,7 +416,7 @@ onUnmounted(() => {
 
 .right p {
   font-size: clamp(20px, 1.25vw, 100vw);
-  font-weight: 600;
+  font-weight: medium;
   color: #003153;
 }
 
