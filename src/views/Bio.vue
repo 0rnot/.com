@@ -33,6 +33,15 @@ const translate = computed(() => {
   return currentConfig.value?.translate || {}
 })
 
+// bio 配置
+const bioConfig = computed(() => {
+  return currentConfig.value?.bio || {}
+})
+
+const bioButtons = computed(() => {
+  return bioConfig.value?.bth || []
+})
+
 const windowWidth = ref(window.innerWidth)
 
 const updateWidth = () => {
@@ -156,8 +165,14 @@ onUnmounted(() => {
               <p>{{ translate.bioContent || '' }}</p>
             </div>
             <div class="btn-container">
-              <a-button class="btn" type="primary">{{ translate.bioBtn1 || '' }}</a-button>
-              <a-button class="btn" type="primary">{{ translate.bioBtn2 || '' }}</a-button>
+              <a-button
+                v-for="(btn, index) in bioButtons"
+                :key="index"
+                class="btn"
+                type="primary"
+              >
+                {{ btn.name }}
+              </a-button>
             </div>
           </div>
         </div>

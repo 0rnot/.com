@@ -101,5 +101,8 @@ translate:
   bioContent: 這裡是個人簡介內容，可以在配置文件中自定義。
   prevPage: 上一頁
   nextPage: 下一頁
-  bioBtn1: 蔚藍檔案
-  bioBtn2: 明日方舟
+
+bio:
+  bth:
+    - name: 蔚藍檔案
+    - name: 明日方舟

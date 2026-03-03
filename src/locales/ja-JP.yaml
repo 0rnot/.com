@@ -103,5 +103,8 @@ translate:
   bioContent: こちらは自己紹介の内容です。設定ファイルでカスタマイズできます。
   prevPage: 前へ
   nextPage: 次へ
-  bioBtn1: ブルーアーカイブ
-  bioBtn2: アークナイツ
+
+bio:
+  bth:
+    - name: ブルーアーカイブ
+    - name: アークナイツ
