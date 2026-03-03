@@ -98,3 +98,9 @@ translate:
   update: 先生！サイトが更新されました。最新の内容を見るにはページを更新してください！
   ok: OK
   cancel: キャンセル
+  bioTitle: 自己紹介
+  bioContent: こちらは自己紹介の内容です。設定ファイルでカスタマイズできます。
+  prevPage: 前へ
+  nextPage: 次へ
+  bioBtn1: ブルーアーカイブ
+  bioBtn2: アークナイツ

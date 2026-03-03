@@ -28,6 +28,11 @@ const author = computed(() => {
   return currentConfig.value.author
 })
 
+// i18n 翻译
+const translate = computed(() => {
+  return currentConfig.value?.translate || {}
+})
+
 const windowWidth = ref(window.innerWidth)
 
 const updateWidth = () => {
@@ -103,14 +108,14 @@ onUnmounted(() => {
           class="arrow arrow-left css-cursor-hover-enabled"
           :class="{ disabled: currentSlide === 0 }"
           @click="goToSlide(0)"
-          alt="上一页"
+          :alt="translate.prevPage || ''"
         />
         <img
           src="/l2d/arrow.png"
           class="arrow arrow-right css-cursor-hover-enabled"
           :class="{ disabled: currentSlide === 1 }"
           @click="goToSlide(1)"
-          alt="下一页"
+          :alt="translate.nextPage || ''"
         />
       </div>
 
@@ -145,16 +150,14 @@ onUnmounted(() => {
           </div>
           <div class="carousel-slide" id="right">
             <div class="intro-title">
-              <div class="title">自我介绍</div>
+              <div class="title">{{ translate.bioTitle || '' }}</div>
             </div>
             <div class="intro-content">
-              <p>
-                点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本点击输入文本
-              </p>
+              <p>{{ translate.bioContent || '' }}</p>
             </div>
             <div class="btn-container">
-              <a-button class="btn" type="primary">关于我</a-button>
-              <a-button class="btn" type="primary">关于我</a-button>
+              <a-button class="btn" type="primary">{{ translate.bioBtn1 || '' }}</a-button>
+              <a-button class="btn" type="primary">{{ translate.bioBtn2 || '' }}</a-button>
             </div>
           </div>
         </div>
