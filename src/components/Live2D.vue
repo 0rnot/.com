@@ -117,7 +117,7 @@ onUnmounted(() => {
 <style scoped>
 .live2d-container {
   width: max-content;
-  height: 100vh;
+  height: 100dvh;
   position: absolute;
   justify-content: center;
   display: flex;

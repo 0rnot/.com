@@ -214,7 +214,7 @@ onUnmounted(() => {
 <style scoped>
 .bio-page {
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   position: relative;
   overflow: hidden;
 }
@@ -234,7 +234,7 @@ onUnmounted(() => {
 
 .bio-container {
   width: 100vw;
-  height: calc(100vh - clamp(120px, 7.5vw, 100vw));
+  height: calc(100dvh - clamp(120px, 7.5vw, 100vw));
   display: flex;
   padding-top: clamp(60px, 3.75vw, 100vw);
 }
