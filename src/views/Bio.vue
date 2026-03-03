@@ -398,20 +398,32 @@ onUnmounted(() => {
 #right .intro-content {
   width: 80%;
   margin-top: clamp(20px, 1.25vw, 100vw);
+  margin-bottom: clamp(20px, 1.25vw, 100vw);
+  flex: 0 1 auto;
+  min-height: 0;
   padding: clamp(20px, 1.25vw, 100vw);
   background-color: #fff;
   border-radius: clamp(8px, 0.5vw, 100vw);
   font-size: clamp(20px, 1.25vw, 100vw);
 }
 
+#right .intro-content p {
+  height: 101%;
+  overflow-y: auto;
+}
+
+#right .intro-content p::-webkit-scrollbar {
+  display: none;
+}
+
 #right .btn-container {
-  width: 40%;
+  width: 80%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   direction: rtl;
+  margin-top: auto;
   gap: clamp(10px, 0.625vw, 100vw);
-  position: absolute;
-  bottom: clamp(40px, 2.5vw, 100vw);
+  margin-bottom: clamp(40px, 2.5vw, 100vw);
 }
 
 #right .btn {
