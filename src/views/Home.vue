@@ -9,6 +9,7 @@ import Background from '@/components/Background.vue'
 import MusicBanner from '@/components/MusicBanner.vue'
 import { useResponsive } from '@/composables/useResponsive'
 import { useConfig } from '@/composables/useConfig'
+import ICPBanner from '@/components/ICPBanner.vue'
 
 // 状态管理
 const l2dOnly = ref(true)
@@ -51,6 +52,11 @@ const canSkip = (value) => {
     <!-- 联系方式 -->
     <transition name="left">
       <Contact v-if="!l2dOnly" />
+    </transition>
+
+    <!-- 联系方式 -->
+    <transition name="left">
+      <ICPBanner v-if="!l2dOnly && ifICP" />
     </transition>
 
     <!-- 任务 -->
