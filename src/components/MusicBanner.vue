@@ -15,8 +15,6 @@ const { configs } = useConfig()
 const ifICP = computed(() => configs.value?.ICP || '')
 const songlist = computed(() => configs.value?.banner?.musicID || [])
 
-console.log(ifICP.value)
-
 const checkScreenSize = () => {
   if (ifICP.value) {
     ap.value.setMode('mini')
