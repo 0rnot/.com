@@ -1,13 +1,14 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import Footer from '@/components/Footer.vue'
 import Level from '@/components/Level.vue'
 import Toolbox from '@/components/Toolbox.vue'
 import Contact from '@/components/Contact.vue'
 import Task from '@/components/Task.vue'
 import Background from '@/components/Background.vue'
-import Banner from '@/components/Banner.vue'
+import MusicBanner from '@/components/MusicBanner.vue'
 import { useResponsive } from '@/composables/useResponsive'
+import { useConfig } from '@/composables/useConfig'
 
 // 状态管理
 const l2dOnly = ref(true)
@@ -15,6 +16,9 @@ const canSkipit = ref(true)
 
 // 使用composables
 const { changeDirection } = useResponsive()
+const { configs } = useConfig()
+const ifICP = computed(() => configs.value?.ICP || '')
+const bannerDirection = computed(() => ifICP.value ? 'right' : changeDirection.value)
 
 // 方法
 const switchL2D = () => {
@@ -53,8 +57,8 @@ const canSkip = (value) => {
     <Task :l2dOnly="l2dOnly" />
 
     <!-- 横幅 -->
-    <transition :name="changeDirection">
-      <Banner v-show="!l2dOnly" />
+    <transition :name="bannerDirection">
+      <MusicBanner v-show="!l2dOnly" />
     </transition>
 
     <!-- 页脚 -->

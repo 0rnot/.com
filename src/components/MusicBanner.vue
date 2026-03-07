@@ -12,9 +12,17 @@ const isMiniMode = ref(false)
 
 // 使用i18n配置系统
 const { configs } = useConfig()
+const ifICP = computed(() => configs.value?.ICP || '')
 const songlist = computed(() => configs.value?.banner?.musicID || [])
 
+console.log(ifICP.value)
+
 const checkScreenSize = () => {
+  if (ifICP.value) {
+    ap.value.setMode('mini')
+    return
+  }
+
   isMiniMode.value = window.innerWidth <= 768
 
   if (isMiniMode.value) {
@@ -60,17 +68,17 @@ const fetchSongData = async (songId) => {
     const response = await axios.get(
       `https://www.lihouse.xyz/coco_widget/music_resource/id/${songId}`
     )
-    
+
     // 检查响应数据结构
     console.log('API响应:', response.data)
-    
+
     const data = response.data.song_data || response.data
-    
+
     // 验证数据结构
     if (!data) {
       throw new Error('无效的响应数据')
     }
-    
+
     // 检查必要的字段
     const songInfo = {
       name: data.name || data.song_name || '未知歌曲',
@@ -79,12 +87,12 @@ const fetchSongData = async (songId) => {
       cover: data.pic || data.cover || data.image,
       lrc: data.lyric || data.lrc || '[00:00.000]暂无歌词\n'
     }
-    
+
     // 验证URL字段
     if (!songInfo.url) {
       throw new Error('歌曲URL不存在')
     }
-    
+
     songName.value = songInfo.name
     console.log('歌曲信息:', songInfo)
 
@@ -134,7 +142,7 @@ const addRandomSong = async () => {
     }
   } catch (error) {
     console.error('添加歌曲失败:', error)
-    
+
     // 如果是第一次尝试失败，销毁播放器
     if (songTimes.value === 0) {
       console.log('首次加载失败，销毁播放器')
@@ -142,7 +150,8 @@ const addRandomSong = async () => {
     } else {
       // 如果不是第一次，尝试加载其他歌曲
       console.log('尝试加载其他歌曲')
-      if (songTimes.value < 3) { // 最多尝试3次
+      if (songTimes.value < 3) {
+        // 最多尝试3次
         setTimeout(() => addRandomSong(), 1000)
       }
     }
@@ -151,7 +160,7 @@ const addRandomSong = async () => {
 </script>
 
 <template>
-  <div id="aplayer"></div>
+  <div id="aplayer" :class="{ 'aplayer-mini': ifICP }"></div>
 </template>
 
 <style scoped>
@@ -170,13 +179,24 @@ const addRandomSong = async () => {
   transform: scale(0.95);
 }
 
+#aplayer.aplayer-mini {
+  right: clamp(20px, 1.25vw, 100vw);
+  top: clamp(192px, 12vw, 100vw);
+  left: unset;
+  bottom: unset;
+  width: clamp(120px, 7.5vw, 100vw);
+  aspect-ratio: 1;
+  border-radius: 100%;
+  border: 2px white solid;
+}
+
 @media screen and (max-width: 768px) {
   #aplayer {
-    right: 20px;
-    top: 192px;
+    right: clamp(20px, 1.25vw, 100vw);
+    top: clamp(192px, 12vw, 100vw);
     left: unset;
     bottom: unset;
-    width: 120px;
+    width: clamp(120px, 7.5vw, 100vw);
     aspect-ratio: 1;
     border-radius: 100%;
     border: 2px white solid;
