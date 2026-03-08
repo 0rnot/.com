@@ -129,11 +129,17 @@ const icpTitle = computed(() => configs.value?.icp?.title || '备案信息')
 
 @media screen and (max-width: 600px) {
   #icp-container {
-    /* display: none; */
-    width: 60vw;
+    width: 40vw;
+    aspect-ratio: unset;
   }
 
   .banner {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 495px) {
+  #icp-container {
     display: none;
   }
 }
