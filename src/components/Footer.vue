@@ -210,10 +210,12 @@ setInterval(() => {
 /* ICP 模式下的特殊样式 */
 @media screen and (max-width: 495px) {
   .footer.icp-mode {
-    width: 100% !important;
-    border-radius: 0 !important;
-    bottom: 50px !important;
-    filter: unset !important;
+    width: 100%;
+    border-radius: 0;
+    bottom: 50px;
+    filter: unset;
+    height: 60px;
+    padding-top: 6px;
   }
 }
 </style>
