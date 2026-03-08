@@ -51,17 +51,7 @@ const about = () => {
     content: () => [
       h('p', {}, copyrightContent),
       h('span', {}, currentConfig.value.translate.projectWebsite),
-      h('a', { href: 'https://github.com/sf-yuzifu/homepage', target: '_blank' }, 'Github'),
-      currentConfig.value.ICP
-        ? [
-            h('br', {}, ''),
-            h(
-              'a',
-              { href: 'https://beian.miit.gov.cn/', target: '_blank' },
-              currentConfig.value.ICP
-            )
-          ]
-        : null
+      h('a', { href: 'https://github.com/sf-yuzifu/homepage', target: '_blank' }, 'Github')
     ],
     footer: false
   })
