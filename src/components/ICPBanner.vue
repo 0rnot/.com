@@ -192,14 +192,3 @@ const icpTitle = computed(() => configs.value?.icp?.title || '备案信息')
   }
 }
 </style>
-
-<style>
-@media screen and (max-width: 495px) {
-  .footer {
-    width: 100% !important;
-    border-radius: 0 !important;
-    bottom: 50px !important;
-    filter: unset !important;
-  }
-}
-</style>

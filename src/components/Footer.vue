@@ -5,6 +5,7 @@ import { useConfig } from '@/composables/useConfig'
 const { configs } = useConfig()
 
 const currentConfig = computed(() => configs.value)
+const ifICP = computed(() => configs.value?.ICP || '')
 
 const iconfontUrl = computed(() => {
   if (!currentConfig.value || !currentConfig.value.iconfont) return ''
@@ -34,7 +35,7 @@ setInterval(() => {
 </script>
 
 <template>
-  <div class="footer">
+  <div class="footer" :class="{ 'icp-mode': ifICP }">
     <div class="project-box">
       <a
         v-for="site in dockSites"
@@ -203,6 +204,16 @@ setInterval(() => {
   .footer::after {
     transform: skew(0deg);
     display: none;
+  }
+}
+
+/* ICP 模式下的特殊样式 */
+@media screen and (max-width: 495px) {
+  .footer.icp-mode {
+    width: 100% !important;
+    border-radius: 0 !important;
+    bottom: 50px !important;
+    filter: unset !important;
   }
 }
 </style>
