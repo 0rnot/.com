@@ -140,7 +140,66 @@ const icpTitle = computed(() => configs.value?.icp?.title || '备案信息')
 
 @media screen and (max-width: 495px) {
   #icp-container {
+    display: flex;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    bottom: 0;
+    box-shadow: unset;
+    background: #e8f3ffee;
+    opacity: 1;
+    z-index: 10;
+  }
+
+  .icp-bg {
     display: none;
+  }
+
+  .icp-link::before,
+  .gongan-link::before,
+  .title::before {
+    content: attr(data-text);
+    display: none;
+  }
+
+  .title {
+    display: none;
+  }
+
+  .icp-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  .icp-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    height: 100%;
+  }
+
+  .icp-link,
+  .gongan-link,
+  .title {
+    color: #003153;
+  }
+}
+</style>
+
+<style>
+@media screen and (max-width: 495px) {
+  .footer {
+    width: 100% !important;
+    border-radius: 0 !important;
+    bottom: 50px !important;
+    filter: unset !important;
   }
 }
 </style>

@@ -19,7 +19,16 @@ const canSkipit = ref(true)
 const { changeDirection } = useResponsive()
 const { configs } = useConfig()
 const ifICP = computed(() => configs.value?.ICP || '')
-const bannerDirection = computed(() => ifICP.value ? 'right' : changeDirection.value)
+const bannerDirection = computed(() => (ifICP.value ? 'right' : changeDirection.value))
+const ICPDirection = computed(() => {
+  if (ifICP.value) {
+    if (changeDirection.value == 'left') {
+      return 'left'
+    }
+    return 'down'
+  }
+  return ''
+})
 
 // 方法
 const switchL2D = () => {
@@ -54,8 +63,8 @@ const canSkip = (value) => {
       <Contact v-if="!l2dOnly" />
     </transition>
 
-    <!-- 联系方式 -->
-    <transition name="left">
+    <!-- ICP -->
+    <transition :name="ICPDirection">
       <ICPBanner v-if="!l2dOnly && ifICP" />
     </transition>
 
