@@ -108,6 +108,8 @@ description: A personal homepage in Blue Archive style. # Website description - 
 favicon: /favicon144.png # Website icon path - small icon displayed in browser tab
 author: Yuzifu # Website author name
 keywords: 'Blue Archive, Xiaoyu yuzifu, Personal Homepage' # Website keywords - used for SEO, comma-separated
+ICP: '' # ICP number -  China registration number, empty if not registered or you're not in China
+gongan: '' # Public Security Registration Number - China registration number, empty if not registered or you're not in China
 
 # PWA Configuration - Progressive Web App configuration (https://developer.mozilla.org/en-US/docs/Web/Manifest)
 manifest:
@@ -141,41 +143,13 @@ dock:
   - name: Fish Archive Project
     href: 'https://gitee.com/sf-yuzifu/eat-fish-together'
     imgSrc: /img/fish.png
-  # Project 2
-  - name: BCM Converter Project
-    href: 'https://gitee.com/sf-yuzifu/bcm_convertor'
-    imgSrc: /img/convertor.png
-  # Project 3
-  - name: Waddle Project
-    href: 'https://waddle.cocotais.cn/'
-    imgSrc: /img/waddle2.png
-  # Project 4
-  - name: PICKDUCK Project
-    href: 'https://shequ.pgaot.com/'
-    imgSrc: /img/pickduck.png
-  # Project 5
-  - name: Boxy Project
-    href: 'https://boxy.cocotais.cn/'
-    imgSrc: /img/boxy.png
 
 # Left contact information area (recommended 4)
 contact:
   # Contact 1
-  - name: QQ Contact
-    href: 'https://wpa.qq.com/msgrd?v=3&uin=2512902451&site=qq&menu=yes&jumpflag=1'
-    iconfont: icon-qq
-  # Contact 2
-  - name: Gitee Profile
-    href: 'https://gitee.com/sf-yuzifu'
-    iconfont: icon-gitee
-  # Contact 3
   - name: Github Profile
     href: 'https://github.com/sf-yuzifu'
     iconfont: icon-github
-  # Contact 4
-  - name: BiliBili Channel
-    href: 'https://space.bilibili.com/447666445'
-    iconfont: icon-bilibili
 
 # Task button configuration - task button at the bottom left of the page
 task:
@@ -189,22 +163,6 @@ banner:
   # NetEase Cloud Music song ID list - used for random playback
   musicID:
     - 2059151619
-    - 2098476758
-    - 2630220461
-    - 2630217054
-    - 2630217057
-    - 2099308172
-    - 2098477269
-    - 2098478097
-    - 2098478355
-    - 2098473565
-    - 2098473572
-    - 2008994667
-    - 1840401436
-    - 2029212574
-    - 2612747239
-    - 2140425047
-    - 1832392174
 
 # Live2D Character Configuration
 memorialLobbies:
@@ -226,25 +184,6 @@ memorialLobbies:
       y: -1/16
       # Dialogue box position (left/right)
       position: right
-
-  # Character 2 - Hina
-  - name: Hina_swimsuit
-    # Live2D model file path
-    path: '/l2d/hina_swimsuit/'
-    # Skeleton animation file
-    skel: 'CH0063_home.skel'
-    # Texture atlas file
-    atlas: 'CH0063_home.atlas'
-    # Character horizontal position offset on screen (between 0-1)
-    offset: 0.68
-    # Dialogue box display position configuration
-    dialogueDisplay:
-      # X coordinate position (can be a fraction)
-      x: 1/4 + 1/8
-      # Y coordinate position (can be a fraction)
-      y: -1/8
-      # Dialogue box position (left/right)
-      position: left
 
 # Bio page configuration
 bio:
