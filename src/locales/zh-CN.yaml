@@ -43,6 +43,10 @@ contact:
 task:
   name: 个人博客
 
+# ICP备案信息标题
+icp:
+  title: 备案信息
+
 # 纪念大厅角色显示名称翻译
 memorialLobbies:
   - name: Aris(Battle)

@@ -43,6 +43,10 @@ contact:
 task:
   name: 個人博客
 
+# ICP備案信息標題
+icp:
+  title: 備案信息
+
 # 紀念大廳角色顯示名稱翻譯
 memorialLobbies:
   - name: Aris

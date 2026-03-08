@@ -6,18 +6,37 @@ import { useConfig } from '@/composables/useConfig'
 const { configs } = useConfig()
 const ifICP = computed(() => configs.value?.ICP || '')
 const ifGongan = computed(() => configs.value?.gongan || '')
+const icpTitle = computed(() => configs.value?.icp?.title || '备案信息')
 </script>
 
 <template>
   <div id="icp-container">
-    <img class="banner" src="/img/banner.png" alt="banner">
+    <img class="icp-bg" src="/img/bannerBG.png" alt="icp-bg" />
+    <img class="banner" src="/img/banner.png" alt="banner" />
     <div v-if="ifICP || ifGongan" class="icp-content">
-      <a v-if="ifICP" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="icp-link" :data-text="ifICP">
-        {{ ifICP }}
-      </a>
-      <a v-if="ifGongan" href="https://beian.mps.gov.cn/" target="_blank" rel="noopener noreferrer" class="gongan-link" :data-text="ifGongan">
-        {{ ifGongan }}
-      </a>
+      <span class="title" :data-text="icpTitle">{{ icpTitle }}</span>
+      <div class="icp-links">
+        <a
+          v-if="ifICP"
+          href="https://beian.miit.gov.cn/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="icp-link"
+          :data-text="ifICP"
+        >
+          {{ ifICP }}
+        </a>
+        <a
+          v-if="ifGongan"
+          href="https://beian.mps.gov.cn/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="gongan-link"
+          :data-text="ifGongan"
+        >
+          {{ ifGongan }}
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -32,15 +51,24 @@ const ifGongan = computed(() => configs.value?.gongan || '')
   opacity: 0.9;
   z-index: 2;
   transition: transform 0.3s;
-  background-size: contain;
-  background: #f0f0f0 var(--deco1) no-repeat right !important;
+  background-size: cover;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 0 clamp(2px, 0.125vw, 100vw) clamp(2px, 0.125vw, 100vw) rgb(0, 0, 0, 0.5);
 }
 
 #icp-container:active {
   transform: scale(0.95);
+}
+
+.icp-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .icp-content {
@@ -48,8 +76,9 @@ const ifGongan = computed(() => configs.value?.gongan || '')
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  padding: clamp(6px, 0.375vw, 100vw);
-  height: calc(100% - clamp(12px, 0.75vw, 100vw));
+  padding: clamp(4px, 0.25vw, 100vw) clamp(8px, 0.5vw, 100vw);
+  height: calc(100% - clamp(8px, 0.5vw, 100vw));
+  z-index: 2;
 }
 
 .banner {
@@ -61,8 +90,9 @@ const ifGongan = computed(() => configs.value?.gongan || '')
 }
 
 .icp-link,
-.gongan-link {
-  color: #FFF;
+.gongan-link,
+.title {
+  color: #fff;
   text-decoration: none;
   font-size: clamp(18px, 1.125vw, 100vw);
   display: flex;
@@ -71,13 +101,24 @@ const ifGongan = computed(() => configs.value?.gongan || '')
   font-weight: bold;
 }
 
+.icp-links {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 0.25vw, 100vw);
+}
+
+.title {
+  font-size: clamp(22px, 1.375vw, 100vw);
+}
+
 .icp-link::before,
-.gongan-link::before {
+.gongan-link::before,
+.title::before {
   content: attr(data-text);
   position: absolute;
   color: transparent;
   font-weight: bold;
-  -webkit-text-stroke: clamp(4px, 0.25vw, 100vw) #00AEEC;
+  -webkit-text-stroke: clamp(4px, 0.25vw, 100vw) #00aeec;
   z-index: -1;
 }
 
@@ -86,8 +127,13 @@ const ifGongan = computed(() => configs.value?.gongan || '')
   color: #0066cc;
 }
 
-@media screen and (max-width: 600px) { 
+@media screen and (max-width: 600px) {
   #icp-container {
+    /* display: none; */
+    width: 60vw;
+  }
+
+  .banner {
     display: none;
   }
 }

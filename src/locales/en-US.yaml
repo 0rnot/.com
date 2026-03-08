@@ -42,6 +42,10 @@ contact:
 task:
   name: Blog
 
+# ICP备案信息标题
+icp:
+  title: ICP Filing Info
+
 # Memorial lobby character display name translations
 memorialLobbies:
   - name: Aris

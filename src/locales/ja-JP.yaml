@@ -43,6 +43,10 @@ contact:
 task:
   name: ブログ
 
+# ICP備案情報タイトル
+icp:
+  title: 備案情報
+
 # 思い出ロビーキャラクター表示名翻訳
 memorialLobbies:
   - name: アリス
