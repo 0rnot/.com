@@ -94,7 +94,7 @@ const icpTitle = computed(() => configs.value?.icp?.title || '备案信息')
 .title {
   color: #fff;
   text-decoration: none;
-  font-size: clamp(18px, 1.125vw, 100vw);
+  font-size: clamp(16px, 1vw, 100vw);
   display: flex;
   align-items: flex-start;
   transition: color 0.3s;
