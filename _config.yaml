@@ -31,7 +31,7 @@ pyroxene: 99999
 
 iconfont: 'https://at.alicdn.com/t/c/font_4336463_umq8x001wf9.js'
 
-# 底部ドック
+# 底部ドック（ユーザーさんのGitHubに合わせた設定）
 dock:
   - name: GitHub 0rnot
     href: 'https://github.com/0rnot'
@@ -103,4 +103,4 @@ bio:
     - name: 0rnot
       path: /img/card/0rnot.png
     - name: PEBIKAC
-      path: /img/card/pebkac.png
+      path: /img/card/pebikac.png
