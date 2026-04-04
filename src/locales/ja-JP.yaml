@@ -2,10 +2,10 @@
 # Japanese Translation File
 
 # ウェブサイトタイトル - ブラウザタブに表示されるタイトル
-title: 0rnot_ブルアカ最高
+title: 0rnot
 
 # ウェブサイト説明 - SEOとソーシャルメディア共有に使用
-description: ブルーアーカイブスタイルの個人ホームページ
+description: ブルアカ最高
 
 # ウェブサイトキーワード - SEOに使用、コンマ区切り
 keywords: 'ブルーアーカイブ, 0rnot, 個人ホームページ'
@@ -19,7 +19,7 @@ manifest:
   short_name: 0rnot Archive
   
   # PWAアプリケーション説明
-  description: ブルーアーカイブスタイルの個人ホームページ
+  description: ブルアカ最高
 
 # ウェブサイト著者表示名
 author: 0rnot
@@ -29,19 +29,14 @@ dock:
   - name: X (Twitter)
   - name: Spotify
   - name: GitHub
-  - name: Waddle
-  - name: Boxy
 
 # 左側連絡先方法エリア - 連絡先方法名翻訳
 contact:
-  - name: GitHub
-  - name: X (Twitter)
-  - name: Blog
-  - name: BiliBili
+
 
 # タスクボタン設定 - タスクボタン表示テキスト翻訳
 task:
-  name: ブログ
+  name: プロフィール
 
 # ICP備案情報タイトル
 icp:
@@ -117,5 +112,5 @@ translate:
 
 bio:
   bth:
-    - name: ブルーアーカイブ
-    - name: phigros
+    - name: 0rnot
+    - name: PE6K4C
