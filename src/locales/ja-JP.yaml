@@ -36,7 +36,7 @@ contact:
 
 # タスクボタン設定 - タスクボタン表示テキスト翻訳
 task:
-  name: プロフィール
+  name: Profile
 
 # ICP備案情報タイトル
 icp:
