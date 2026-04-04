@@ -87,13 +87,18 @@
       }
       /* ▲▲ ここまで ▲▲ */
 
-      /* ▼▼ 【最終兵器】サイト内のありとあらゆる要素のフォントを本家風に強制上書き ▼▼ */
-      * {
+/* ▼▼ 【最終兵器：改】どんな強力な指定も粉砕する、超高優先度のフォント上書き魔法 ▼▼ */
+      html body,
+      html body #app,
+      html body #app *,
+      html body #app div,
+      html body #app span,
+      html body #app p,
+      [class*="arco-"] {
         font-family: 'Noto Sans JP', sans-serif !important;
         font-weight: 700 !important; /* ブルアカUI特有の太字 */
-        text-rendering: optimizeLegibility !important; 
-        -webkit-font-smoothing: auto !important; 
-        -moz-osx-font-smoothing: auto !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
       }
       /* ▲▲ ここまで ▲▲ */
     </style>
