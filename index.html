@@ -1,7 +1,12 @@
 <!doctype html>
-<html lang="zh">
+<html lang="ja">
   <head>
     <meta charset="UTF-8" />
+    
+    <!-- ▼ ダークモードを強制回避し、ライトモードに固定する設定 ▼ -->
+    <meta name="color-scheme" content="light" />
+    <!-- ▲ ここまで ▲ -->
+
     <meta content="yes" name="mobile-web-app-capable" />
     <meta content="yes" name="apple-mobile-web-app-capable" />
     <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style" />
@@ -20,5 +25,19 @@
   <body>
     <div id="app"></div>
     <script src="/src/main.js" type="module"></script>
+
+    <!-- ▼ UIフレームワーク（Arco Design）が勝手にダークモードになるのを防ぐ処理 ▼ -->
+    <script>
+      document.body.removeAttribute('arco-theme');
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.attributeName === 'arco-theme') {
+            document.body.removeAttribute('arco-theme');
+          }
+        });
+      });
+      observer.observe(document.body, { attributes: true });
+    </script>
+    <!-- ▲ ここまで ▲ -->
   </body>
 </html>
