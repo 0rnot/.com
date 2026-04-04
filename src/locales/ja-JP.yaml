@@ -50,6 +50,7 @@ icp:
 # 思い出ロビーキャラクター表示名翻訳
 memorialLobbies:
   - name: アリス
+  - name: ケイ
   - name: ヒナ（水着）
 
 # Aris(Battle)
