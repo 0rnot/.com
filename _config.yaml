@@ -1,215 +1,106 @@
-# 基础配置文件（所有语言通用）
-# Website Basic Configuration
-
-# 网站标题 - 浏览器标签页显示的标题
-title: Fish Archive
-
-# 网站描述 - 用于搜索引擎优化和社交媒体分享
-description: A personal homepage in Blue Archive style.
-
-# 网站图标路径 - 浏览器标签页显示的小图标
+# 基础配置文件（0rnot / PEBIKAC 完全適応版）
+title: 0rnot Archive
+description: Once in a blue moon | Public Servant / Capitalism Hacker
 favicon: /favicon144.png
+author: 0rnot
+keywords: 'Blue Archive, 0rnot, PEBIKAC, Capitalism Hacker, Public Servant, Arch Linux, LLM'
 
-# 网站作者姓名
-author: Yuzifu
-
-# 网站关键词 - 用于搜索引擎优化，逗号分隔
-keywords: 'Blue Archive, 小鱼yuzifu, Personal Homepage'
-
-# ICP备案号 - 中国大陆备案信息，留空表示未备案
 ICP: ''
-# 公安备案号 - 中国大陆网站备案信息，留空表示未备案
 gongan: ''
 
-# PWA配置 - 渐进式Web应用配置
 manifest:
-  # PWA应用完整名称
-  name: Fish Archive
-
-  # PWA应用简短名称 - 用于桌面显示
-  short_name: Fish Archive
-
-  # PWA应用描述
-  description: A personal homepage in Blue Archive style.
-
-  # PWA主题颜色 - 影响浏览器UI颜色
+  name: 0rnot Archive
+  short_name: 0rnot
+  description: Once in a blue moon - Blue Archive style homepage
   theme_color: '#128AFA'
-
-  # PWA启动URL - 应用启动时打开的页面
   start_url: /
-
-  # PWA应用唯一标识符
-  id: Homepage
-
-  # PWA图标配置
+  id: 0rnot
   icons:
-    # 大尺寸图标 - 用于桌面安装
     - src: /favicon512.png
       sizes: 512x512
       purpose: any maskable
-
-    # 小尺寸图标 - 用于移动设备
     - src: /favicon144.png
       sizes: 144x144
 
-# 个人游戏等级信息
-level: 90 # 当前等级
-exp: 8382 # 当前经验值
-nextExp: 8381 # 升级所需经验值
-gold: 11451419 # 信用点数量
-pyroxene: 24000 # 青辉石数量
+# ゲーム風ステータス（好みで調整OK）
+level: 99
+exp: 99999
+nextExp: 100000
+gold: 1145141919
+pyroxene: 99999
 
-# Iconfont字体库地址 - 阿里云图标字体库
 iconfont: 'https://at.alicdn.com/t/c/font_4336463_umq8x001wf9.js'
 
-# 底部项目展示区域 - 显示相关项目链接
+# 底部ドック（あなたのGitHubを中心に）
 dock:
-  # 项目1
-  - name: Bandcomic
-    href: 'https://github.com/sf-yuzifu/bandcomic'
-    imgSrc: /img/bandcomic.png
-
-  # 项目2
-  - name: BCM Converter Project
-    href: 'https://gitee.com/sf-yuzifu/bcm_convertor'
+  - name: GitHub 0rnot
+    href: 'https://github.com/0rnot'
+    imgSrc: /img/fish.png          # ← 後であなたの好きな画像に変更可
+  - name: Metrics
+    href: 'https://github.com/0rnot/0rnot'
     imgSrc: /img/convertor.png
-
-  # 项目3
-  - name: Waddle Project
-    href: 'https://waddle.cocotais.cn/'
+  - name: Snake Grid
+    href: 'https://github.com/0rnot/0rnot'
     imgSrc: /img/waddle2.png
-
-  # 项目4
-  - name: Boxy Project
-    href: 'https://boxy.cocotais.cn/'
-    imgSrc: /img/boxy.png
-
-  # 项目5
-  - name: Fish Archive Project
-    href: 'https://gitee.com/sf-yuzifu/eat-fish-together'
+  - name: 0rnot Main Repo
+    href: 'https://github.com/0rnot'
     imgSrc: /img/fish.png
 
-# 左侧联系方式区域
+# 連絡先（あなたのXとGitHubを追加）
 contact:
-  # 联系方式1
-  - name: BandBBS
-    href: 'https://www.bandbbs.cn/members/969142/'
-    iconfont: icon-bandbbs
-
-  # 联系方式2
-  - name: Gitee
-    href: 'https://gitee.com/sf-yuzifu'
-    iconfont: icon-gitee
-
-  # 联系方式3
-  - name: Github
-    href: 'https://github.com/sf-yuzifu'
+  - name: GitHub
+    href: 'https://github.com/0rnot'
     iconfont: icon-github
+  - name: X (Twitter)
+    href: 'https://x.com/PE6K4C'
+    iconfont: icon-twitter          # iconfontにTwitterアイコンがあれば使用（なければ後で追加）
+  - name: Blog / Memo
+    href: '#'                       # ブログがあればここにURLを入れる
+    iconfont: icon-link
 
-  # 联系方式4
-  - name: BiliBili
-    href: 'https://space.bilibili.com/447666445'
-    iconfont: icon-bilibili
-
-# 任务按钮配置 - 页面左下角的任务按钮
+# 左下タスクボタン
 task:
-  # 任务按钮显示文本
-  name: Blog Link
-  # 任务按钮链接地址
-  href: 'https://blog.yzf.moe/'
+  name: 0rnot GitHub
+  href: 'https://github.com/0rnot'
 
-# Banner音乐播放器配置
+# Banner音楽（好みで変更・削除可）
 banner:
-  # 网易云音乐歌曲ID列表 - 用于随机播放
   musicID:
     - 2059151619
     - 2098476758
     - 2630220461
-    - 2630217054
-    - 2630217057
-    - 2099308172
-    - 2098477269
-    - 2098478097
-    - 2098478355
-    - 2098473565
-    - 2098473572
-    - 2008994667
-    - 1840401436
-    - 2029212574
-    - 2612747239
-    - 2140425047
-    - 1832392174
 
-# Live2D角色配置
+# Live2Dメモリーホール（プロジェクトに存在するモデルを優先的に使用）
 memorialLobbies:
-  # 角色1 - Aris(Battle)
   - name: Aris(Battle)
-    # Live2D模型文件路径
-    path: '/l2d/aris_battle/'
-    # 骨骼动画文件
+    path: '/l2d/aris_battle/'       # または /l2d/aris/ に合わせて調整
     skel: 'CH0334_home.skel'
-    # 纹理图集文件
     atlas: 'CH0334_home.atlas'
-    # 角色在屏幕中的水平位置偏移（0-1之间）
     offset: 0.5
-    # 对话框显示位置配置
     dialogueDisplay:
-      # X坐标位置（可以是分数）
       x: -1/4 - 1/16
-      # Y坐标位置（可以是分数）
       y: -1/16
-      # 对话框位置（left/right）
       position: right
 
-  # 角色2 - Kei
-  - name: Kei
-    # Live2D模型文件路径
-    path: '/l2d/kei/'
-    # 骨骼动画文件
-    skel: 'CH0335_home.skel'
-    # 纹理图集文件
-    atlas: 'CH0335_home.atlas'
-    # 角色在屏幕中的水平位置偏移（0-1之间）
-    offset: 0.62
-    # 对话框显示位置配置
+  - name: CH0334_spr
+    path: '/l2d/CH0334_spr/'
+    skel: 'CH0334_spr.skel'
+    atlas: 'CH0334_spr.atlas'
+    offset: 0.55
     dialogueDisplay:
-      # X坐标位置（可以是分数）
       x: 1/4 + 1/8
-      # Y坐标位置（可以是分数）
       y: -1/16
-      # 对话框位置（left/right）
       position: left
 
-  # 角色3 - Hina
-  - name: Hina_swimsuit
-    # Live2D模型文件路径
-    path: '/l2d/hina_swimsuit/'
-    # 骨骼动画文件
-    skel: 'CH0063_home.skel'
-    # 纹理图集文件
-    atlas: 'CH0063_home.atlas'
-    # 角色在屏幕中的水平位置偏移（0-1之间）
-    offset: 0.68
-    # 对话框显示位置配置
-    dialogueDisplay:
-      # X坐标位置（可以是分数）
-      x: 1/4 + 1/8
-      # Y坐标位置（可以是分数）
-      y: -1/8
-      # 对话框位置（left/right）
-      position: left
-
+# Bio（あなたのプロフィール画像をここに入れるのがおすすめ）
 bio:
   student:
     - name: CH0334_spr
-      # Live2D模型文件路径
       path: '/l2d/CH0334_spr/'
-      # 骨骼动画文件
       skel: 'CH0334_spr.skel'
-      # 纹理图集文件
       atlas: 'CH0334_spr.atlas'
   bth:
-  - name: 蔚蓝档案
-    path: /img/card/ba.png
-  - name: 明日方舟
-    path: /img/card/arknight.png
+  - name: 0rnot
+    path: /img/card/0rnot.png       # ← ここにあなたのヘッダー画像やキャラ画像をアップロードして置き換え推奨
+  - name: PEBIKAC
+    path: /img/card/pebikac.png     # あなたのアイコン画像を入れると良い
