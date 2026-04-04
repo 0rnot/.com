@@ -21,8 +21,49 @@
     <meta content="<%- themeColor %>" name="theme-color" />
     <link id="favicon" href="<%- favicon %>" rel="icon" />
     <title><%- title %></title>
+
+    <!-- ▼ ここから追加：スマホ縦画面の時の保護魔法 ▼ -->
+    <style>
+      /* 基本は警告画面を隠しておく（PC・横画面用） */
+      #rotate-please {
+        display: none;
+      }
+      
+      /* 画面幅が768px以下（スマホ等）かつ 縦向き（portrait）の時だけ発動 */
+      @media screen and (max-width: 768px) and (orientation: portrait) {
+        #rotate-please {
+          display: flex;
+          position: fixed;
+          top: 0; left: 0; width: 100vw; height: 100vh;
+          background: #f0f0f0;
+          z-index: 999999; /* 一番手前に表示 */
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          padding: 20px;
+          box-sizing: border-box;
+        }
+        /* 縦画面の時は裏のサイト本体を完全に消去してレイアウト崩れを防ぐ */
+        #app {
+          display: none !important;
+        }
+      }
+    </style>
+    <!-- ▲ ここまで ▲ -->
   </head>
   <body>
+    <!-- ▼ ここから追加：スマホ縦持ちユーザーへの警告メッセージ ▼ -->
+    <div id="rotate-please">
+      <div style="font-size: 60px; margin-bottom: 20px;">📱🔄</div>
+      <h2 style="color: #128AFA; margin-bottom: 15px;">先生、端末を横向きにしてください！</h2>
+      <p style="color: #666; font-weight: bold; line-height: 1.5; font-size: 16px;">
+        このシステムは横画面での閲覧に最適化されています。<br>
+        スマホの「画面の縦向きロック」を解除して<br>端末を横に持ち替えてください。
+      </p>
+    </div>
+    <!-- ▲ ここまで ▲ -->
+
     <div id="app"></div>
     <script src="/src/main.js" type="module"></script>
 
