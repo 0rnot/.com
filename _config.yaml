@@ -73,8 +73,9 @@ banner:
     - 2098476758
     - 2630220461
 
-# Live2Dメモリーホール
+# Live2Dメモリーホール（アリス、ケイ、水着ヒナの3人を登録）
 memorialLobbies:
+  # [0] アリス
   - name: Aris(Battle)
     path: '/l2d/aris_battle/'
     skel: 'CH0334_home.skel'
@@ -85,15 +86,27 @@ memorialLobbies:
       y: -1/16
       position: right
 
-  - name: CH0334_spr
-    path: '/l2d/CH0334_spr/'
-    skel: 'CH0334_spr.skel'
-    atlas: 'CH0334_spr.atlas'
-    offset: 0.55
+  # [1] ケイ
+  - name: Kei
+    path: '/l2d/CH0335/'
+    skel: 'CH0335_home.skel'
+    atlas: 'CH0335_home.atlas'
+    offset: 0.5
     dialogueDisplay:
       x: 1/4 + 1/8
       y: -1/16
       position: left
+
+  # [2] ヒナ（水着）
+  - name: Hina(Swimsuit)
+    path: '/l2d/CH0063/'
+    skel: 'CH0063_home.skel'
+    atlas: 'CH0063_home.atlas'
+    offset: 0.5
+    dialogueDisplay:
+      x: -1/4
+      y: -1/16
+      position: right
 
 # Bio
 bio:
