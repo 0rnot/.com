@@ -25,7 +25,7 @@
     <meta name="viewport" content="width=1280, user-scalable=no" />
     <!-- ▲ ここまで ▲ -->
 
-    <!-- ▼ スマホ縦画面の時の保護魔法 ▼ -->
+    <!-- ▼ スマホ縦画面の時の保護魔法 ＆ 吹き出し消去魔法 ▼ -->
     <style>
       /* 基本は警告画面を隠しておく */
       #rotate-please {
@@ -52,6 +52,19 @@
           display: none !important;
         }
       }
+
+      /* ▼▼ 全画面共通・吹き出し完全消去のグローバル魔法 ▼▼ */
+      [class*="dialogue"], 
+      [class*="Dialogue"], 
+      [class*="talk"], 
+      [class*="Talk"],
+      [class*="bubble"] {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        color: transparent !important;
+      }
+      /* ▲▲ ここまで ▲▲ */
     </style>
     <!-- ▲ ここまで ▲ -->
   </head>
