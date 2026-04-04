@@ -86,27 +86,16 @@
         display: none !important;
       }
       /* ▲▲ ここまで ▲▲ */
-    
-    body,
-      div[class*="bio"], 
-      div[class*="Bio"], 
-      div[class*="text"],
-      div[class*="Text"],
-      div[class*="content"],
-      div[class*="desc"],
-      p {
+
+      /* ▼▼ 【最終兵器】サイト内のありとあらゆる要素のフォントを本家風に強制上書き ▼▼ */
+      * {
         font-family: 'Noto Sans JP', sans-serif !important;
         font-weight: 700 !important; /* ブルアカUI特有の太字 */
-
-        /* ▼ ここから下を修正・追加 ▼ */
-        /* 文字の可読性と綺麗さを最優先にする */
         text-rendering: optimizeLegibility !important; 
-        
-        /* 不要なかすれ処理（smoothing）を排除 */
         -webkit-font-smoothing: auto !important; 
         -moz-osx-font-smoothing: auto !important;
-        /* ▲ ここまで ▲ */
       }
+      /* ▲▲ ここまで ▲▲ */
     </style>
     <!-- ▲ ここまで ▲ -->
   </head>
