@@ -53,16 +53,26 @@
         }
       }
 
-      /* ▼▼ 全画面共通・吹き出し完全消去のグローバル魔法 ▼▼ */
+      /* ▼▼ 全画面共通・吹き出し＆しっぽ完全消去のグローバル魔法 ▼▼ */
       [class*="dialogue"], 
       [class*="Dialogue"], 
       [class*="talk"], 
       [class*="Talk"],
-      [class*="bubble"] {
+      [class*="bubble"],
+      [class*="dialogue"]::before,
+      [class*="dialogue"]::after,
+      [class*="Dialogue"]::before,
+      [class*="Dialogue"]::after,
+      [class*="arrow"],
+      [class*="Arrow"],
+      [class*="tail"],
+      [class*="triangle"] {
         opacity: 0 !important;
         visibility: hidden !important;
         pointer-events: none !important;
         color: transparent !important;
+        background: transparent !important;
+        border: none !important;
       }
       /* ▲▲ ここまで ▲▲ */
     </style>
