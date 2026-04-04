@@ -82,7 +82,7 @@ memorialLobbies:
 
   # [1] ケイ
   - name: Kei
-    path: '/l2d/CH0335/'
+    path: '/l2d/kei/'
     skel: 'CH0335_home.skel'
     atlas: 'CH0335_home.atlas'
     offset: 0.5
@@ -93,7 +93,7 @@ memorialLobbies:
 
   # [2] ヒナ（水着）
   - name: Hina(Swimsuit)
-    path: '/l2d/CH0063/'
+    path: '/l2d/hina_swimsuit/'
     skel: 'CH0063_home.skel'
     atlas: 'CH0063_home.atlas'
     offset: 0.5
