@@ -2,13 +2,13 @@
 # Japanese Translation File
 
 # ウェブサイトタイトル - ブラウザタブに表示されるタイトル
-title: フィッシュアーカイブ
+title: 0rnot_ブルアカ最高
 
 # ウェブサイト説明 - SEOとソーシャルメディア共有に使用
 description: ブルーアーカイブスタイルの個人ホームページ
 
 # ウェブサイトキーワード - SEOに使用、コンマ区切り
-keywords: 'ブルーアーカイブ, ゆづふ, 個人ホームページ'
+keywords: 'ブルーアーカイブ, 0rnot, 個人ホームページ'
 
 # PWAアプリケーション名設定
 manifest:
@@ -22,7 +22,7 @@ manifest:
   description: ブルーアーカイブスタイルの個人ホームページ
 
 # ウェブサイト著者表示名
-author: ゆづふ
+author: 0rnot
 
 # 底部プロジェクト表示エリア - プロジェクト名翻訳
 dock:
@@ -56,12 +56,12 @@ memorialLobbies:
 # Aris(Battle)
 memorialLobbies[0]:
   voice:
-    CH0334_MemorialLobby_1_1: えへへ。先生、惊きましたか？
-    CH0334_MemorialLobby_1_2: 先生と一绪に、この夜空を见たくて……呼んだんです。
+    CH0334_MemorialLobby_1_1: えへへ。先生、驚きましたか？
+    CH0334_MemorialLobby_1_2: 先生と一绪に、この夜空を見たくて……呼んだんです。
     CH0334_MemorialLobby_2_1: とても……绮丽ですね。
     CH0334_MemorialLobby_2_2: アリスの世界にも、まだ行ったことのない世界にも……きっとこんな绮丽なものがたくさんあると思うんです。
-    CH0334_MemorialLobby_3_1: でも……不思议です。
-    CH0334_MemorialLobby_3_2: 世界って、こんなに绮丽なのに……どうして人は争うんでしょう？
+    CH0334_MemorialLobby_3_1: でも……不思議です。
+    CH0334_MemorialLobby_3_2: 世界って、こんなにきれいなのに……どうして人は争うんでしょう？
     CH0334_MemorialLobby_4: あの星空みたいに、この世界は、みんなで分け合っても大丈夫なくらい美しいものであふれているのに……。
     CH0334_MemorialLobby_5: ……やっぱり、アリスにはまだわかりません。
 
@@ -105,13 +105,13 @@ translate:
   bio: 自己紹介
   bioTitle: 自己紹介
   bioContent:
-    - ゆづふです、よろしくお願いします >_<！
+    - 0rnotです、ブルアカを完全再現してみました。
     - <br/>
-    - '今まで:'
-    - · Python、HTML/CSS/JS、Node.js、Vue3、React が少し得意
-    - · Tauri のために Rust を勉強中
-    - · CTF 関連の知識を勉強中
-    - · 現在は先生、トレーナー、ドクター、管理人
+    - 'STUTS:'
+    - · REDMAGIC10Pro+miad01
+    - · d.py/Arch/LLM/ricing/...
+    - · SDR/DAC/VR/r>g
+    - · 人生はブルアカに包含される下位概念であり、物質世界は不完全なミメーシスに過ぎない
     - <br/>
     - '<img width="100%" src="https://stats.yuzifu.top/api?username=sf-yuzifu&show_icons=true&count_private=false&theme=vue-dark" alt="統計情報" />'
     - '<img width="100%" src="https://stats.yuzifu.top/api/pin?username=sf-yuzifu&repo=homepage&show_icons=true&count_private=false&theme=vue-dark" alt="リポジトリ統計" />'
@@ -122,4 +122,4 @@ translate:
 bio:
   bth:
     - name: ブルーアーカイブ
-    - name: アークナイツ
+    - name: phigros
