@@ -13,10 +13,10 @@ keywords: 'ブルーアーカイブ, 0rnot, 個人ホームページ'
 # PWAアプリケーション名設定
 manifest:
   # PWAアプリケーション完全名
-  name: フィッシュアーカイブ
+  name: 0rnot Archive
   
   # PWAアプリケーション短名 - デスクトップ表示に使用
-  short_name: フィッシュアーカイブ
+  short_name: 0rnot Archive
   
   # PWAアプリケーション説明
   description: ブルーアーカイブスタイルの個人ホームページ
@@ -24,19 +24,19 @@ manifest:
 # ウェブサイト著者表示名
 author: 0rnot
 
-# 底部プロジェクト表示エリア - プロジェクト名翻訳
+# 底部プロジェクト表示エリア - プロジェクト名翻訳（ここにSpotifyやXの名前を入れる）
 dock:
-  - name: Bandcomic
-  - name: BCM変換ツール
+  - name: X (Twitter)
+  - name: Spotify
+  - name: GitHub
   - name: Waddle
   - name: Boxy
-  - name: 一緒に魚を食べよう
 
 # 左側連絡先方法エリア - 連絡先方法名翻訳
 contact:
-  - name: BandBBS
-  - name: Gitee
-  - name: Github
+  - name: GitHub
+  - name: X (Twitter)
+  - name: Blog
   - name: BiliBili
 
 # タスクボタン設定 - タスクボタン表示テキスト翻訳
@@ -52,14 +52,13 @@ memorialLobbies:
   - name: アリス
   - name: ヒナ（水着）
 
-
 # Aris(Battle)
 memorialLobbies[0]:
   voice:
     CH0334_MemorialLobby_1_1: えへへ。先生、驚きましたか？
-    CH0334_MemorialLobby_1_2: 先生と一绪に、この夜空を見たくて……呼んだんです。
-    CH0334_MemorialLobby_2_1: とても……绮丽ですね。
-    CH0334_MemorialLobby_2_2: アリスの世界にも、まだ行ったことのない世界にも……きっとこんな绮丽なものがたくさんあると思うんです。
+    CH0334_MemorialLobby_1_2: 先生と一緒に、この夜空を見たくて……呼んだんです。
+    CH0334_MemorialLobby_2_1: とても……綺麗ですね。
+    CH0334_MemorialLobby_2_2: アリスの世界にも、まだ行ったことのない世界にも……きっとこんな綺麗なものがたくさんあると思うんです。
     CH0334_MemorialLobby_3_1: でも……不思議です。
     CH0334_MemorialLobby_3_2: 世界って、こんなにきれいなのに……どうして人は争うんでしょう？
     CH0334_MemorialLobby_4: あの星空みたいに、この世界は、みんなで分け合っても大丈夫なくらい美しいものであふれているのに……。
@@ -84,14 +83,14 @@ memorialLobbies[2]:
   voice:
       CH0063_MemorialLobby_1_1: 何でみんな、そんなに海が好きなんだろう……って、いつもそう思ってた。
       CH0063_MemorialLobby_1_2: みんなは楽しそうだけど、私はどうしても好きになれなくて…
-      CH0063_MemorialLobby_2_1: 水の中はよく見えないし、足が付がないと不安だし……
+      CH0063_MemorialLobby_2_1: 水の中はよく見えないし、足がつかないと不安だし……
       CH0063_MemorialLobby_2_2: 先生も、そう思ったことない？
       CH0063_MemorialLobby_3_1: 特に夜の海は、まるで暗闇みたいに不気味で……
       CH0063_MemorialLobby_3_2: 見てるだけで吸い込まれそうで、好きになれなかったけど……
       CH0063_MemorialLobby_4_1: でも……今は、みんなの気持ちが少しだけ分かった気がする。
       CH0063_MemorialLobby_4_2: 海って、こんなに綺麗だったのね。
       CH0063_MemorialLobby_5_1: 不思議……今まで、こんな風に思ったことなかったのに。
-      CH0063_MemorialLobby_5_2: ありがとう，先生。一緒にいてくれて…… 色んなことを，教えてくれて。
+      CH0063_MemorialLobby_5_2: ありがとう、先生。一緒にいてくれて…… 色んなことを、教えてくれて。
 
 # 共通インターフェース翻訳文字列
 translate:
@@ -107,14 +106,14 @@ translate:
   bioContent:
     - 0rnotです、ブルアカを完全再現してみました。
     - <br/>
-    - 'STUTS:'
+    - 'STATUS:'
     - · REDMAGIC10Pro+miad01
     - · d.py/Arch/LLM/ricing/...
     - · SDR/DAC/VR/r>g
     - · 人生はブルアカに包含される下位概念であり、物質世界は不完全なミメーシスに過ぎない
     - <br/>
-    - '<img width="100%" src="https://stats.yuzifu.top/api?username=sf-yuzifu&show_icons=true&count_private=false&theme=vue-dark" alt="統計情報" />'
-    - '<img width="100%" src="https://stats.yuzifu.top/api/pin?username=sf-yuzifu&repo=homepage&show_icons=true&count_private=false&theme=vue-dark" alt="リポジトリ統計" />'
+    - '<img width="100%" src="https://github-readme-stats.vercel.app/api?username=0rnot&show_icons=true&count_private=false&theme=vue-dark" alt="統計情報" />'
+    - '<img width="100%" src="https://github-readme-stats.vercel.app/api/pin?username=0rnot&repo=0rnot&show_icons=true&count_private=false&theme=vue-dark" alt="リポジトリ統計" />'
     - '<img width="100%" src="https://card.yuy1n.io/card/76561198886449751/dark,en,badge,group">'
   prevPage: 前へ
   nextPage: 次へ
