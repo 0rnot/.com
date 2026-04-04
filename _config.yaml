@@ -1,7 +1,7 @@
 # 基礎配置文件（0rnot / PEBIKAC 完全適応版）
 title: 0rnot Archive
 description: Once in a blue moon | Public Servant / Capitalism Hacker
-favicon: /favicon144.png
+favicon: /my-icon.png
 author: 0rnot
 keywords: 'Blue Archive, 0rnot, PEBIKAC, Capitalism Hacker, Public Servant, Arch Linux, LLM'
 
@@ -16,10 +16,10 @@ manifest:
   start_url: /
   id: 0rnot
   icons:
-    - src: /favicon512.png
+    - src: /my-icon.png
       sizes: 512x512
       purpose: any maskable
-    - src: /favicon144.png
+    - src: /my-icon.png
       sizes: 144x144
 
 # ゲーム風ステータス
