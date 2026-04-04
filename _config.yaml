@@ -51,14 +51,14 @@ contact:
   - name: X (Twitter)
     href: 'https://x.com/PE6K4C'
     iconfont: icon-twitter
-  - name: Blog
-    href: '#'
+  - name: Profile
+    href: 'https://github.com/0rnot'
     iconfont: icon-link
 
 # 左下タスクボタン
 task:
   name: Blog
-  href: 'https://あなたのブログURL'
+  href: 'https://github.com/0rnot'
 
 # Banner音楽
 banner:
