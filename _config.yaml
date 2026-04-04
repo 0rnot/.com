@@ -23,26 +23,29 @@ manifest:
       sizes: 144x144
 
 # ゲーム風ステータス
-level: 99
-exp: 99999
-nextExp: 100000
-gold: 1145141919
-pyroxene: 99999
+level: 89
+exp: 25860
+nextExp: 26770
+gold: 114514810
+pyroxene: 72000
 
 iconfont: 'https://at.alicdn.com/t/c/font_4336463_umq8x001wf9.js'
 
-# 底部ドック（ユーザーさんのGitHubに合わせた設定）
+# 底部ドック
 dock:
-  - name: GitHub 0rnot
+  - name: X (Twitter)
+    href: 'https://x.com/PE6K4C'
+    imgSrc: 'https://cdn-icons-png.flaticon.com/512/5969/5969020.png'
+  - name: Spotify
+    href: 'https://open.spotify.com/'
+    imgSrc: 'https://cdn-icons-png.flaticon.com/512/174/174872.png'
+  - name: GitHub
     href: 'https://github.com/0rnot'
-    imgSrc: /img/fish.png
-  - name: Metrics
-    href: 'https://github.com/0rnot/0rnot'
-    imgSrc: /img/convertor.png
-  - name: Snake Grid
-    href: 'https://github.com/0rnot/0rnot'
+    imgSrc: 'https://cdn-icons-png.flaticon.com/512/25/25231.png'
+  - name: Waddle
+    href: 'https://github.com/0rnot'
     imgSrc: /img/waddle2.png
-  - name: 0rnot Main Repo
+  - name: Boxy
     href: 'https://github.com/0rnot'
     imgSrc: /img/fish.png
 
@@ -54,7 +57,7 @@ contact:
   - name: X (Twitter)
     href: 'https://x.com/PE6K4C'
     iconfont: icon-twitter
-  - name: Blog / Memo
+  - name: Blog
     href: '#'
     iconfont: icon-link
 
@@ -102,5 +105,5 @@ bio:
   bth:
     - name: 0rnot
       path: /img/card/0rnot.png
-    - name: PEBIKAC
-      path: /img/card/pebikac.png
+    - name: PEBKAC
+      path: /img/card/pebkac.png
