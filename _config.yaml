@@ -1,4 +1,4 @@
-# 基础配置文件（0rnot / PEBIKAC 完全適応版）
+# 基礎配置文件（0rnot / PEBIKAC 完全適応版）
 title: 0rnot Archive
 description: Once in a blue moon | Public Servant / Capitalism Hacker
 favicon: /favicon144.png
@@ -22,7 +22,7 @@ manifest:
     - src: /favicon144.png
       sizes: 144x144
 
-# ゲーム風ステータス（好みで調整OK）
+# ゲーム風ステータス
 level: 99
 exp: 99999
 nextExp: 100000
@@ -31,11 +31,11 @@ pyroxene: 99999
 
 iconfont: 'https://at.alicdn.com/t/c/font_4336463_umq8x001wf9.js'
 
-# 底部ドック（あなたのGitHubを中心に）
+# 底部ドック
 dock:
   - name: GitHub 0rnot
     href: 'https://github.com/0rnot'
-    imgSrc: /img/fish.png          # ← 後であなたの好きな画像に変更可
+    imgSrc: /img/fish.png
   - name: Metrics
     href: 'https://github.com/0rnot/0rnot'
     imgSrc: /img/convertor.png
@@ -46,16 +46,16 @@ dock:
     href: 'https://github.com/0rnot'
     imgSrc: /img/fish.png
 
-# 連絡先（あなたのXとGitHubを追加）
+# 連絡先
 contact:
   - name: GitHub
     href: 'https://github.com/0rnot'
     iconfont: icon-github
   - name: X (Twitter)
     href: 'https://x.com/PE6K4C'
-    iconfont: icon-twitter          # iconfontにTwitterアイコンがあれば使用（なければ後で追加）
+    iconfont: icon-twitter
   - name: Blog / Memo
-    href: '#'                       # ブログがあればここにURLを入れる
+    href: '#'
     iconfont: icon-link
 
 # 左下タスクボタン
@@ -63,17 +63,17 @@ task:
   name: 0rnot GitHub
   href: 'https://github.com/0rnot'
 
-# Banner音楽（好みで変更・削除可）
+# Banner音楽
 banner:
   musicID:
     - 2059151619
     - 2098476758
     - 2630220461
 
-# Live2Dメモリーホール（プロジェクトに存在するモデルを優先的に使用）
+# Live2Dメモリーホール
 memorialLobbies:
   - name: Aris(Battle)
-    path: '/l2d/aris_battle/'       # または /l2d/aris/ に合わせて調整
+    path: '/l2d/aris_battle/'
     skel: 'CH0334_home.skel'
     atlas: 'CH0334_home.atlas'
     offset: 0.5
@@ -92,7 +92,7 @@ memorialLobbies:
       y: -1/16
       position: left
 
-# Bio（あなたのプロフィール画像をここに入れるのがおすすめ）
+# Bio
 bio:
   student:
     - name: CH0334_spr
@@ -100,7 +100,7 @@ bio:
       skel: 'CH0334_spr.skel'
       atlas: 'CH0334_spr.atlas'
   bth:
-  - name: 0rnot
-    path: /img/card/0rnot.png       # ← ここにあなたのヘッダー画像やキャラ画像をアップロードして置き換え推奨
-  - name: PEBIKAC
-    path: /img/card/pebikac.png     # あなたのアイコン画像を入れると良い
+    - name: 0rnot
+      path: /img/card/0rnot.png
+    - name: PEBIKAC
+      path: /img/card/pebkac.png
