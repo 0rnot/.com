@@ -43,21 +43,21 @@ onMounted(async () => {
         name: 'Aoharu',
         artist: 'Nor',
         url: '/music/Track_34_Nor_Aoharu.ogg.mp3',
-        cover: '/LOGO.png',
+        cover: '/music/LOGO.png',
         lrc: '[00:00.000] Aoharu\n'
       },
       {
         name: 'Constant Moderato',
         artist: 'Mitsukiyo',
         url: '/music/Theme_271_Title.ogg.mp3',
-        cover: '/LOGO.png',
+        cover: '/music/LOGO.png',
         lrc: '[00:00.000] Constant Moderato\n'
       },
       {
         name: 'Signal of Abydos',
         artist: 'KARUT',
         url: '/music/Track_45_Nor_Signal_of_Abydos.ogg.mp3',
-        cover: '/LOGO.png',
+        cover: '/music/LOGO.png',
         lrc: '[00:00.000] Signal of Abydos\n'
       }
     ]
