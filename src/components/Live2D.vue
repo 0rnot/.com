@@ -131,27 +131,4 @@ onUnmounted(() => {
 }
 </style>
 
-<style scoped>
-/* ▼ 吹き出し（背景・枠）と文字（セリフ）の両方を完全に消し去る魔法 ▼ */
-/* :deep() を使うことで、Vueが自動生成する吹き出し要素を確実に狙い撃ちします */
 
-/* 吹き出しのコンテナ全体を透明にする */
-:deep(.dialogue),
-:deep(.dialogue-box),
-:deep([class*="dialogue"]),
-:deep([class*="Dialogue"]) {
-  opacity: 0 !important;              /* 透明度100%（完全に隠す） */
-  pointer-events: none !important;    /* 透明な吹き出しをクリックできないようにする */
-  visibility: hidden !important;      /* レンダリング自体を無効化（念押しの処理） */
-}
-
-/* 中にあるテキスト要素も明示的に透明にする（念のため） */
-:deep(.dialogue span),
-:deep(.dialogue p),
-:deep([class*="dialogue"] span),
-:deep([class*="dialogue"] p) {
-  opacity: 0 !important;
-  color: transparent !important; /* 文字色を透明に */
-}
-/* ▲ ここまで ▲ */
-</style>
