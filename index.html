@@ -16,21 +16,24 @@
     <meta name="description" content="<%- description %>" />
     <meta name="keywords" content="<%- keywords %>" />
     <meta name="author" content="<%- favicon %>" />
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport" />
     <meta content="IE=edge" http-equiv="X-UA-Compatible" />
     <meta content="<%- themeColor %>" name="theme-color" />
     <link id="favicon" href="<%- favicon %>" rel="icon" />
     <title><%- title %></title>
 
-    <!-- ▼ ここから追加：スマホ縦画面の時の保護魔法 ▼ -->
+    <!-- ▼★超重要変更：スマホに「自分は横幅1280pxのPCモニターだ」と錯覚させる魔法 ▼ -->
+    <meta name="viewport" content="width=1280, user-scalable=no" />
+    <!-- ▲ ここまで ▲ -->
+
+    <!-- ▼ スマホ縦画面の時の保護魔法 ▼ -->
     <style>
-      /* 基本は警告画面を隠しておく（PC・横画面用） */
+      /* 基本は警告画面を隠しておく */
       #rotate-please {
         display: none;
       }
       
-      /* 画面幅が768px以下（スマホ等）かつ 縦向き（portrait）の時だけ発動 */
-      @media screen and (max-width: 768px) and (orientation: portrait) {
+      /* 縦向き（portrait）の時だけ発動 */
+      @media screen and (orientation: portrait) {
         #rotate-please {
           display: flex;
           position: fixed;
@@ -53,12 +56,12 @@
     <!-- ▲ ここまで ▲ -->
   </head>
   <body>
-    <!-- ▼ ここから追加：スマホ縦持ちユーザーへの警告メッセージ ▼ -->
+    <!-- ▼ スマホ縦持ちユーザーへの警告メッセージ ▼ -->
     <div id="rotate-please">
       <div style="font-size: 60px; margin-bottom: 20px;">📱🔄</div>
       <h2 style="color: #128AFA; margin-bottom: 15px;">先生、端末を横向きにしてください！</h2>
       <p style="color: #666; font-weight: bold; line-height: 1.5; font-size: 16px;">
-        このシステムは横画面での閲覧に最適化されています。<br>
+        このシステムはPC版UIでの閲覧に最適化されています。<br>
         スマホの「画面の縦向きロック」を解除して<br>端末を横に持ち替えてください。
       </p>
     </div>
