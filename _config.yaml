@@ -10,7 +10,7 @@ gongan: ''
 
 manifest:
   name: 0rnot Archive
-  short_name: 0rnot
+  short_name: 0rnot Archive
   description: Once in a blue moon - Blue Archive style homepage
   theme_color: '#128AFA'
   start_url: /
@@ -31,7 +31,7 @@ pyroxene: 72000
 
 iconfont: 'https://at.alicdn.com/t/c/font_4336463_umq8x001wf9.js'
 
-# 底部ドック
+# 底部ドック（X、Spotify、GitHubの3つに限定）
 dock:
   - name: X (Twitter)
     href: 'https://x.com/PE6K4C'
@@ -42,12 +42,6 @@ dock:
   - name: GitHub
     href: 'https://github.com/0rnot'
     imgSrc: 'https://cdn-icons-png.flaticon.com/512/25/25231.png'
-  - name: Waddle
-    href: 'https://github.com/0rnot'
-    imgSrc: /img/waddle2.png
-  - name: Boxy
-    href: 'https://github.com/0rnot'
-    imgSrc: /img/fish.png
 
 # 連絡先
 contact:
@@ -63,8 +57,8 @@ contact:
 
 # 左下タスクボタン
 task:
-  name: 0rnot GitHub
-  href: 'https://github.com/0rnot'
+  name: Blog
+  href: 'https://あなたのブログURL'
 
 # Banner音楽
 banner:
@@ -73,7 +67,7 @@ banner:
     - 2098476758
     - 2630220461
 
-# Live2Dメモリーホール（アリス、ケイ、水着ヒナの3人を登録）
+# Live2Dメモリーホール
 memorialLobbies:
   # [0] アリス
   - name: Aris(Battle)
