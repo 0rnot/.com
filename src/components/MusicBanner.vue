@@ -1,16 +1,18 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed, nextTick } from 'vue'
 import 'aplayer/dist/APlayer.min.css'
 import APlayer from 'aplayer'
 import { useConfig } from '@/composables/useConfig'
 
 const ap = ref(null)
+const playerRef = ref(null) // ★確実な読み込みのために追加
 const isMiniMode = ref(false)
 
 const { configs } = useConfig()
 const ifICP = computed(() => configs.value?.ICP || '')
 
 const checkScreenSize = () => {
+  if (!ap.value) return
   if (ifICP.value) {
     ap.value.setMode('mini')
     return
@@ -25,37 +27,38 @@ const checkScreenSize = () => {
   }
 }
 
-// 完全にローカルの音楽ファイルを読み込む（複数曲対応版）
-onMounted(() => {
+onMounted(async () => {
+  await nextTick() // ★HTMLの描画完了を確実に待つ魔法
   ap.value = new APlayer({
-    container: document.getElementById('aplayer'),
-    autoplay: false, // ブラウザの制限上、自動再生はfalseが推奨です
+    container: playerRef.value, // ★ID検索ではなく直接要素を指定
+    autoplay: false,
     mini: false,
     lrcType: 1,
     listFolded: true,
     loop: 'all',
-    order: 'list', // 曲順に再生（ランダムにしたい場合は 'random' に変更）
+    order: 'list',
+    theme: '#128AFA', // ★ブルアカブルーのアクセントカラー
     audio: [
       {
         name: 'Aoharu',
         artist: 'Nor',
         url: '/music/Track_34_Nor_Aoharu.ogg.mp3',
-        cover: '/music/LOGO.png',
-        lrc: '[00:00.000] 🎵\n'
+        cover: '/LOGO.png',
+        lrc: '[00:00.000] Aoharu\n'
       },
       {
         name: 'Constant Moderato',
         artist: 'Mitsukiyo',
         url: '/music/Theme_271_Title.ogg.mp3',
-        cover: '/music/LOGO.png',
-        lrc: '[00:00.000] 🎵\n'
+        cover: '/LOGO.png',
+        lrc: '[00:00.000] Constant Moderato\n'
       },
       {
         name: 'Signal of Abydos',
         artist: 'KARUT',
         url: '/music/Track_45_Nor_Signal_of_Abydos.ogg.mp3',
-        cover: '/music/LOGO.png',
-        lrc: '[00:00.000] 🎵\n'
+        cover: '/LOGO.png',
+        lrc: '[00:00.000] Signal of Abydos\n'
       }
     ]
   })
@@ -72,7 +75,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div id="aplayer" :class="{ 'aplayer-mini': ifICP }"></div>
+  <!-- ★ ref="playerRef" を追加して確実に関連付け -->
+  <div id="aplayer" ref="playerRef" :class="{ 'aplayer-mini': ifICP }"></div>
 </template>
 
 <style scoped>
@@ -153,4 +157,17 @@ onBeforeUnmount(() => {
 .aplayer .aplayer-lrc:before {
   background: unset;
 }
+
+/* ▼ カメレオン化（白飛び）防止：強制的に文字やボタンを黒にする ▼ */
+.aplayer { color: #000 !important; }
+.aplayer .aplayer-info .aplayer-music .aplayer-title { color: #000 !important; }
+.aplayer .aplayer-info .aplayer-music .aplayer-author { color: #666 !important; }
+.aplayer .aplayer-info .aplayer-controller .aplayer-time { color: #999 !important; }
+.aplayer-icon svg { fill: #000 !important; }
+.aplayer-icon path { fill: #000 !important; }
+.aplayer .aplayer-list ol li .aplayer-list-title { color: #000 !important; }
+.aplayer .aplayer-list ol li .aplayer-list-author { color: #666 !important; }
+.aplayer .aplayer-lrc p { color: #666 !important; }
+.aplayer .aplayer-lrc p.aplayer-lrc-current { color: #000 !important; font-weight: bold; }
+/* ▲ ここまで ▲ */
 </style>
